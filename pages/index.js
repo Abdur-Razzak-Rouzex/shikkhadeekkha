@@ -37,7 +37,7 @@ export default function Home(props) {
             passHref
           >
             <Link sx={classes.flex}>
-              <img src={product.featuredImage} alt={product.name}></img>
+              <img src={product.featuredImage} alt={product.name} />
             </Link>
           </NextLink>
         ))}

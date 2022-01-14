@@ -3,7 +3,7 @@ import { createContext, useReducer } from 'react';
 
 export const Store = createContext();
 const initialState = {
-  darkMode: Cookies.get('darkMode') === 'ON' ? true : false,
+  darkMode: Cookies.get('darkMode') === 'ON',
   cart: {
     cartItems: Cookies.get('cartItems')
       ? JSON.parse(Cookies.get('cartItems'))

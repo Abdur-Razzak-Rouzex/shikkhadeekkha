@@ -1,8 +1,15 @@
 import Head from 'next/head';
-import {CssBaseline, ThemeProvider} from '@mui/material';
+import {
+    AppBar, Badge, Box, Button,
+    Container, CssBaseline, Divider,
+    Drawer, IconButton, InputBase,
+    Link, List, ListItem,
+    ListItemText, Menu, MenuItem,
+    Switch, ThemeProvider, Toolbar,
+    Typography
+} from '@mui/material';
 
 import {createTheme} from '@mui/material/styles';
-
 import useMediaQuery from '@mui/material/useMediaQuery';
 import React, {useContext, useEffect, useState} from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -15,26 +22,6 @@ import {useSnackbar} from 'notistack';
 import axios from 'axios';
 import {useRouter} from 'next/router';
 import NextLink from 'next/link';
-import {
-    AppBar,
-    Toolbar,
-    Typography,
-    Container,
-    Link,
-    Switch,
-    Badge,
-    Button,
-    Menu,
-    MenuItem,
-    Box,
-    IconButton,
-    Drawer,
-    List,
-    ListItem,
-    Divider,
-    ListItemText,
-    InputBase,
-} from '@mui/material';
 
 import {Store} from '../utils/Store';
 
@@ -80,6 +67,7 @@ export default function Layout({title, description, children}) {
     const sidebarOpenHandler = () => {
         setSidebarVisible(true);
     };
+
     const sidebarCloseHandler = () => {
         setSidebarVisible(false);
     };
@@ -138,7 +126,7 @@ export default function Layout({title, description, children}) {
     return (
         <>
             <Head>
-                <title>{title ? `${title} - Next Amazona` : 'Next Amazona'}</title>
+                <title>{title ? `${title} - শিক্ষাদীক্ষা` : 'শিক্ষাদীক্ষা'}</title>
                 {description && <meta name="description" content={description}/>}
             </Head>
             <ThemeProvider theme={theme}>
@@ -155,8 +143,10 @@ export default function Layout({title, description, children}) {
                                 <MenuIcon sx={classes.navbarButton}/>
                             </IconButton>
                             <NextLink href="/" passHref>
-                                <Link>
-                                    <Typography sx={classes.brand}>amazona</Typography>
+                                <Link style={{textDecoration: 'none'}}>
+                                    <Typography sx={classes.brand}>শিক্ষাদীক্ষা</Typography>
+                                    <Typography variant='span' sx={{fontSize: 12, marginLeft: '22px'}}>মননে সৃষ্টির
+                                        বিকাশ</Typography>
                                 </Link>
                             </NextLink>
                         </Box>

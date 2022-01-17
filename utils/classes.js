@@ -51,6 +51,7 @@ const classes = {
   brand: {
     fontWeight: 'bold',
     fontSize: '1.5rem',
+    marginBottom: '-10px',
   },
   grow: {
     flexGrow: 1,

@@ -1,11 +1,21 @@
 import Head from 'next/head';
 import {
-    AppBar, Badge, Box, Button,
-    Container, CssBaseline, Divider,
-    Drawer, IconButton, InputBase,
-    Link, List, ListItem,
-    ListItemText, Menu, MenuItem,
-    Switch, ThemeProvider, Toolbar,
+    AppBar,
+    Badge,
+    Box,
+    Container,
+    CssBaseline,
+    Divider,
+    Drawer,
+    IconButton,
+    InputBase,
+    Link,
+    List,
+    ListItem,
+    ListItemText,
+    Switch,
+    ThemeProvider,
+    Toolbar,
     Typography
 } from '@mui/material';
 
@@ -102,25 +112,6 @@ export default function Layout({title, description, children}) {
         const newDarkMode = !darkMode;
         Cookies.set('darkMode', newDarkMode ? 'ON' : 'OFF');
     };
-    const [anchorEl, setAnchorEl] = useState(null);
-    const loginClickHandler = (e) => {
-        setAnchorEl(e.currentTarget);
-    };
-    const loginMenuCloseHandler = (e, redirect) => {
-        setAnchorEl(null);
-        if (redirect) {
-            router.push(redirect);
-        }
-    };
-    const logoutClickHandler = () => {
-        setAnchorEl(null);
-        dispatch({type: 'USER_LOGOUT'});
-        Cookies.remove('userInfo');
-        Cookies.remove('cartItems');
-        Cookies.remove('shippinhAddress');
-        Cookies.remove('paymentMethod');
-        router.push('/');
-    };
 
     const isDesktop = useMediaQuery('(min-width:600px)');
     return (
@@ -215,7 +206,7 @@ export default function Layout({title, description, children}) {
                                 onChange={darkModeChangeHandler}
                             />
                             <NextLink href="/cart" passHref>
-                                <Link>
+                                <Link style={{textDecoration: 'none'}}>
                                     <Typography component="span">
                                         {cart.cartItems.length > 0 ? (
                                             <Badge
@@ -232,48 +223,22 @@ export default function Layout({title, description, children}) {
                             </NextLink>
                             {userInfo ? (
                                 <>
-                                    <Button
-                                        aria-controls="simple-menu"
-                                        aria-haspopup="true"
-                                        onClick={loginClickHandler}
-                                        sx={classes.navbarButton}
-                                    >
-                                        {userInfo.name}
-                                    </Button>
-                                    <Menu
-                                        id="simple-menu"
-                                        anchorEl={anchorEl}
-                                        keepMounted
-                                        open={Boolean(anchorEl)}
-                                        onClose={loginMenuCloseHandler}
-                                    >
-                                        <MenuItem
-                                            onClick={(e) => loginMenuCloseHandler(e, '/profile')}
-                                        >
-                                            Profile
-                                        </MenuItem>
-                                        <MenuItem
-                                            onClick={(e) =>
-                                                loginMenuCloseHandler(e, '/order-history')
-                                            }
-                                        >
-                                            Order Hisotry
-                                        </MenuItem>
-                                        {userInfo.isAdmin && (
-                                            <MenuItem
-                                                onClick={(e) =>
-                                                    loginMenuCloseHandler(e, '/admin/dashboard')
-                                                }
-                                            >
-                                                Admin Dashboard
-                                            </MenuItem>
-                                        )}
-                                        <MenuItem onClick={logoutClickHandler}>Logout</MenuItem>
-                                    </Menu>
+                                    <NextLink href="/profile" passHref>
+                                        <Link style={{textDecoration: 'none'}}>
+                                            <Typography component="span">{userInfo.name}</Typography>
+                                        </Link>
+                                    </NextLink>
+                                    {userInfo.isAdmin && (
+                                        <NextLink href="/admin/dashboard" passHref>
+                                            <Link style={{textDecoration: 'none'}}>
+                                                <Typography component="span">Admin Dashboard</Typography>
+                                            </Link>
+                                        </NextLink>
+                                    )}
                                 </>
                             ) : (
                                 <NextLink href="/login" passHref>
-                                    <Link>
+                                    <Link style={{textDecoration: 'none'}}>
                                         <Typography component="span">Login</Typography>
                                     </Link>
                                 </NextLink>

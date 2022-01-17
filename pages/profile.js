@@ -34,6 +34,15 @@ function Profile() {
     const router = useRouter();
     const {userInfo} = state;
 
+    const logoutClickHandler = () => {
+        dispatch({type: 'USER_LOGOUT'});
+        Cookies.remove('userInfo');
+        Cookies.remove('cartItems');
+        Cookies.remove('shippinhAddress');
+        Cookies.remove('paymentMethod');
+        router.push('/');
+    };
+
     useEffect(() => {
         if (!userInfo) {
             return router.push('/login');
@@ -81,6 +90,9 @@ function Profile() {
                                     <ListItemText primary="Order History"/>
                                 </ListItem>
                             </NextLink>
+                            <ListItem button component="a">
+                                <ListItemText onClick={logoutClickHandler} primary="Logout"/>
+                            </ListItem>
                         </List>
                     </Card>
                 </Grid>

@@ -93,7 +93,7 @@ function Order({params}) {
     } = order;
 
     useEffect(() => {
-        if (!userInfo) {
+        if (!userInfo.name) {
             return router.push('/login');
         }
         const fetchOrder = async () => {

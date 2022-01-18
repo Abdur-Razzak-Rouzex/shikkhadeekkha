@@ -9,7 +9,6 @@ handler.use(isAuth, isAdmin);
 handler.get(async (req, res) => {
   await db.connect();
   const products = await Product.find({});
-  await db.disconnect();
   res.send(products);
 });
 
@@ -29,7 +28,6 @@ handler.post(async (req, res) => {
   });
 
   const product = await newProduct.save();
-  await db.disconnect();
   res.send({ message: 'Product Created', product });
 });
 

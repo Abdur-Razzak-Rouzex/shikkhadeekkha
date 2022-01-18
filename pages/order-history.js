@@ -49,7 +49,7 @@ function OrderHistory() {
     });
 
     useEffect(() => {
-        if (!userInfo) {
+        if (!userInfo.name) {
             router.push('/login');
         }
         const fetchOrders = async () => {

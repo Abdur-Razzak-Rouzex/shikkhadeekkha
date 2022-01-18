@@ -74,7 +74,7 @@ function UserEdit({params}) {
     const {userInfo} = state;
 
     useEffect(() => {
-        if (!userInfo) {
+        if (!userInfo.name) {
             return router.push('/login');
         } else {
             const fetchData = async () => {

@@ -25,7 +25,7 @@ export default function Shipping() {
     const {location} = shippingAddress;
 
     useEffect(() => {
-        if (!userInfo) {
+        if (!userInfo.name) {
             router.push('/login?redirect=/shipping');
         }
         setValue('fullName', shippingAddress.fullName);

@@ -1,20 +1,18 @@
 import axios from 'axios';
 import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
-import NextLink from 'next/link';
-import React, {useEffect, useContext, useReducer, useState} from 'react';
+import React, {useContext, useEffect, useReducer, useState} from 'react';
 import {
+    Button,
+    Card,
+    Checkbox,
+    CircularProgress,
+    FormControlLabel,
     Grid,
     List,
     ListItem,
-    Typography,
-    Card,
-    Button,
-    ListItemText,
     TextField,
-    CircularProgress,
-    FormControlLabel,
-    Checkbox,
+    Typography,
 } from '@mui/material';
 import {getError} from '../../../utils/error';
 import {Store} from '../../../utils/Store';
@@ -23,6 +21,7 @@ import {Controller, useForm} from 'react-hook-form';
 import {useSnackbar} from 'notistack';
 import Form from '../../../components/Form';
 import classes from '../../../utils/classes';
+import AdminMenuItems from "../../../components/admin/AdminMenuItems";
 
 function reducer(state, action) {
     switch (action.type) {
@@ -74,7 +73,7 @@ function ProductEdit({params}) {
     const {userInfo} = state;
 
     useEffect(() => {
-        if (!userInfo) {
+        if (!userInfo.name) {
             return router.push('/login');
         } else {
             const fetchData = async () => {
@@ -168,28 +167,7 @@ function ProductEdit({params}) {
             <Grid container spacing={1}>
                 <Grid item md={3} xs={12}>
                     <Card sx={classes.section}>
-                        <List>
-                            <NextLink href="/admin/dashboard" passHref>
-                                <ListItem button component="a">
-                                    <ListItemText primary="Admin Dashboard"/>
-                                </ListItem>
-                            </NextLink>
-                            <NextLink href="/admin/orders" passHref>
-                                <ListItem button component="a">
-                                    <ListItemText primary="Orders"/>
-                                </ListItem>
-                            </NextLink>
-                            <NextLink href="/admin/products" passHref>
-                                <ListItem selected button component="a">
-                                    <ListItemText primary="Products"/>
-                                </ListItem>
-                            </NextLink>
-                            <NextLink href="/admin/users" passHref>
-                                <ListItem button component="a">
-                                    <ListItemText primary="Users"/>
-                                </ListItem>
-                            </NextLink>
-                        </List>
+                        <AdminMenuItems activeItem="products"/>
                     </Card>
                 </Grid>
                 <Grid item md={9} xs={12}>
@@ -201,7 +179,7 @@ function ProductEdit({params}) {
                                 </Typography>
                             </ListItem>
                             <ListItem>
-                                {loading && <CircularProgress></CircularProgress>}
+                                {loading && <CircularProgress/>}
                                 {error && <Typography sx={classes.error}>{error}</Typography>}
                             </ListItem>
                             <ListItem>

@@ -2,27 +2,27 @@ import axios from 'axios';
 import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
 import NextLink from 'next/link';
-import React, {useEffect, useContext, useReducer} from 'react';
+import React, {useContext, useEffect, useReducer} from 'react';
 import {
+    Button,
+    Card,
     CircularProgress,
     Grid,
     List,
     ListItem,
-    Typography,
-    Card,
-    Button,
-    ListItemText,
-    TableContainer,
     Table,
+    TableBody,
+    TableCell,
+    TableContainer,
     TableHead,
     TableRow,
-    TableCell,
-    TableBody,
+    Typography,
 } from '@mui/material';
 import {getError} from '../../utils/error';
 import {Store} from '../../utils/Store';
 import Layout from '../../components/Layout';
 import classes from '../../utils/classes';
+import AdminMenuItems from "../../components/admin/AdminMenuItems";
 
 function reducer(state, action) {
     switch (action.type) {
@@ -50,7 +50,7 @@ function AdminOrders() {
     });
 
     useEffect(() => {
-        if (!userInfo) {
+        if (!userInfo.name) {
             router.push('/login');
         }
         const fetchData = async () => {
@@ -71,28 +71,7 @@ function AdminOrders() {
             <Grid container spacing={1}>
                 <Grid item md={3} xs={12}>
                     <Card sx={classes.section}>
-                        <List>
-                            <NextLink href="/admin/dashboard" passHref>
-                                <ListItem button component="a">
-                                    <ListItemText primary="Admin Dashboard" />
-                                </ListItem>
-                            </NextLink>
-                            <NextLink href="/admin/orders" passHref>
-                                <ListItem selected button component="a">
-                                    <ListItemText primary="Orders" />
-                                </ListItem>
-                            </NextLink>
-                            <NextLink href="/admin/products" passHref>
-                                <ListItem button component="a">
-                                    <ListItemText primary="Products" />
-                                </ListItem>
-                            </NextLink>
-                            <NextLink href="/admin/users" passHref>
-                                <ListItem button component="a">
-                                    <ListItemText primary="Users" />
-                                </ListItem>
-                            </NextLink>
-                        </List>
+                        <AdminMenuItems activeItem="orders"/>
                     </Card>
                 </Grid>
                 <Grid item md={9} xs={12}>

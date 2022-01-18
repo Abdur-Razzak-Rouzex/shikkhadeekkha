@@ -7,11 +7,11 @@ const initialState = {
 
   cart: {
     cartItems: Cookies.get('cartItems')
-      ? JSON.parse(JSON.stringify(Cookies.get('cartItems')))
+      ? JSON.parse(Cookies.get('cartItems'))
       : [],
 
     shippingAddress: Cookies.get('shippingAddress')
-      ? JSON.parse(JSON.stringify(Cookies.get('shippingAddress')))
+      ? JSON.parse(Cookies.get('shippingAddress'))
       : { location: {} },
 
     paymentMethod: Cookies.get('paymentMethod')
@@ -20,7 +20,7 @@ const initialState = {
   },
 
   userInfo: Cookies.get('userInfo')
-    ? JSON.parse(JSON.stringify(Cookies.get('userInfo')))
+    ? JSON.parse(Cookies.get('userInfo'))
     : null,
 };
 

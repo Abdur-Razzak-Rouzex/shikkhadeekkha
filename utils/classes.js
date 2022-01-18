@@ -3,12 +3,6 @@ const classes = {
   flex: {
     display: 'flex',
   },
-  visible: {
-    display: 'initial',
-  },
-  hidden: {
-    display: 'none',
-  },
   sort: {
     marginRight: 1,
   },

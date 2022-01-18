@@ -4,19 +4,23 @@ import { createContext, useReducer } from 'react';
 export const Store = createContext();
 const initialState = {
   darkMode: Cookies.get('darkMode') === 'ON',
+
   cart: {
     cartItems: Cookies.get('cartItems')
-      ? JSON.parse(Cookies.get('cartItems'))
+      ? JSON.parse(JSON.stringify(Cookies.get('cartItems')))
       : [],
+
     shippingAddress: Cookies.get('shippingAddress')
-      ? JSON.parse(Cookies.get('shippingAddress'))
+      ? JSON.parse(JSON.stringify(Cookies.get('shippingAddress')))
       : { location: {} },
+
     paymentMethod: Cookies.get('paymentMethod')
       ? Cookies.get('paymentMethod')
       : '',
   },
+
   userInfo: Cookies.get('userInfo')
-    ? JSON.parse(Cookies.get('userInfo'))
+    ? JSON.parse(JSON.stringify(Cookies.get('userInfo')))
     : null,
 };
 

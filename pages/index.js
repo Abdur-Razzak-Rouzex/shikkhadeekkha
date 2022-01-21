@@ -19,9 +19,9 @@ export default function Home(props) {
   const { state, dispatch } = useContext(Store);
   const { topRatedProducts, heroBannersDoc } = props;
 
-  const topline = {
+  const topLine = {
       title: 'the title',
-      description: 'the description should be at least two lines'
+      description: 'A short and strong description'
   }
 
   const addToCartHandler = async (product) => {
@@ -62,7 +62,7 @@ export default function Home(props) {
         ))}
       </Carousel>
 
-        <TopLine topline={topline} />
+        <TopLine topline={topLine} />
 
       <Typography variant="h2">Popular Products</Typography>
       <Grid container spacing={3}>

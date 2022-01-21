@@ -18,11 +18,11 @@ import {
     TableRow,
     Typography,
 } from '@mui/material';
-import {getError} from '../../utils/error';
-import {Store} from '../../utils/Store';
-import Layout from '../../components/Layout';
-import classes from '../../utils/classes';
-import AdminMenuItems from "../../components/admin/AdminMenuItems";
+import {getError} from '../../../utils/error';
+import {Store} from '../../../utils/Store';
+import Layout from '../../../components/Layout';
+import classes from '../../../utils/classes';
+import AdminMenuItems from "../../../components/admin/AdminMenuItems";
 
 function reducer(state, action) {
     switch (action.type) {

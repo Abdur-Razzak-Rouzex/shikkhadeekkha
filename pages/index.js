@@ -66,7 +66,8 @@ export default function Home(props) {
             </Carousel>
 
             <TopLineSection topline={topLine}/>
-            {/*<WhyChooseUsSection
+
+            <WhyChooseUsSection
                 title="Why choose us?"
                 subtitle="Read the next reasons"
                 items={[
@@ -95,7 +96,7 @@ export default function Home(props) {
                         },
                     },
                 ]}
-            />*/}
+            />
 
             <Typography variant="h2">Popular Products</Typography>
             <Grid container spacing={3}>

@@ -18,12 +18,12 @@ import {
     TableRow,
     Typography,
 } from '@mui/material';
-import {getError} from '../../utils/error';
-import {Store} from '../../utils/Store';
-import Layout from '../../components/Layout';
-import classes from '../../utils/classes';
+import {getError} from '../../../utils/error';
+import {Store} from '../../../utils/Store';
+import Layout from '../../../components/Layout';
+import classes from '../../../utils/classes';
 import {useSnackbar} from 'notistack';
-import AdminMenuItems from "../../components/admin/AdminMenuItems";
+import AdminMenuItems from "../../../components/admin/AdminMenuItems";
 
 function reducer(state, action) {
     switch (action.type) {
@@ -144,7 +144,7 @@ function AdminUsers() {
                                                         <TableCell>{user.isAdmin ? 'YES' : 'NO'}</TableCell>
                                                         <TableCell>
                                                             <NextLink
-                                                                href={`/admin/user/${user._id}`}
+                                                                href={`/admin/users/${user._id}`}
                                                                 passHref
                                                             >
                                                                 <Button size="small" variant="contained">

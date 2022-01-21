@@ -18,12 +18,12 @@ import {
     TableRow,
     Typography,
 } from '@mui/material';
-import {getError} from '../../utils/error';
-import {Store} from '../../utils/Store';
-import Layout from '../../components/Layout';
-import classes from '../../utils/classes';
+import {getError} from '../../../utils/error';
+import {Store} from '../../../utils/Store';
+import Layout from '../../../components/Layout';
+import classes from '../../../utils/classes';
 import {useSnackbar} from 'notistack';
-import AdminMenuItems from "../../components/admin/AdminMenuItems";
+import AdminMenuItems from "../../../components/admin/AdminMenuItems";
 
 function reducer(state, action) {
     switch (action.type) {
@@ -105,7 +105,7 @@ function AdminProdcuts() {
             );
             dispatch({type: 'CREATE_SUCCESS'});
             enqueueSnackbar('Product created successfully', {variant: 'success'});
-            router.push(`/admin/product/${data.product._id}`);
+            router.push(`/admin/products/${data.product._id}`);
         } catch (err) {
             dispatch({type: 'CREATE_FAIL'});
             enqueueSnackbar(getError(err), {variant: 'error'});
@@ -191,7 +191,7 @@ function AdminProdcuts() {
                                                         <TableCell>{product.rating}</TableCell>
                                                         <TableCell>
                                                             <NextLink
-                                                                href={`/admin/product/${product._id}`}
+                                                                href={`/admin/products/${product._id}`}
                                                                 passHref
                                                             >
                                                                 <Button

@@ -33,7 +33,7 @@ export default function Login() {
         if (userInfo) {
             router.push('/');
         }
-    }, []);
+    }, [router, userInfo]);
 
     const submitHandler = async ({email, password}) => {
         closeSnackbar();
@@ -44,7 +44,7 @@ export default function Login() {
             });
             dispatch({type: 'USER_LOGIN', payload: data});
             Cookies.set('userInfo', JSON.stringify(data));
-            router.push(redirect || '/');
+            await router.push(redirect || '/');
         } catch (err) {
             enqueueSnackbar(getError(err), {variant: 'error'});
         }

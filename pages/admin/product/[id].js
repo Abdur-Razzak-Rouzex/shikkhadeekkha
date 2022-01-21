@@ -73,7 +73,7 @@ function ProductEdit({params}) {
     const {userInfo} = state;
 
     useEffect(() => {
-        if (!userInfo.name) {
+        if (!userInfo?.name) {
             return router.push('/login');
         } else {
             const fetchData = async () => {
@@ -99,7 +99,7 @@ function ProductEdit({params}) {
             };
             fetchData();
         }
-    }, []);
+    }, [productId, router, setValue, userInfo.name, userInfo.token]);
     const uploadHandler = async (e, imageField = 'image') => {
         const file = e.target.files[0];
         const bodyFormData = new FormData();

@@ -50,7 +50,7 @@ function AdminOrders() {
     });
 
     useEffect(() => {
-        if (!userInfo.name) {
+        if (!userInfo?.name) {
             router.push('/login');
         }
         const fetchData = async () => {
@@ -65,7 +65,7 @@ function AdminOrders() {
             }
         };
         fetchData();
-    }, []);
+    }, [router, userInfo.name, userInfo.token]);
     return (
         <Layout title="Orders">
             <Grid container spacing={1}>

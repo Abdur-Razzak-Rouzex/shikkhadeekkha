@@ -74,7 +74,7 @@ function UserEdit({params}) {
     const {userInfo} = state;
 
     useEffect(() => {
-        if (!userInfo.name) {
+        if (!userInfo?.name) {
             return router.push('/login');
         } else {
             const fetchData = async () => {
@@ -92,7 +92,7 @@ function UserEdit({params}) {
             };
             fetchData();
         }
-    }, []);
+    }, [router, setValue, userId, userInfo.name, userInfo.token]);
 
     const submitHandler = async ({name}) => {
         closeSnackbar();

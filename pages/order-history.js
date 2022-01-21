@@ -49,7 +49,7 @@ function OrderHistory() {
     });
 
     useEffect(() => {
-        if (!userInfo.name) {
+        if (!userInfo?.name) {
             router.push('/login');
         }
         const fetchOrders = async () => {
@@ -64,7 +64,7 @@ function OrderHistory() {
             }
         };
         fetchOrders();
-    }, []);
+    }, [router, userInfo.name, userInfo.token]);
     return (
         <Layout title="Order History">
             <Grid container spacing={1}>

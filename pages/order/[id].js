@@ -58,7 +58,7 @@ function reducer(state, action) {
                 errorDeliver: '',
             };
         default:
-            state;
+            return state;
     }
 }
 
@@ -93,7 +93,7 @@ function Order({params}) {
     } = order;
 
     useEffect(() => {
-        if (!userInfo.name) {
+        if (!userInfo?.name) {
             return router.push('/login');
         }
         const fetchOrder = async () => {
@@ -136,7 +136,8 @@ function Order({params}) {
             };
             loadPaypalScript();
         }
-    }, [order, successPay, successDeliver]);
+    }, [order, successPay, successDeliver, userInfo.name, userInfo.token, orderId, router, paypalDispatch]);
+
     const {enqueueSnackbar} = useSnackbar();
 
     function createOrder(data, actions) {

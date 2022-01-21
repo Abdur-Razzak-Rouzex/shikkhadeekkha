@@ -24,6 +24,7 @@ import AdminMenuItems from "../../../components/admin/AdminMenuItems";
 import Layout from "../../../components/Layout";
 import {Store} from "../../../utils/Store";
 import classes from "../../../utils/classes";
+import Image from 'next/image'
 
 function reducer(state, action) {
     switch (action.type) {
@@ -62,7 +63,7 @@ function AdminProdcuts() {
     });
 
     useEffect(() => {
-        if (!userInfo.name) {
+        if (!userInfo?.name) {
             router.push('/login');
         }
         const fetchData = async () => {
@@ -81,7 +82,7 @@ function AdminProdcuts() {
         } else {
             fetchData();
         }
-    }, [successDelete]);
+    }, [router, successDelete, userInfo.name, userInfo.token]);
 
     const createHandler = async () => {
         await router.push('/admin/hero-banner/create');
@@ -157,10 +158,11 @@ function AdminProdcuts() {
                                                 {heroBanners.map((banner) => (
                                                     <TableRow key={banner._id}>
                                                         <TableCell>
-                                                            <img
+                                                            <Image
                                                                 src={banner.imgUrl}
                                                                 alt="Cadet Coaching"
-                                                                style={{width: 100, height: 150}}
+                                                                width={200}
+                                                                height={100}
                                                             />
                                                         </TableCell>
                                                         <TableCell>{banner.link}</TableCell>

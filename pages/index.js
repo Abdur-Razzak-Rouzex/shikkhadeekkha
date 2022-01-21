@@ -12,11 +12,17 @@ import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import classes from '../utils/classes';
 import HeroBanner from "../models/HeroBanner";
+import TopLine from "../components/body/TopLine";
 
 export default function Home(props) {
   const router = useRouter();
   const { state, dispatch } = useContext(Store);
   const { topRatedProducts, heroBannersDoc } = props;
+
+  const topline = {
+      title: 'the title',
+      description: 'the description should be at least two lines'
+  }
 
   const addToCartHandler = async (product) => {
     const existItem = state.cart.cartItems.find((x) => x._id === product._id);
@@ -55,6 +61,8 @@ export default function Home(props) {
           </NextLink>
         ))}
       </Carousel>
+
+        <TopLine topline={topline} />
 
       <Typography variant="h2">Popular Products</Typography>
       <Grid container spacing={3}>

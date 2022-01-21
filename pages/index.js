@@ -1,102 +1,133 @@
 import NextLink from 'next/link';
-import { Grid, Link, Typography } from '@mui/material';
+import {Grid, Link, Typography} from '@mui/material';
 import Layout from '../components/Layout';
 import db from '../utils/db';
 import Product from '../models/Product';
 import axios from 'axios';
-import { useRouter } from 'next/router';
-import { useContext } from 'react';
-import { Store } from '../utils/Store';
+import {useRouter} from 'next/router';
+import {useContext} from 'react';
+import {Store} from '../utils/Store';
 import ProductItem from '../components/ProductItem';
-import { Carousel } from 'react-responsive-carousel';
+import {Carousel} from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import classes from '../utils/classes';
 import HeroBanner from "../models/HeroBanner";
 import TopLine from "../components/body/TopLine";
+import WhyChooseUs from "../components/body/topLine/whyChooseUs";
 
 export default function Home(props) {
-  const router = useRouter();
-  const { state, dispatch } = useContext(Store);
-  const { topRatedProducts, heroBannersDoc } = props;
+    const router = useRouter();
+    const {state, dispatch} = useContext(Store);
+    const {topRatedProducts, heroBannersDoc} = props;
 
-  const topLine = {
-      title: 'the title',
-      description: 'A short and strong description'
-  }
-
-  const addToCartHandler = async (product) => {
-    const existItem = state.cart.cartItems.find((x) => x._id === product._id);
-    const quantity = existItem ? existItem.quantity + 1 : 1;
-    const { data } = await axios.get(`/api/products/${product._id}`);
-    if (data.countInStock < quantity) {
-      window.alert('Sorry. Product is out of stock');
-      return;
+    const topLine = {
+        title: 'the title',
+        description: 'A short and strong description'
     }
-    dispatch({ type: 'CART_ADD_ITEM', payload: { ...product, quantity } });
-    router.push('/cart');
-  };
 
-  return (
-    <Layout>
-      <Carousel
-          showThumbs={false}
-          autoPlay={true}
-          infiniteLoop={true}
-          interval={5000}
-          transitionTime={1000}
-      >
-        {heroBannersDoc.map((heroBanner) => (
-          <NextLink
-            key={heroBanner._id}
-            href={`/${heroBanner.link}`}
-            passHref
-          >
-            <Link sx={classes.flex}>
-              <img
-                  src={heroBanner.imgUrl}
-                  alt={heroBanner.altTitle}
-                  style={{maxWidth: 1500, maxHeight: 500}}
-              />
-            </Link>
-          </NextLink>
-        ))}
-      </Carousel>
+    const addToCartHandler = async (product) => {
+        const existItem = state.cart.cartItems.find((x) => x._id === product._id);
+        const quantity = existItem ? existItem.quantity + 1 : 1;
+        const {data} = await axios.get(`/api/products/${product._id}`);
+        if (data.countInStock < quantity) {
+            window.alert('Sorry. Product is out of stock');
+            return;
+        }
+        dispatch({type: 'CART_ADD_ITEM', payload: {...product, quantity}});
+        router.push('/cart');
+    };
 
-        <TopLine topline={topLine} />
+    return (
+        <Layout>
+            <Carousel
+                showThumbs={false}
+                autoPlay={true}
+                infiniteLoop={true}
+                interval={5000}
+                transitionTime={1000}
+            >
+                {heroBannersDoc.map((heroBanner) => (
+                    <NextLink
+                        key={heroBanner._id}
+                        href={`/${heroBanner.link}`}
+                        passHref
+                    >
+                        <Link sx={classes.flex}>
+                            <img
+                                src={heroBanner.imgUrl}
+                                alt={heroBanner.altTitle}
+                                style={{maxWidth: 1500, maxHeight: 500}}
+                            />
+                        </Link>
+                    </NextLink>
+                ))}
+            </Carousel>
 
-      <Typography variant="h2">Popular Products</Typography>
-      <Grid container spacing={3}>
-        {topRatedProducts.map((product) => (
-          <Grid item md={4} key={product.name}>
-            <ProductItem
-              product={product}
-              addToCartHandler={addToCartHandler}
-            />
-          </Grid>
-        ))}
-      </Grid>
-    </Layout>
-  );
+            <TopLine topline={topLine}/>
+            {/*<WhyChooseUs
+                title="Why choose us?"
+                subtitle="Read the next reasons"
+                items={[
+                    {
+                        title: 'The standard ',
+                        text:
+                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
+                        img: {
+                            src: 'https://res.cloudinary.com/arouzex/image/upload/v1642750883/Hero%20Banners/d4nhtv78egb4qgcfhrl3.jpg',
+                        },
+                    },
+                    {
+                        title: 'The standard',
+                        text:
+                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
+                        img: {
+                            src: 'https://res.cloudinary.com/arouzex/image/upload/v1642750921/Hero%20Banners/gjaldfwn91xdmismvhvh.jpg',
+                        },
+                    },
+                    {
+                        title: 'The standard',
+                        text:
+                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
+                        img: {
+                            src: 'https://res.cloudinary.com/arouzex/image/upload/v1642750987/Hero%20Banners/lxt3qe1ckpchwxcegsfh.jpg',
+                        },
+                    },
+                ]}
+            />*/}
+
+            <Typography variant="h2">Popular Products</Typography>
+            <Grid container spacing={3}>
+                {topRatedProducts.map((product) => (
+                    <Grid item md={4} key={product.name}>
+                        <ProductItem
+                            product={product}
+                            addToCartHandler={addToCartHandler}
+                        />
+                    </Grid>
+                ))}
+            </Grid>
+        </Layout>
+    );
 }
 
 export async function getServerSideProps() {
-  await db.connect();
+    await db.connect();
 
-  const topRatedProductsDocs = await Product.find({}, '-reviews')
-    .lean()
-    .sort({
-      rating: -1,
-    })
-    .limit(6);
+    const topRatedProductsDocs = await Product.find({}, '-reviews')
+        .lean()
+        .sort({
+            rating: -1,
+        })
+        .limit(6);
 
-  const heroBannersDoc = await HeroBanner.find({}, )
-      .lean()
-      .limit(3);
+    const heroBannersDoc = await HeroBanner.find({},)
+        .lean()
+        .limit(3);
 
-  return {
-    props: {
-      topRatedProducts: topRatedProductsDocs.map(db.convertDocToObj),
-      heroBannersDoc: heroBannersDoc.map(db.convertDocToObj),
-    },
-  };
+    return {
+        props: {
+            topRatedProducts: topRatedProductsDocs.map(db.convertDocToObj),
+            heroBannersDoc: heroBannersDoc.map(db.convertDocToObj),
+        },
+    };
 }

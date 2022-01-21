@@ -16,7 +16,8 @@ handler.post(async (req, res) => {
     await db.connect();
     const newHeroBanner = new HeroBanner({
         imgUrl: req.body.imgUrl,
-        link: req.body.link
+        link: req.body.link,
+        altTitle: req.body.altTitle
     });
 
     const heroBanner = await newHeroBanner.save();

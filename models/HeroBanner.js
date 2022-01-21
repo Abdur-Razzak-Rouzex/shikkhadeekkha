@@ -8,6 +8,11 @@ const heroBannerSchema = new mongoose.Schema({
         link: {
             type: String,
             required: false
+        },
+        altTitle: {
+            type: String,
+            required: false,
+            default: 'Cadet Coaching'
         }
     },
     {

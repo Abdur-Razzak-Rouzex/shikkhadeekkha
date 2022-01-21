@@ -63,6 +63,7 @@ const CreateHeroBanner = () => {
         const file = e.target.files[0];
         const bodyFormData = new FormData();
         bodyFormData.append('file', file);
+        bodyFormData.append('from', 'heroBanner');
         try {
             dispatch({type: 'UPLOAD_REQUEST'});
             const {data} = await axios.post('/api/admin/upload', bodyFormData, {
@@ -80,14 +81,14 @@ const CreateHeroBanner = () => {
         }
     };
 
-    const submitHandler = async ({imgUrl, link}) => {
+    const submitHandler = async ({imgUrl, link, altTitle}) => {
         closeSnackbar();
         try {
             dispatch({type: 'CREATE_REQUEST'});
 
             await axios.post(
                 `/api/admin/hero-banner`,
-                {imgUrl, link},
+                {imgUrl, link, altTitle},
                 {headers: {authorization: `Bearer ${userInfo.token}`}}
             );
 
@@ -174,6 +175,23 @@ const CreateHeroBanner = () => {
                                                         multiline
                                                         id="link"
                                                         label="Link"
+                                                        {...field}
+                                                    />
+                                                )}
+                                            />
+                                        </ListItem>
+                                        <ListItem>
+                                            <Controller
+                                                name="altTitle"
+                                                control={control}
+                                                defaultValue="Cadet Coaching"
+                                                render={({field}) => (
+                                                    <TextField
+                                                        variant="outlined"
+                                                        fullWidth
+                                                        multiline
+                                                        id="altTitle"
+                                                        label="Image alter title"
                                                         {...field}
                                                     />
                                                 )}

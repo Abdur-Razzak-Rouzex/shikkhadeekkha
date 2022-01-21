@@ -1,4 +1,4 @@
-import TitleAndSubtitle from "../../../common/TitleAndSubtitle";
+import TitleAndSubtitle from "../../common/TitleAndSubtitle";
 import {
     Box, Button, Card, CardActions, CardContent, CardMedia,
     Container, Grid, Typography
@@ -30,7 +30,7 @@ const Feature = ({item: {img, title, text}}) => {
     );
 };
 
-export default function WhyChooseUs({items, title, subtitle}) {
+export default function WhyChooseUsSection({items, title, subtitle}) {
     return (
         <Box component="section" sx={{paddingY: 5}}>
             <Container>

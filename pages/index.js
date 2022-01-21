@@ -12,8 +12,8 @@ import {Carousel} from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import classes from '../utils/classes';
 import HeroBanner from "../models/HeroBanner";
-import TopLine from "../components/body/TopLine";
-import WhyChooseUs from "../components/body/topLine/whyChooseUs";
+import TopLineSection from "../components/body/TopLineSection";
+import WhyChooseUsSection from "../components/body/whyChooseUsSection";
 
 export default function Home(props) {
     const router = useRouter();
@@ -63,8 +63,8 @@ export default function Home(props) {
                 ))}
             </Carousel>
 
-            <TopLine topline={topLine}/>
-            {/*<WhyChooseUs
+            <TopLineSection topline={topLine}/>
+            {/*<WhyChooseUsSection
                 title="Why choose us?"
                 subtitle="Read the next reasons"
                 items={[

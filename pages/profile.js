@@ -44,12 +44,12 @@ function Profile() {
     };
 
     useEffect(() => {
-        if (!userInfo.name) {
+        if (!userInfo?.name) {
             return router.push('/login');
         }
         setValue('name', userInfo.name);
         setValue('email', userInfo.email);
-    }, []);
+    }, [router, setValue, userInfo.email, userInfo.name]);
     const submitHandler = async ({name, email, password, confirmPassword}) => {
         closeSnackbar();
         if (password !== confirmPassword) {

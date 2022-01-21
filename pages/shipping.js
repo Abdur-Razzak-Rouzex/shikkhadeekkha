@@ -1,4 +1,4 @@
-import {List, ListItem, Typography, TextField, Button} from '@mui/material';
+import {Button, List, ListItem, TextField, Typography} from '@mui/material';
 import {useRouter} from 'next/router';
 import React, {useContext, useEffect} from 'react';
 import Layout from '../components/Layout';
@@ -14,7 +14,6 @@ export default function Shipping() {
         control,
         formState: {errors},
         setValue,
-        getValues,
     } = useForm();
     const router = useRouter();
     const {state, dispatch} = useContext(Store);
@@ -22,10 +21,12 @@ export default function Shipping() {
         userInfo,
         cart: {shippingAddress},
     } = state;
+
     const {location} = shippingAddress;
 
     useEffect(() => {
-        if (!userInfo.name) {
+        console.log('use info from shipping: ', userInfo);
+        if (!userInfo?.name) {
             router.push('/login?redirect=/shipping');
         }
         setValue('fullName', shippingAddress.fullName);
@@ -33,7 +34,7 @@ export default function Shipping() {
         setValue('city', shippingAddress.city);
         setValue('postalCode', shippingAddress.postalCode);
         setValue('country', shippingAddress.country);
-    }, []);
+    }, [router, setValue, shippingAddress.address, shippingAddress.city, shippingAddress.country, shippingAddress.fullName, shippingAddress.postalCode, userInfo, userInfo?.name]);
 
     const submitHandler = ({fullName, address, city, postalCode, country}) => {
         dispatch({
@@ -54,7 +55,7 @@ export default function Shipping() {
         router.push('/payment');
     };
 
-    const chooseLocationHandler = () => {
+    /*const chooseLocationHandler = () => {
         const fullName = getValues('fullName');
         const address = getValues('address');
         const city = getValues('city');
@@ -76,7 +77,8 @@ export default function Shipping() {
             })
         );
         router.push('/map');
-    };
+    };*/
+
     return (
         <Layout title="Shipping Address">
             <CheckoutWizard activeStep={1}/>
@@ -226,14 +228,14 @@ export default function Shipping() {
                         />
                     </ListItem>
                     <ListItem>
-                        <Button
+                        {/*<Button
                             variant="contained"
                             type="button"
                             color="secondary"
                             onClick={chooseLocationHandler}
                         >
                             Choose on map
-                        </Button>
+                        </Button>*/}
                         <Typography>
                             {location.lat && `${location.lat}, ${location.lat}`}
                         </Typography>

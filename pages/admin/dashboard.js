@@ -47,7 +47,7 @@ function AdminDashboard() {
     });
 
     useEffect(() => {
-        if (!userInfo.name) {
+        if (!userInfo?.name) {
             router.push('/login');
         }
         const fetchData = async () => {
@@ -62,7 +62,7 @@ function AdminDashboard() {
             }
         };
         fetchData();
-    }, []);
+    }, [router, userInfo.name, userInfo.token]);
     return (
         <Layout title="Admin Dashboard">
             <Grid container spacing={1}>

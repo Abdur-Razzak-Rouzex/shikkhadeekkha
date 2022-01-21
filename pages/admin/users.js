@@ -61,7 +61,7 @@ function AdminUsers() {
         });
 
     useEffect(() => {
-        if (!userInfo.name) {
+        if (!userInfo?.name) {
             router.push('/login');
         }
         const fetchData = async () => {
@@ -80,7 +80,7 @@ function AdminUsers() {
         } else {
             fetchData();
         }
-    }, [successDelete]);
+    }, [router, successDelete, userInfo.name, userInfo.token]);
 
     const {enqueueSnackbar} = useSnackbar();
 

@@ -31,6 +31,7 @@ function CartScreen() {
     const {
         cart: {cartItems},
     } = state;
+
     const updateCartHandler = async (item, quantity) => {
         const {data} = await axios.get(`/api/products/${item._id}`);
         if (data.countInStock < quantity) {
@@ -39,12 +40,15 @@ function CartScreen() {
         }
         dispatch({type: 'CART_ADD_ITEM', payload: {...item, quantity}});
     };
+
     const removeItemHandler = (item) => {
         dispatch({type: 'CART_REMOVE_ITEM', payload: item});
     };
+
     const checkoutHandler = () => {
         router.push('/shipping');
     };
+
     return (
         <Layout title="Shopping Cart">
             <Typography component="h1" variant="h1">

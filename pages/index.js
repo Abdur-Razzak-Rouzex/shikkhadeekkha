@@ -14,6 +14,7 @@ import classes from '../utils/classes';
 import HeroBanner from "../models/HeroBanner";
 import TopLineSection from "../components/body/TopLineSection";
 import WhyChooseUsSection from "../components/body/whyChooseUsSection";
+import Image from 'next/image'
 
 export default function Home(props) {
     const router = useRouter();
@@ -53,10 +54,11 @@ export default function Home(props) {
                         passHref
                     >
                         <Link sx={classes.flex}>
-                            <img
+                            <Image
                                 src={heroBanner.imgUrl}
                                 alt={heroBanner.altTitle}
-                                style={{maxWidth: 1500, maxHeight: 500}}
+                                width={1500}
+                                height={500}
                             />
                         </Link>
                     </NextLink>

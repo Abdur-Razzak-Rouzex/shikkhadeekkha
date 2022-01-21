@@ -54,10 +54,10 @@ const CreateHeroBanner = () => {
     const {userInfo} = state;
 
     useEffect(() => {
-        if (!userInfo.name) {
+        if (!userInfo?.name) {
             return router.push('/login');
         }
-    }, []);
+    }, [router, userInfo?.name]);
 
     const uploadHandler = async (e, imageField = 'image') => {
         const file = e.target.files[0];

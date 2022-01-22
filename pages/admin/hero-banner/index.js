@@ -15,6 +15,7 @@ import AdminMenuItems from "../../../components/admin/AdminMenuItems";
 import dynamic from "next/dynamic";
 import {useRouter} from "next/router";
 import CircularProgress from '@mui/material/CircularProgress';
+import {muiDataTableOptions} from "../../../components/common/constants";
 
 const HeroBanners = () => {
     const {enqueueSnackbar} = useSnackbar();
@@ -26,9 +27,6 @@ const HeroBanners = () => {
     const router = useRouter();
     const {userInfo} = state;
     const [loader, setLoader] = useState(false);
-
-    /*const {data, loading, pageCount, totalCount} = useFetchHeroBanners();
-    console.log('data mmm: ', data);*/
 
     const [data, setData] = useState([]);
 
@@ -95,21 +93,13 @@ const HeroBanners = () => {
 
     const columns = useMemo(
         () => [
-            /*{
-                Header: '#',
-                disableFilters: true,
-                disableSortBy: true,
-                Cell: (props) => {
-                    return props.row.index + 1;
-                },
-            },*/
             {
-                name: "imgUrl",
-                label: " Image",
+                label: "Serial Number",
+                name: "#",
                 options: {
-                    filter: true,
-                    sort: true,
-                }
+                    filter: false,
+                    sort: false,
+                },
             },
             {
                 name: "altTitle",
@@ -122,6 +112,14 @@ const HeroBanners = () => {
             {
                 name: "link",
                 label: "Link",
+                options: {
+                    filter: true,
+                    sort: true,
+                }
+            },
+            {
+                name: "imgUrl",
+                label: " Image",
                 options: {
                     filter: true,
                     sort: true,
@@ -157,11 +155,6 @@ const HeroBanners = () => {
         [],
     );
 
-    const options = {
-        filterType: 'checkbox',
-        serverSide: true
-    };
-
     return (
         <>
             <Layout title="Hero Banners">
@@ -173,11 +166,16 @@ const HeroBanners = () => {
                     </Grid>
                     <Grid item md={9} xs={12}>
                         {loader ? (
-                            <Box
-                                sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '50px' }}
-                            >
-                                <CircularProgress color="secondary"/>
-                            </Box>
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        marginTop: '100px'
+                                    }}
+                                >
+                                    <CircularProgress color="secondary"/>
+                                </Box>
                             ) :
                             (
                                 <PageBlock
@@ -197,7 +195,7 @@ const HeroBanners = () => {
                                         pageCount={pageCount}
                                         totalCount={totalCount}
                                         toggleResetTable={isToggleTable}*/
-                                        options={options}
+                                        options={muiDataTableOptions}
                                     />
 
                                     {isOpenAddEditModal && (

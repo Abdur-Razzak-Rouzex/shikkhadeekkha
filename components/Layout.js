@@ -42,6 +42,12 @@ export default function Layout({title, description, children}) {
             secondary: {
                 main: '#208080',
             },
+            error: {
+                main: '#d32f2f',
+            },
+            warning: {
+                main: '#ED6C02',
+            },
         },
     });
 

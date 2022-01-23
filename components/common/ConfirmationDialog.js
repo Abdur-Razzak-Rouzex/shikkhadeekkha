@@ -23,7 +23,10 @@ const ConfirmationDialog = ({open, onDeny, onConfirm, title, dialogTitle}) => {
                     </DialogContentText>
                 </Box>
                 <Box pt={2}>
-                    <Button onClick={onDeny} color='secondary.main'>
+                    <Button
+                        onClick={onDeny}
+                        color='secondary'
+                    >
                         No
                     </Button>
                     <Button

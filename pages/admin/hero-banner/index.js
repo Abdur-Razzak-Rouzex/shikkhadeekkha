@@ -5,7 +5,7 @@ import {Store} from "../../../utils/Store";
 import {getError} from "../../../utils/error";
 import AddButton from '../../../components/common/button/AddButton';
 import PageBlock from '../../../components/common/PageBlock';
-import {Box, Button, Card, Grid} from "@mui/material";
+import {Box, Card, Grid} from "@mui/material";
 import MUIDataTable from "mui-datatables";
 import HeroBannerAddEditPopup from "./HeroBannerAddEditPopup";
 import HeroBannerDetailsPopup from "./HeroBannerDetailsPopup";
@@ -89,7 +89,7 @@ const HeroBanners = () => {
                 headers: {authorization: `Bearer ${userInfo.token}`},
             });
 
-            enqueueSnackbar('Product deleted successfully', {variant: 'success'});
+            enqueueSnackbar('Hero Banner deleted successfully', {variant: 'success'});
             refreshDataTable();
         } catch (err) {
             enqueueSnackbar(getError(err), {variant: 'error'});
@@ -167,23 +167,6 @@ const HeroBanners = () => {
                     },
                 }
             }
-            /*{
-                label: "Actions",
-                Cell: (props) => {
-                    let data = props.row.original;
-                    return (
-                        <DatatableButtonGroup>
-                            <ReadButton onClick={() => openDetailsModal(data.id)}/>
-                            <EditButton onClick={() => openAddEditModal(data.id)}/>
-                            <DeleteButton
-                                deleteAction={() => deleteHeroBanner(data.id)}
-                                deleteTitle="Are you sure?"
-                            />
-                        </DatatableButtonGroup>
-                    );
-                },
-                sortable: false,
-            },*/
         ],
         [],
     );
@@ -224,10 +207,6 @@ const HeroBanners = () => {
                                         title={"Hero Banners"}
                                         columns={columns}
                                         data={data}
-                                        /*loading={loading}
-                                        pageCount={pageCount}
-                                        totalCount={totalCount}
-                                        toggleResetTable={isToggleTable}*/
                                         options={muiDataTableOptions}
                                     />
 

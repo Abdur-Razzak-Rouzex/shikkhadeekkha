@@ -8,14 +8,16 @@ export const DialogTitle = (props) => {
     const {children, onClose, ...other} = props;
 
     return (
-        <MuiDialogTitle {...other}>
+        <MuiDialogTitle {...other} sx={{display: 'flex', justifyContent: 'space-between'}}>
             <Typography>{children}</Typography>
             {onClose ? (
                 <IconButton
                     aria-label='close'
                     onClick={onClose}
-                    size='large'>
-                    <CloseIcon />
+                    size='large'
+                    sx={{marginTop: '-11px'}}
+                >
+                    <CloseIcon/>
                 </IconButton>
             ) : null}
         </MuiDialogTitle>
@@ -26,7 +28,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction='up' ref={ref} {...props} />;
 });
 
-const CustomMuiModal = ({onClose, children, maxWidth = 'md', ...props }) => {
+const CustomMuiModal = ({onClose, children, maxWidth = 'md', ...props}) => {
     return (
         <Dialog
             aria-labelledby='simple-modal-title'

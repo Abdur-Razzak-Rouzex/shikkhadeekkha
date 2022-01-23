@@ -30,7 +30,7 @@ const isAuth = async (req, res, next) => {
     });
   } else {
     /*res.status(401).send({ message: 'Token is not supplied' });*/
-    res.status(401).send({ message: 'You are not a valid user' });
+    res.status(401).send({ message: 'You are not a valid user or refresh the page' });
   }
 };
 const isAdmin = async (req, res, next) => {

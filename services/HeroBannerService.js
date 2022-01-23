@@ -11,7 +11,9 @@ const fetcher = async (url) => {
 }
 
 export function useFetchSingleHeroBanner (id) {
-    const { data, error, mutate } = useSWR(`/api/admin/hero-banner/${id}`, fetcher)
+    console.log('the id in service: ', id);
+    const { data, error, mutate } = useSWR(`/api/admin/hero-banner/${id}`, fetcher);
+    console.log('data in service: ', data);
 
     return {
         heroBanner: data,

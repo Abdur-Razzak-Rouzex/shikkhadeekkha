@@ -4,7 +4,7 @@ import Tooltip from '@mui/material/Tooltip';
 import {Skeleton} from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 
-const EditButton = ({onClick, isLoading, className, variant = 'contained', ...extra}) => {
+const EditButton = ({onClick, isLoading = false, className, variant = 'contained', ...extra}) => {
     return isLoading ? (
         <Skeleton variant='text' height={60} width={100}/>
     ) : (
@@ -12,9 +12,9 @@ const EditButton = ({onClick, isLoading, className, variant = 'contained', ...ex
             <Button
                 startIcon={<EditIcon/>}
                 onClick={onClick}
-                sx={extra?.color && {color: 'secondary'}}
+                sx={extra?.color && {color: 'secondary.main'}}
                 className={className ? className : className}
-                color={extra?.color || 'warning'}
+                color={extra?.color || 'secondary'}
                 variant={variant}
                 {...extra}>
                 Edit

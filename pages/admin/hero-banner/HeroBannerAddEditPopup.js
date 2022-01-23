@@ -5,13 +5,12 @@ import React, {useContext, useEffect, useMemo, useState} from 'react';
 import {useSnackbar} from 'notistack';
 import {yupResolver} from "@hookform/resolvers/yup";
 import {getError} from "../../../utils/error";
-import ViewCarouselIcon from '@mui/icons-material/ViewCarousel';
 import HookFormMuiModal from '../../../components/common/modals/HookFormMuiModal';
 import SubmitButton from "../../../components/common/button/SubmitButton";
 import CancelButton from "../../../components/common/button/CancelButton";
 import axios from "axios";
-import {useFetchSingleHeroBanner} from "../../../services/HeroBannerService";
 import {Store} from "../../../utils/Store";
+import {useRouter} from "next/router";
 
 const initialValues = {
     imgUrl: '',
@@ -22,16 +21,35 @@ const initialValues = {
 const HeroBannerAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
     const {enqueueSnackbar} = useSnackbar();
     const isEdit = itemId != null;
-    const [imgUrl, setImgUrl] = useState('');
+    const [imageUrl, setImageUrl] = useState('');
     const [loadingUpload, setLoadingUpload] = useState(false);
     const {state} = useContext(Store);
     const {userInfo} = state;
+    const router = useRouter();
+    const [itemData, setItemData] = useState({});
 
-    const {
-        data: itemData,
-        isLoading,
-        mutate: mutateHeroBanner,
-    } = useFetchSingleHeroBanner(itemId);
+
+    useEffect(() => {
+        if (!userInfo?.name) {
+            router.push('/login');
+        }
+
+        const getBanner = async () => {
+            try {
+                const {data} = await axios.get(`/api/admin/hero-banner/${itemId}`, {
+                    headers: {authorization: `Bearer ${userInfo.token}`},
+                })
+                setItemData(data);
+            } catch (error) {
+                enqueueSnackbar(getError(error), {variant: 'error'});
+            }
+        };
+
+        if (itemId) {
+            getBanner();
+        }
+
+    }, [itemId])
 
     const validationSchema = useMemo(() => {
         return yup.object().shape({
@@ -56,14 +74,21 @@ const HeroBannerAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
         const file = e.target.files[0];
         const bodyFormData = new FormData();
         bodyFormData.append('file', file);
+        bodyFormData.append('from', 'heroBanner');
         try {
-            const {data} = await axios.post('/api/users/upload', bodyFormData, {
+            const {data} = await axios.post('/api/admin/upload', bodyFormData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
+                    'Content-Type': 'multipart/form-data',
+                    authorization: `Bearer ${userInfo.token}`,
+                },
             });
 
-            setImgUrl(data.secure_url);
+            setImageUrl(data.secure_url);
+            reset({
+                imgUrl: data.secure_url,
+                link: itemData?.link,
+                altTitle: itemData?.altTitle,
+            });
             setLoadingUpload(false);
             enqueueSnackbar('Hero banner image uploaded successfully', {variant: 'success'});
 
@@ -80,12 +105,15 @@ const HeroBannerAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                 link: itemData?.link,
                 altTitle: itemData?.altTitle,
             });
+            setImageUrl(itemId?.imgUrl);
         } else {
             reset(initialValues);
         }
     }, [itemData, reset]);
 
     const onSubmit = async ({imgUrl, link, altTitle}) => {
+        console.log('imgUrl: ', imgUrl);
+        console.log('imageUrl: ', imageUrl);
         try {
             if (itemId) {
                 await axios.put(
@@ -94,7 +122,7 @@ const HeroBannerAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                     {headers: {authorization: `Bearer ${userInfo.token}`}}
                 );
                 enqueueSnackbar('Hero Banner updated successfully', {variant: 'success'});
-                await mutateHeroBanner();
+                /*await mutateHeroBanner();*/
             } else {
                 await axios.post(
                     `/api/admin/hero-banner`,
@@ -116,35 +144,39 @@ const HeroBannerAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
             {...props}
             title={
                 <>
-                    <ViewCarouselIcon/>
-                    {isEdit ? (<Typography>Edit</Typography>) : (<Typography>Add New</Typography>)}
+                    {isEdit ?
+                        (<Typography component={'span'} variant={'h5'}>Edit Hero Banner</Typography>)
+                        : (<Typography component={'span'} variant={'h5'}>Add a new Hero Banner</Typography>)
+                    }
                 </>
             }
             maxWidth={'md'}
             handleSubmit={handleSubmit(onSubmit)}
             actions={
                 <>
-                    <CancelButton onClick={props.onClose} isLoading={isLoading}/>
-                    <SubmitButton isSubmitting={isSubmitting} isLoading={isLoading}/>
+                    <CancelButton onClick={props.onClose}/>
+                    <SubmitButton isSubmitting={isSubmitting}/>
                 </>
             }>
             <Grid container spacing={5}>
-                <Grid item xs={6}>
-                    {imgUrl &&
-                        <TextField
-                            value={imgUrl}
-                            error={!!errors.imgUrl}
-                            variant="outlined"
-                            id="imgUrl"
-                            label="Upload Hero Banner Image"
-                            {...register("imgUrl")}
-                            helperText={errors.imgUrl?.message ?? null}
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                        />}
+                <Grid item xs={12} md={12}>
+                    <TextField
+                        error={!!errors.imgUrl}
+                        variant="outlined"
+                        id="imgUrl"
+                        label="Upload Hero Banner Image"
+                        {...register("imgUrl")}
+                        helperText={errors.imgUrl?.message ?? null}
+                        InputProps={{
+                            readOnly: true,
+                        }}
+                        fullWidth
+                    />
+                </Grid>
+                <Grid item xs={6}/>
+                <Grid item xs={6} sx={{display: 'flex', justifyContent: 'end'}}>
                     <Button variant="contained" component="label" sx={{minWidth: 250}}>
-                        Upload Profile Picture
+                        Upload Hero Banner
                         <input type="file" onChange={uploadHandler} hidden accept="image/*"/>
                     </Button>
                     {loadingUpload && <CircularProgress/>}

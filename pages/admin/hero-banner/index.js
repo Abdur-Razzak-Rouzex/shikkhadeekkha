@@ -5,7 +5,7 @@ import {Store} from "../../../utils/Store";
 import {getError} from "../../../utils/error";
 import AddButton from '../../../components/common/button/AddButton';
 import PageBlock from '../../../components/common/PageBlock';
-import {Box, Card, Grid} from "@mui/material";
+import {Box, Button, Card, Grid} from "@mui/material";
 import MUIDataTable from "mui-datatables";
 import HeroBannerAddEditPopup from "./HeroBannerAddEditPopup";
 import HeroBannerDetailsPopup from "./HeroBannerDetailsPopup";
@@ -16,6 +16,10 @@ import dynamic from "next/dynamic";
 import {useRouter} from "next/router";
 import CircularProgress from '@mui/material/CircularProgress';
 import {muiDataTableOptions} from "../../../components/common/constants";
+import DatatableButtonGroup from "../../../components/common/button/DatatableButtonGroup";
+import ReadButton from "../../../components/common/button/ReadButton";
+import EditButton from "../../../components/common/button/EditButton";
+import DeleteButton from "../../../components/common/button/DeleteButton";
 
 const HeroBanners = () => {
     const {enqueueSnackbar} = useSnackbar();
@@ -34,21 +38,27 @@ const HeroBanners = () => {
         if (!userInfo?.name) {
             router.push('/login');
         }
-        const getUsers = async () => {
+        const getBanners = async () => {
             setLoader(true);
+            let modifiedData = [];
             try {
                 const {data} = await axios.get('/api/admin/hero-banner', {
                     headers: {authorization: `Bearer ${userInfo.token}`},
                 })
-                setData(data);
+
+                data.map((item, index) => {
+                    modifiedData.push({sl: index + 1, ...item});
+                })
+
+                setData(modifiedData);
                 setLoader(false);
             } catch (error) {
                 enqueueSnackbar(getError(error), {variant: 'error'});
                 setLoader(false);
             }
         };
-        getUsers();
-    }, [enqueueSnackbar, router, userInfo?.name, userInfo.token])
+        getBanners();
+    }, [isToggleTable])
 
     const closeAddEditModal = useCallback(() => {
         setIsOpenAddEditModal(false);
@@ -61,8 +71,7 @@ const HeroBanners = () => {
         setSelectedItemId(itemId);
     }, []);
 
-    const openDetailsModal = useCallback(
-        (itemId) => {
+    const openDetailsModal = useCallback((itemId) => {
             setIsOpenDetailsModal(true);
             setSelectedItemId(itemId);
         },
@@ -94,8 +103,17 @@ const HeroBanners = () => {
     const columns = useMemo(
         () => [
             {
+                name: "_id",
+                label: "ID",
+                options: {
+                    filter: false,
+                    sort: false,
+                    display: false
+                },
+            },
+            {
+                name: "sl",
                 label: "Serial Number",
-                name: "#",
                 options: {
                     filter: false,
                     sort: false,
@@ -125,15 +143,30 @@ const HeroBanners = () => {
                     sort: true,
                 }
             },
-            /*{
-                Header: "Status",
-                accessor: 'row_status',
-                filter: 'rowStatusFilter',
-                Cell: (props) => {
-                    let data = props.row.original;
-                    return <CustomChipRowStatus value={data?.row_status}/>;
-                },
-            },*/
+            {
+                name: "#",
+                label: "Actions",
+                options: {
+                    filter: false,
+                    sort: false,
+                    searchable: false,
+                    download: false,
+                    print: false,
+                    customBodyRender: (value, tableMeta) => {
+                        const id = tableMeta.tableData[tableMeta.rowIndex]._id;
+                        return (
+                            <DatatableButtonGroup>
+                                <ReadButton onClick={() => openDetailsModal(id)}/>
+                                <EditButton onClick={() => openAddEditModal(id)}/>
+                                <DeleteButton
+                                    deleteAction={() => deleteHeroBanner(id)}
+                                    deleteTitle="Are you sure?"
+                                />
+                            </DatatableButtonGroup>
+                        );
+                    },
+                }
+            }
             /*{
                 label: "Actions",
                 Cell: (props) => {
@@ -213,6 +246,7 @@ const HeroBanners = () => {
                                             itemId={selectedItemId}
                                             onClose={closeDetailsModal}
                                             openEditModal={openAddEditModal}
+                                            userInfo={userInfo}
                                         />
                                     )}
                                 </PageBlock>

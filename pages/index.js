@@ -123,7 +123,7 @@ export async function getServerSideProps() {
         })
         .limit(6);
 
-    const heroBannersDoc = await HeroBanner.find({},)
+    const heroBannersDoc = await HeroBanner.find({})
         .lean()
         .limit(3);
 

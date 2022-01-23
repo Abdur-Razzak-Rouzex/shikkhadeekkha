@@ -141,6 +141,7 @@ const HeroBanners = () => {
                 options: {
                     filter: true,
                     sort: true,
+                    display: false
                 }
             },
             {

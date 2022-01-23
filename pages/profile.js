@@ -38,7 +38,7 @@ function Profile() {
         dispatch({type: 'USER_LOGOUT'});
         Cookies.remove('userInfo');
         Cookies.remove('cartItems');
-        Cookies.remove('shippinhAddress');
+        Cookies.remove('shippingAddress');
         Cookies.remove('paymentMethod');
         router.push('/');
     };
@@ -47,9 +47,10 @@ function Profile() {
         if (!userInfo?.name) {
             return router.push('/login');
         }
-        setValue('name', userInfo.name);
-        setValue('email', userInfo.email);
-    }, [router, setValue, userInfo.email, userInfo.name]);
+        setValue('name', userInfo?.name);
+        setValue('email', userInfo?.email);
+    }, []);
+
     const submitHandler = async ({name, email, password, confirmPassword}) => {
         closeSnackbar();
         if (password !== confirmPassword) {

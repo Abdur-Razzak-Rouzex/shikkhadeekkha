@@ -4,13 +4,14 @@ import HeroBanner from '../../../../models/HeroBanner';
 import db from '../../../../utils/db';
 
 const handler = nc();
-handler.use(isAuth, isAdmin);
 
 handler.get(async (req, res) => {
     await db.connect();
     const heroBanners = await HeroBanner.find({});
     res.send(heroBanners);
 });
+
+handler.use(isAuth, isAdmin);
 
 handler.post(async (req, res) => {
     await db.connect();

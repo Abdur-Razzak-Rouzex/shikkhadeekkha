@@ -1,25 +1,44 @@
 import NextLink from 'next/link';
-import {Grid, Link, Typography} from '@mui/material';
+import {Grid, Link, Skeleton, Typography} from '@mui/material';
 import Layout from '../components/Layout';
 import db from '../utils/db';
 import Product from '../models/Product';
 import axios from 'axios';
 import {useRouter} from 'next/router';
-import {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Store} from '../utils/Store';
 import ProductItem from '../components/ProductItem';
 import {Carousel} from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import classes from '../utils/classes';
-import HeroBanner from "../models/HeroBanner";
 import TopLineSection from "../components/body/TopLineSection";
 import WhyChooseUsSection from "../components/body/whyChooseUsSection";
 import Image from 'next/image'
+import {getError} from "../utils/error";
+import {useSnackbar} from "notistack";
 
 export default function Home(props) {
     const router = useRouter();
     const {state, dispatch} = useContext(Store);
-    const {topRatedProducts, heroBannersDoc} = props;
+    const {topRatedProducts} = props;
+    const {enqueueSnackbar} = useSnackbar();
+    const [banners, setBanners] = useState([]);
+    const [loader, setLoader] = useState(false);
+
+    useEffect(() => {
+        const getBanners = async () => {
+            setLoader(true);
+            try {
+                const {data} = await axios.get('/api/admin/hero-banner')
+                setBanners(data);
+                setLoader(false);
+            } catch (error) {
+                enqueueSnackbar(getError(error), {variant: 'error'});
+                setLoader(false);
+            }
+        };
+        getBanners();
+    }, [])
 
     const topLine = {
         title: 'the title',
@@ -40,30 +59,36 @@ export default function Home(props) {
 
     return (
         <Layout>
-            <Carousel
-                showThumbs={false}
-                autoPlay={true}
-                infiniteLoop={true}
-                interval={5000}
-                transitionTime={1000}
-            >
-                {heroBannersDoc.map((heroBanner) => (
-                    <NextLink
-                        key={heroBanner._id}
-                        href={`/${heroBanner.link}`}
-                        passHref
+            {loader ?
+                (
+                    <Skeleton variant='rectangular' height="60vh" width="100%"/>
+                ) : (
+                    <Carousel
+                        showThumbs={false}
+                        autoPlay={true}
+                        infiniteLoop={true}
+                        interval={5000}
+                        transitionTime={1000}
                     >
-                        <Link sx={classes.flex}>
-                            <Image
-                                src={heroBanner.imgUrl}
-                                alt={heroBanner.altTitle}
-                                width={1500}
-                                height={500}
-                            />
-                        </Link>
-                    </NextLink>
-                ))}
-            </Carousel>
+                        {banners.map((heroBanner) => (
+                            <NextLink
+                                key={heroBanner._id}
+                                href={`/${heroBanner.link}`}
+                                passHref
+                            >
+                                <Link sx={classes.flex}>
+                                    <Image
+                                        src={heroBanner.imgUrl}
+                                        alt={heroBanner.altTitle}
+                                        width={1500}
+                                        height={500}
+                                    />
+                                </Link>
+                            </NextLink>
+                        ))}
+                    </Carousel>
+                )
+            }
 
             <TopLineSection topline={topLine}/>
 
@@ -123,14 +148,9 @@ export async function getServerSideProps() {
         })
         .limit(6);
 
-    const heroBannersDoc = await HeroBanner.find({})
-        .lean()
-        .limit(3);
-
     return {
         props: {
             topRatedProducts: topRatedProductsDocs.map(db.convertDocToObj),
-            heroBannersDoc: heroBannersDoc.map(db.convertDocToObj),
         },
     };
 }

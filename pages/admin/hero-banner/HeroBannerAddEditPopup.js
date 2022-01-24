@@ -112,8 +112,6 @@ const HeroBannerAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
     }, [itemData, reset]);
 
     const onSubmit = async ({imgUrl, link, altTitle}) => {
-        console.log('imgUrl: ', imgUrl);
-        console.log('imageUrl: ', imageUrl);
         try {
             if (itemId) {
                 await axios.put(

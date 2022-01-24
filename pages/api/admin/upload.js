@@ -33,12 +33,24 @@ handler.use(isAuth, isAdmin, upload.single('file')).post(async (req, res) => {
                         ]
                     },
                     (error, result) => {
-                    if (result) {
-                        resolve(result);
-                    } else {
-                        reject(error);
-                    }
-                });
+                        if (result) {
+                            resolve(result);
+                        } else {
+                            reject(error);
+                        }
+                    });
+            } else if (req.body.from === 'whyChooseUs') {
+                stream = cloudinary.uploader.upload_stream(
+                    {
+                        folder: 'Hero Banners',
+                    },
+                    (error, result) => {
+                        if (result) {
+                            resolve(result);
+                        } else {
+                            reject(error);
+                        }
+                    });
             } else {
                 stream = cloudinary.uploader.upload_stream((error, result) => {
                     if (result) {

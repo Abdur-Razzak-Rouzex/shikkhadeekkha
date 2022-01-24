@@ -13,12 +13,15 @@ import {Store} from "../../../utils/Store";
 import {useRouter} from "next/router";
 
 const initialValues = {
-    imgUrl: '',
-    link: '',
-    altTitle: ''
+    image: '',
+    title: '',
+    shortDescription: '',
+    isFlipBook: false,
+    flipBookLink: '',
+    contentBody: '',
 };
 
-const HeroBannerAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
+const WhyChooseUsAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
     const {enqueueSnackbar} = useSnackbar();
     const isEdit = itemId != null;
     const [loadingUpload, setLoadingUpload] = useState(false);
@@ -33,9 +36,9 @@ const HeroBannerAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
             router.push('/login');
         }
 
-        const getBanner = async () => {
+        const getWhyChooseUs = async () => {
             try {
-                const {data} = await axios.get(`/api/admin/hero-banner/${itemId}`, {
+                const {data} = await axios.get(`/api/why-choose-us/${itemId}`, {
                     headers: {authorization: `Bearer ${userInfo.token}`},
                 })
                 setItemData(data);
@@ -45,17 +48,43 @@ const HeroBannerAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
         };
 
         if (itemId) {
-            getBanner();
+            getWhyChooseUs();
         }
 
     }, [itemId])
 
     const validationSchema = useMemo(() => {
         return yup.object().shape({
-            imgUrl: yup
+            image: yup
                 .string()
                 .required()
                 .label("Image url"),
+            title: yup
+                .string()
+                .required()
+                .label("Title"),
+            shortDescription: yup
+                .string()
+                .required()
+                .label("Short Description"),
+            isFlipBook: yup
+                .boolean()
+                .required()
+                .label("Is FlipBook"),
+            flipBookLink: yup
+                .mixed()
+                .label("Is FlipBook")
+                .when('isFlipBook', {
+                    is: true,
+                    then: yup.string().required(),
+                }),
+            contentBody: yup
+                .mixed()
+                .label("Content Body")
+                .when('isFlipBook', {
+                    is: false,
+                    then: yup.string().required(),
+                }),
         })
     }, []);
 
@@ -74,7 +103,7 @@ const HeroBannerAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
         const file = e.target.files[0];
         const bodyFormData = new FormData();
         bodyFormData.append('file', file);
-        bodyFormData.append('from', 'heroBanner');
+        bodyFormData.append('from', 'whyChooseUs');
         try {
             const {data} = await axios.post('/api/admin/upload', bodyFormData, {
                 headers: {
@@ -83,9 +112,9 @@ const HeroBannerAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                 },
             });
 
-            reset({...getValues(), imgUrl: data.secure_url});
+            reset({...getValues(), image: data.secure_url});
             setLoadingUpload(false);
-            enqueueSnackbar('Hero banner image uploaded successfully', {variant: 'success'});
+            enqueueSnackbar('Image for "Why choose Us" section uploaded successfully', {variant: 'success'});
 
         } catch (error) {
             setLoadingUpload(false);
@@ -96,32 +125,34 @@ const HeroBannerAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
     useEffect(() => {
         if (itemData) {
             reset({
-                imgUrl: itemData?.imgUrl,
-                link: itemData?.link,
-                altTitle: itemData?.altTitle,
+                image: itemData?.image,
+                title: itemData?.title,
+                shortDescription: itemData?.shortDescription,
+                isFlipBook: itemData?.isFlipBook,
+                flipBookLink: itemData?.flipBookLink,
+                contentBody: itemData?.contentBody,
             });
         } else {
             reset(initialValues);
         }
     }, [itemData, reset]);
 
-    const onSubmit = async ({imgUrl, link, altTitle}) => {
+    const onSubmit = async (data) => {
         try {
             if (itemId) {
                 await axios.put(
                     `/api/admin/hero-banner/${itemId}`,
-                    {imgUrl, link, altTitle},
+                    data,
                     {headers: {authorization: `Bearer ${userInfo.token}`}}
                 );
-                enqueueSnackbar('Hero Banner updated successfully', {variant: 'success'});
-                /*await mutateHeroBanner();*/
+                enqueueSnackbar('"Why Choose Us" updated successfully', {variant: 'success'});
             } else {
                 await axios.post(
                     `/api/admin/hero-banner`,
-                    {imgUrl, link, altTitle},
+                    data,
                     {headers: {authorization: `Bearer ${userInfo.token}`}}
                 );
-                enqueueSnackbar('Hero Banner created successfully', {variant: 'success'});
+                enqueueSnackbar('"Why Choose Us" created successfully', {variant: 'success'});
             }
             props.onClose();
             refreshDataTable();
@@ -137,8 +168,8 @@ const HeroBannerAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
             title={
                 <>
                     {isEdit ?
-                        (<Typography component={'span'} variant={'h5'}>Edit Hero Banner</Typography>)
-                        : (<Typography component={'span'} variant={'h5'}>Add a new Hero Banner</Typography>)
+                        (<Typography component={'span'} variant={'h5'}>Edit Why Choose Us</Typography>)
+                        : (<Typography component={'span'} variant={'h5'}>Add a new Why Choose Us</Typography>)
                     }
                 </>
             }
@@ -199,4 +230,4 @@ const HeroBannerAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
         </HookFormMuiModal>
     );
 };
-export default HeroBannerAddEditPopup;
+export default WhyChooseUsAddEditPopup;

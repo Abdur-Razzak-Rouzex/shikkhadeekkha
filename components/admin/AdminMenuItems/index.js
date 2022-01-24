@@ -30,6 +30,11 @@ const AdminMenuItems = ({activeItem}) => {
                     <ListItemText primary="Hero Banner"/>
                 </ListItem>
             </NextLink>
+            <NextLink href="/admin/why-choose-us" passHref>
+                <ListItem selected={activeItem === 'why-choose-us'} button component="a">
+                    <ListItemText primary="Why Choose Us"/>
+                </ListItem>
+            </NextLink>
         </List>
     )
 }

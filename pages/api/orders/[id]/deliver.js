@@ -15,10 +15,8 @@ handler.put(async (req, res) => {
     order.isDelivered = true;
     order.deliveredAt = Date.now();
     const deliveredOrder = await order.save();
-    await db.disconnect();
     res.send({ message: 'order delivered', order: deliveredOrder });
   } else {
-    await db.disconnect();
     res.status(404).send({ message: 'order not found' });
   }
 });

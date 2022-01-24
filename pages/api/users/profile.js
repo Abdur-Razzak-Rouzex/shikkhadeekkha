@@ -16,7 +16,6 @@ handler.put(async (req, res) => {
     ? bcrypt.hashSync(req.body.password)
     : user.password;
   await user.save();
-  await db.disconnect();
 
   const token = signToken(user);
   res.send({

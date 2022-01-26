@@ -21,7 +21,7 @@ const WhyChooseUsDetailsPopup = ({itemId, openEditModal, userInfo, ...props}) =>
 
         const getBanner = async () => {
             try {
-                const {data} = await axios.get(`/api/admin/hero-banner/${itemId}`, {
+                const {data} = await axios.get(`/api/why-choose-us/${itemId}`, {
                     headers: {authorization: `Bearer ${userInfo.token}`},
                 })
                 setItemData(data);
@@ -57,7 +57,7 @@ const WhyChooseUsDetailsPopup = ({itemId, openEditModal, userInfo, ...props}) =>
                     }>
                     <Grid container spacing={2}>
                         <Grid item xs={12} md={12}>
-                            <img src={itemData?.imgUrl} alt={itemId?.altTitle} height={300} width={850}/>
+                            <img src={itemData?.image} alt={itemId?.altTitle} height={300} width={850}/>
                         </Grid>
                         <Grid item xs={12} md={6}>
                             <DetailsInputView

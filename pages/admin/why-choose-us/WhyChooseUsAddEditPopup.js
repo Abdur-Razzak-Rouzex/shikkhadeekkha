@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import {Button, CircularProgress, Grid, TextField, Typography} from '@mui/material';
+import {Button, Checkbox, CircularProgress, Grid, TextField, Typography} from '@mui/material';
 import {useForm} from 'react-hook-form';
 import React, {useContext, useEffect, useMemo, useState} from 'react';
 import {useSnackbar} from 'notistack';
@@ -29,6 +29,7 @@ const WhyChooseUsAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
     const {userInfo} = state;
     const router = useRouter();
     const [itemData, setItemData] = useState({});
+    const [isFlipBookChecked, setIsFlipBookChecked] = useState(false);
 
 
     useEffect(() => {
@@ -138,17 +139,18 @@ const WhyChooseUsAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
     }, [itemData, reset]);
 
     const onSubmit = async (data) => {
+        console.log('why choose us add edit submitted data: ', data);
         try {
             if (itemId) {
                 await axios.put(
-                    `/api/admin/hero-banner/${itemId}`,
+                    `/api/why-choose-us/${itemId}`,
                     data,
                     {headers: {authorization: `Bearer ${userInfo.token}`}}
                 );
                 enqueueSnackbar('"Why Choose Us" updated successfully', {variant: 'success'});
             } else {
                 await axios.post(
-                    `/api/admin/hero-banner`,
+                    `/api/why-choose-us`,
                     data,
                     {headers: {authorization: `Bearer ${userInfo.token}`}}
                 );
@@ -184,12 +186,12 @@ const WhyChooseUsAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
             <Grid container spacing={5}>
                 <Grid item xs={12} md={12}>
                     <TextField
-                        error={!!errors.imgUrl}
+                        error={!!errors.image}
                         variant="outlined"
-                        id="imgUrl"
-                        label="Upload Hero Banner Image"
-                        {...register("imgUrl")}
-                        helperText={errors.imgUrl?.message ?? null}
+                        id="image"
+                        label="Upload image for why choose us section"
+                        {...register("image")}
+                        helperText={errors.image?.message ?? null}
                         InputProps={{
                             readOnly: true,
                         }}
@@ -204,28 +206,66 @@ const WhyChooseUsAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                     </Button>
                     {loadingUpload && <CircularProgress/>}
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={12}>
                     <TextField
-                        error={!!errors.username}
+                        error={!!errors.title}
                         variant="outlined"
                         fullWidth
-                        id="link"
-                        label="Link"
-                        {...register("link")}
-                        helperText={errors.link?.message ?? null}
+                        id="title"
+                        label="Title"
+                        {...register("title")}
+                        helperText={errors.title?.message ?? null}
                     />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={12}>
                     <TextField
-                        error={!!errors.altTitle}
+                        error={!!errors.shortDescription}
                         variant="outlined"
                         fullWidth
-                        id="altTitle"
-                        label="Image alter title"
-                        {...register("altTitle")}
-                        helperText={errors.altTitle?.message ?? null}
+                        id="shortDescription"
+                        label="Write a short Description"
+                        rows={2}
+                        multiline={true}
+                        {...register("shortDescription")}
+                        helperText={errors.shortDescription?.message ?? null}
                     />
                 </Grid>
+                <Grid item xs={12} sx={{display: 'flex'}}>
+                    <Checkbox
+                        id="isFlipBook"
+                        color={'primary'}
+                        checked={isFlipBookChecked}
+                        {...register("isFlipBook")}
+                        onChange={() => setIsFlipBookChecked(prevState => !prevState)}
+                    />
+                    <Typography sx={{paddingTop: '10px'}}>Is Flip Book</Typography>
+                </Grid>
+                {isFlipBookChecked &&
+                    (<Grid item xs={12}>
+                        <TextField
+                            error={!!errors.flipBookLink}
+                            variant="outlined"
+                            fullWidth
+                            id="flipBookLink"
+                            label="Insert the flip book link"
+                            {...register("flipBookLink")}
+                            helperText={errors.flipBookLink?.message ?? null}
+                        />
+                    </Grid>)}
+                {!isFlipBookChecked &&
+                    (<Grid item xs={12}>
+                        <TextField
+                            error={!!errors.contentBody}
+                            variant="outlined"
+                            fullWidth
+                            id="contentBody"
+                            label="Write the content body"
+                            rows={10}
+                            multiline={true}
+                            {...register("contentBody")}
+                            helperText={errors.flipBookLink?.message ?? null}
+                        />
+                    </Grid>)}
             </Grid>
         </HookFormMuiModal>
     );

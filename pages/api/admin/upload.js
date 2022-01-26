@@ -42,7 +42,7 @@ handler.use(isAuth, isAdmin, upload.single('file')).post(async (req, res) => {
             } else if (req.body.from === 'whyChooseUs') {
                 stream = cloudinary.uploader.upload_stream(
                     {
-                        folder: 'Hero Banners',
+                        folder: 'Why Choose Us',
                     },
                     (error, result) => {
                         if (result) {

@@ -20,6 +20,7 @@ import EditButton from "../../../components/common/button/EditButton";
 import DeleteButton from "../../../components/common/button/DeleteButton";
 import WhyChooseUsDetailsPopup from "./WhyChooseUsDetailsPopup";
 import WhyChooseUsAddEditPopup from "./WhyChooseUsAddEditPopup";
+import CustomChipRowStatus from "../../../components/common/CustomChipRowStatus";
 
 const WhyChooseUs = () => {
     const {enqueueSnackbar} = useSnackbar();
@@ -140,8 +141,13 @@ const WhyChooseUs = () => {
                 name: "isFlipBook",
                 label: "Is Flip Book",
                 options: {
-                    filter: true,
                     sort: true,
+                    customBodyRender: (value, tableMeta) => {
+                        const isFlipBook = tableMeta.tableData[tableMeta.rowIndex].isFlipBook;
+                        return (
+                            <CustomChipRowStatus value={isFlipBook} />
+                        );
+                    },
                 }
             },
             {

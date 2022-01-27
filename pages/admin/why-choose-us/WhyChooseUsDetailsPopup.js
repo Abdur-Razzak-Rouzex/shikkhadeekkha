@@ -55,19 +55,37 @@ const WhyChooseUsDetailsPopup = ({itemId, openEditModal, userInfo, ...props}) =>
                     }>
                     <Grid container spacing={2}>
                         <Grid item xs={12} md={12}>
-                            <img src={itemData?.image} alt={itemId?.altTitle} height={300} width={850}/>
+                            <img src={itemData?.image} alt={itemId?.altTitle} height={300} width={400}/>
                         </Grid>
                         <Grid item xs={12} md={6}>
                             <DetailsInputView
-                                label="Link"
-                                value={itemData?.link}
+                                label="Title"
+                                value={itemData?.title}
                             />
                         </Grid>
 
                         <Grid item xs={12} md={6}>
                             <DetailsInputView
-                                label="Alt title"
-                                value={itemData?.altTitle}
+                                label="Short Description"
+                                value={itemData?.shortDescription}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <DetailsInputView
+                                label="isFlipBook"
+                                value={itemData?.isFlipBook}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <DetailsInputView
+                                label="Flip Book Link"
+                                value={itemData?.flipBookLink}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={12}>
+                            <DetailsInputView
+                                label="Content Body"
+                                value={itemData?.contentBody}
                             />
                         </Grid>
                     </Grid>

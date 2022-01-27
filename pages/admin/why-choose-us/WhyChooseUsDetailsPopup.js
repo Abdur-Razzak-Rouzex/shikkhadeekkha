@@ -21,9 +21,7 @@ const WhyChooseUsDetailsPopup = ({itemId, openEditModal, userInfo, ...props}) =>
 
         const getBanner = async () => {
             try {
-                const {data} = await axios.get(`/api/why-choose-us/${itemId}`, {
-                    headers: {authorization: `Bearer ${userInfo.token}`},
-                })
+                const {data} = await axios.get(`/api/why-choose-us/${itemId}`);
                 setItemData(data);
             } catch (error) {
                 enqueueSnackbar(getError(error), {variant: 'error'});

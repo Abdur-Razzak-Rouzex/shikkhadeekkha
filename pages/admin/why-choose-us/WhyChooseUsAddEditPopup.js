@@ -31,7 +31,6 @@ const WhyChooseUsAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
     const [itemData, setItemData] = useState({});
     const [isFlipBookChecked, setIsFlipBookChecked] = useState(false);
 
-
     useEffect(() => {
         if (!userInfo?.name) {
             router.push('/login');
@@ -139,7 +138,7 @@ const WhyChooseUsAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
     }, [itemData, reset]);
 
     const onSubmit = async (data) => {
-        console.log('why choose us add edit submitted data: ', data);
+        /*console.log('why choose us add edit submitted data: ', data);*/
         try {
             if (itemId) {
                 await axios.put(

@@ -160,7 +160,7 @@ const WhyChooseUs = () => {
                     download: false,
                     print: false,
                     customBodyRender: (value, tableMeta) => {
-                        const id = tableMeta.tableData[tableMeta.rowIndex]._id;
+                        const id = tableMeta.rowData[0];
                         return (
                             <DatatableButtonGroup>
                                 <ReadButton onClick={() => openDetailsModal(id)}/>

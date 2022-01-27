@@ -40,7 +40,7 @@ const WhyChooseUsDetailsPopup = ({itemId, openEditModal, userInfo, ...props}) =>
                     {...props}
                     title={
                         <>
-                            <Typography component={'span'} variant={'h5'}>Hero Banner details</Typography>
+                            <Typography component={'span'} variant={'h5'}>Why Choose Us details</Typography>
                         </>
                     }
                     maxWidth={'md'}

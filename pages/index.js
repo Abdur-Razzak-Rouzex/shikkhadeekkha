@@ -23,14 +23,24 @@ export default function Home(props) {
     const {topRatedProducts} = props;
     const {enqueueSnackbar} = useSnackbar();
     const [banners, setBanners] = useState([]);
+    const [whyChooseUs, setWhyChooseUs] = useState([]);
     const [loader, setLoader] = useState(false);
 
     useEffect(() => {
         const getBanners = async () => {
             setLoader(true);
             try {
-                const {data} = await axios.get('/api/admin/hero-banner')
-                setBanners(data);
+                const [bannersData, whyChooseUsData] = await Promise.all([
+                    axios.get('/api/admin/hero-banner'),
+                    axios.get('/api/why-choose-us', {
+                        params: {
+                            from: 'client'
+                        }
+                    }),
+                ])
+                setBanners(bannersData.data);
+                setWhyChooseUs(whyChooseUsData.data);
+                console.log('why us: data: ', whyChooseUs);
                 setLoader(false);
             } catch (error) {
                 enqueueSnackbar(getError(error), {variant: 'error'});
@@ -95,32 +105,7 @@ export default function Home(props) {
             <WhyChooseUsSection
                 title="Why choose us?"
                 subtitle="Read the next reasons"
-                items={[
-                    {
-                        title: 'The standard ',
-                        text:
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
-                        img: {
-                            src: 'https://res.cloudinary.com/arouzex/image/upload/v1642750883/Hero%20Banners/d4nhtv78egb4qgcfhrl3.jpg',
-                        },
-                    },
-                    {
-                        title: 'The standard',
-                        text:
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
-                        img: {
-                            src: 'https://res.cloudinary.com/arouzex/image/upload/v1642750921/Hero%20Banners/gjaldfwn91xdmismvhvh.jpg',
-                        },
-                    },
-                    {
-                        title: 'The standard',
-                        text:
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
-                        img: {
-                            src: 'https://res.cloudinary.com/arouzex/image/upload/v1642750987/Hero%20Banners/lxt3qe1ckpchwxcegsfh.jpg',
-                        },
-                    },
-                ]}
+                items={whyChooseUs}
             />
 
             <Typography variant="h2">Popular Products</Typography>

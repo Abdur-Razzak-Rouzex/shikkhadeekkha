@@ -8,8 +8,9 @@ const handler = nc();
 handler.get(async (req, res) => {
     await db.connect();
     let allWhyChooseUs;
-    if(req.body?.from === 'client') {
+    if(req.params?.from === 'client') {
         allWhyChooseUs = await WhyChooseUs.find({}).limit(3);
+        console.log('call was in client');
     }else {
         allWhyChooseUs = await WhyChooseUs.find({});
     }

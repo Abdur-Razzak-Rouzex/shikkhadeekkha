@@ -129,6 +129,13 @@ const Header = () => {
                                     </Typography>
                                 </Link>
                             </NextLink>
+                            <NextLink href="/about-us" passHref>
+                                <Link>
+                                    <Typography component="span">
+                                        About Us
+                                    </Typography>
+                                </Link>
+                            </NextLink>
                             {userInfo ? (
                                 <>
                                     <NextLink href="/profile" passHref>

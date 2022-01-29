@@ -54,9 +54,17 @@ const WhyChooseUsDetailsPopup = ({itemId, openEditModal, userInfo, ...props}) =>
                         </>
                     }>
                     <Grid container spacing={2}>
-                        <Grid item xs={12} md={12}>
-                            <img src={itemData?.image} alt={itemId?.altTitle} height={300} width={400}/>
-                        </Grid>
+                        {itemData?.smallImage ?
+                            (
+                                <Grid item xs={12} md={12}>
+                                    <img src={itemData?.smallImage} alt={itemId?.title} height={300} width={400}/>
+                                </Grid>
+                            ) : (
+                                <Grid item xs={12} md={12}>
+                                    <img src={itemData?.largeImage} alt={itemId?.title} height={300} width={850}/>
+                                </Grid>
+                            )
+                        }
                         <Grid item xs={12} md={6}>
                             <DetailsInputView
                                 label="Title"

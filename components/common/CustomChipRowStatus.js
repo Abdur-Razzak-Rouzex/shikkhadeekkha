@@ -22,14 +22,14 @@ const CustomChipRowStatus = ({value, isLoading, label}) => {
             )}
             <Chip
                 icon={
-                    value == 1 ? (
+                    value ? (
                         <CheckCircleOutline fontSize={'small'} />
                     ) : (
                         <CancelIcon fontSize={'small'} />
                     )
                 }
-                color={value == 1 ? 'primary' : 'secondary'}
-                label={value == 1 ? ("Active") : ("Inactive")}
+                color={value ? 'primary' : 'secondary'}
+                label={value ? ("Active") : ("Inactive")}
             />
         </>
     );

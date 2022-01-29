@@ -1,18 +1,15 @@
 import TitleAndSubtitle from "../../common/TitleAndSubtitle";
-import {
-    Box, Button, Card, CardActions, CardContent, CardMedia,
-    Container, Grid, Typography, Link
-} from "@mui/material";
+import {Box, Button, Card, CardActions, CardContent, CardMedia, Container, Grid, Link, Typography} from "@mui/material";
 import NextLink from "next/link";
 
-const Feature = ({item: {image, title, shortDescription, _id}}) => {
+export const Feature = ({item: {smallImage, title, shortDescription, _id}}) => {
     return (
         <Grid item xs={12} sm={6} md={4} elevation={1}>
             <Card sx={{maxWidth: 345}}>
                 <CardMedia
                     component="img"
                     height="140"
-                    image={image}
+                    image={smallImage}
                     alt={title}
                 />
                 <CardContent>

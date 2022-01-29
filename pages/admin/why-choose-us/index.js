@@ -143,7 +143,7 @@ const WhyChooseUs = () => {
                 options: {
                     sort: true,
                     customBodyRender: (value, tableMeta) => {
-                        const isFlipBook = tableMeta.tableData[tableMeta.rowIndex].isFlipBook;
+                        const isFlipBook = tableMeta.rowData[4];
                         return (
                             <CustomChipRowStatus value={isFlipBook} />
                         );

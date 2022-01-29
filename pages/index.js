@@ -4,21 +4,19 @@ import Layout from '../components/Layout';
 import db from '../utils/db';
 import Product from '../models/Product';
 import axios from 'axios';
-import {useRouter} from 'next/router';
 import React, {useContext, useEffect, useState} from 'react';
 import {Store} from '../utils/Store';
 import ProductItem from '../components/ProductItem';
 import {Carousel} from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import classes from '../utils/classes';
-import TopLineSection from "../components/body/TopLineSection";
-import WhyChooseUsSection from "../components/body/whyChooseUsSection";
+import TopLineSection from "../components/homepage/TopLineSection";
+import WhyChooseUsSection from "../components/homepage/whyChooseUsSection";
 import Image from 'next/image'
 import {getError} from "../utils/error";
 import {useSnackbar} from "notistack";
 
 export default function Home(props) {
-    const router = useRouter();
     const {state, dispatch} = useContext(Store);
     const {topRatedProducts} = props;
     const {enqueueSnackbar} = useSnackbar();
@@ -64,7 +62,6 @@ export default function Home(props) {
             return;
         }
         dispatch({type: 'CART_ADD_ITEM', payload: {...product, quantity}});
-        router.push('/cart');
     };
 
     return (

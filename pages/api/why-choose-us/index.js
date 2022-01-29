@@ -22,7 +22,8 @@ handler.use(isAuth, isAdmin);
 handler.post(async (req, res) => {
     await db.connect();
     const newHeroBanner = new WhyChooseUs({
-        image: req.body.image,
+        smallImage: req.body.smallImage,
+        largeImage: req.body.largeImage,
         title: req.body.title,
         shortDescription: req.body.shortDescription,
         isFlipBook: req.body.isFlipBook,

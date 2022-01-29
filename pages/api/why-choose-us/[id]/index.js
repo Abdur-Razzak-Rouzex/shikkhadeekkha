@@ -17,7 +17,8 @@ handler.put(async (req, res) => {
     await db.connect();
     const whyChooseUs = await WhyChooseUs.findById(req.query.id);
     if (whyChooseUs) {
-        whyChooseUs.image = req.body.image;
+        whyChooseUs.smallImage = req.body.smallImage;
+        whyChooseUs.largeImage = req.body.largeImage;
         whyChooseUs.title = req.body.title;
         whyChooseUs.shortDescription = req.body.shortDescription;
         whyChooseUs.isFlipBook = req.body.isFlipBook;

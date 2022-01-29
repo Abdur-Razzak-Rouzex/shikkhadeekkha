@@ -13,7 +13,8 @@ import {Store} from "../../../utils/Store";
 import {useRouter} from "next/router";
 
 const initialValues = {
-    image: '',
+    smallImage: '',
+    largeImage: '',
     title: '',
     shortDescription: '',
     isFlipBook: false,
@@ -55,10 +56,10 @@ const WhyChooseUsAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
 
     const validationSchema = useMemo(() => {
         return yup.object().shape({
-            image: yup
+            smallImage: yup
                 .string()
                 .required()
-                .label("Image url"),
+                .label("Small Image"),
             title: yup
                 .string()
                 .required()
@@ -85,6 +86,13 @@ const WhyChooseUsAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                     is: false,
                     then: yup.string().required(),
                 }),
+            largeImage: yup
+                .mixed()
+                .label("Large Image")
+                .when('isFlipBook', {
+                    is: false,
+                    then: yup.string().required(),
+                }),
         })
     }, []);
 
@@ -98,7 +106,7 @@ const WhyChooseUsAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
         resolver: yupResolver(validationSchema),
     });
 
-    const uploadHandler = async (e) => {
+    const uploadHandler = async (e, imageSize = 'image') => {
         setLoadingUpload(true);
         const file = e.target.files[0];
         const bodyFormData = new FormData();
@@ -112,7 +120,11 @@ const WhyChooseUsAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                 },
             });
 
-            reset({...getValues(), image: data.secure_url});
+            if (imageSize === 'smallImage') {
+                reset({...getValues(), smallImage: data.secure_url});
+            } else {
+                reset({...getValues(), largeImage: data.secure_url});
+            }
             setLoadingUpload(false);
             enqueueSnackbar('Image for "Why choose Us" section uploaded successfully', {variant: 'success'});
 
@@ -125,7 +137,8 @@ const WhyChooseUsAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
     useEffect(() => {
         if (itemData) {
             reset({
-                image: itemData?.image,
+                smallImage: itemData?.smallImage,
+                largeImage: itemData?.largeImage,
                 title: itemData?.title,
                 shortDescription: itemData?.shortDescription,
                 isFlipBook: itemData?.isFlipBook,
@@ -185,12 +198,12 @@ const WhyChooseUsAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
             <Grid container spacing={5}>
                 <Grid item xs={12} md={12}>
                     <TextField
-                        error={!!errors.image}
+                        error={!!errors.smallImage}
                         variant="outlined"
-                        id="image"
-                        label="Upload image for why choose us section"
-                        {...register("image")}
-                        helperText={errors.image?.message ?? null}
+                        id="smallImage"
+                        label="Upload small image for why choose us section"
+                        {...register("smallImage")}
+                        helperText={errors.smallImage?.message ?? null}
                         InputProps={{
                             readOnly: true,
                         }}
@@ -200,8 +213,8 @@ const WhyChooseUsAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                 <Grid item xs={6}/>
                 <Grid item xs={6} sx={{display: 'flex', justifyContent: 'end'}}>
                     <Button variant="contained" component="label" sx={{minWidth: 250}}>
-                        Upload Hero Banner
-                        <input type="file" onChange={uploadHandler} hidden accept="image/*"/>
+                        Upload small image
+                        <input type="file" onChange={(e) => uploadHandler(e,'smallImage')} hidden accept="image/*"/>
                     </Button>
                     {loadingUpload && <CircularProgress/>}
                 </Grid>
@@ -252,19 +265,47 @@ const WhyChooseUsAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                         />
                     </Grid>)}
                 {!isFlipBookChecked &&
-                    (<Grid item xs={12}>
-                        <TextField
-                            error={!!errors.contentBody}
-                            variant="outlined"
-                            fullWidth
-                            id="contentBody"
-                            label="Write the content body"
-                            rows={10}
-                            multiline={true}
-                            {...register("contentBody")}
-                            helperText={errors.flipBookLink?.message ?? null}
-                        />
-                    </Grid>)}
+                    (
+                        <>
+                            <Grid item xs={12}>
+                                <TextField
+                                    error={!!errors.contentBody}
+                                    variant="outlined"
+                                    fullWidth
+                                    id="contentBody"
+                                    label="Write the content body"
+                                    rows={10}
+                                    multiline={true}
+                                    {...register("contentBody")}
+                                    helperText={errors.flipBookLink?.message ?? null}
+                                />
+                            </Grid>
+                            <Grid item xs={12} md={12}>
+                                <TextField
+                                    error={!!errors.largeImage}
+                                    variant="outlined"
+                                    id="largeImage"
+                                    label="Upload large image for about us details page"
+                                    {...register("largeImage")}
+                                    helperText={errors.largeImage?.message ?? null}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                    fullWidth
+                                />
+                            </Grid>
+                            <Grid item xs={6}/>
+                            <Grid item xs={6} sx={{display: 'flex', justifyContent: 'end'}}>
+                                <Button variant="contained" component="label" sx={{minWidth: 250}}>
+                                    Upload large image
+                                    <input type="file" onChange={uploadHandler} hidden
+                                           accept="image/*"/>
+                                </Button>
+                                {loadingUpload && <CircularProgress/>}
+                            </Grid>
+                        </>
+                    )
+                }
             </Grid>
         </HookFormMuiModal>
     );

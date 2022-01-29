@@ -1,9 +1,13 @@
 import mongoose from "mongoose";
 
 const whyChooseUsSchema = new mongoose.Schema({
-        image: {
+        smallImage: {
             type: String,
             required: true
+        },
+        largeImage: {
+            type: String,
+            required: false
         },
         title: {
             type: String,

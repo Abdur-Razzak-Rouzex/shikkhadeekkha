@@ -48,10 +48,11 @@ function Profile() {
             return router.push('/login');
         }
         setValue('name', userInfo?.name);
+        setValue('phone', userInfo?.phone);
         setValue('email', userInfo?.email);
     }, []);
 
-    const submitHandler = async ({name, email, password, confirmPassword}) => {
+    const submitHandler = async ({name, phone, email, password, confirmPassword}) => {
         closeSnackbar();
         if (password !== confirmPassword) {
             enqueueSnackbar("Passwords don't match", {variant: 'error'});
@@ -62,6 +63,7 @@ function Profile() {
                 '/api/users/profile',
                 {
                     name,
+                    phone,
                     email,
                     password,
                 },
@@ -139,11 +141,39 @@ function Profile() {
                                         </ListItem>
                                         <ListItem>
                                             <Controller
-                                                name="email"
+                                                name="phone"
                                                 control={control}
                                                 defaultValue=""
                                                 rules={{
                                                     required: true,
+                                                    pattern: /(^(\+88|0088)?(01){1}[3456789]{1}(\d){8})$/
+                                                }}
+                                                render={({field}) => (
+                                                    <TextField
+                                                        variant="outlined"
+                                                        fullWidth
+                                                        id="phone"
+                                                        label="Phone Number"
+                                                        inputProps={{type: 'phone'}}
+                                                        error={Boolean(errors.phone)}
+                                                        helperText={
+                                                            errors.phone
+                                                                ? errors.phone.type === 'pattern'
+                                                                    ? 'Phone number is not valid'
+                                                                    : 'Phone number is required'
+                                                                : ''
+                                                        }
+                                                        {...field}
+                                                    />
+                                                )}
+                                            />
+                                        </ListItem>
+                                        <ListItem>
+                                            <Controller
+                                                name="email"
+                                                control={control}
+                                                defaultValue=""
+                                                rules={{
                                                     pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
                                                 }}
                                                 render={({field}) => (

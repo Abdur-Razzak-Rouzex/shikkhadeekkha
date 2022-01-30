@@ -39,7 +39,6 @@ export default function Home(props) {
                 ])
                 setBanners(bannersData.data);
                 setWhyChooseUs(whyChooseUsData.data);
-                console.log('why us: data: ', whyChooseUs);
                 setLoader(false);
             } catch (error) {
                 enqueueSnackbar(getError(error), {variant: 'error'});

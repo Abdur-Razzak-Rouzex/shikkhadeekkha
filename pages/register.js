@@ -17,6 +17,7 @@ import {Controller, useForm} from 'react-hook-form';
 import {useSnackbar} from 'notistack';
 import {getError} from '../utils/error';
 import Form from '../components/Form';
+import {trim} from "lodash/string";
 
 export default function Register() {
     const {
@@ -35,21 +36,23 @@ export default function Register() {
         }
     }, [router, userInfo]);
 
-    const submitHandler = async ({name, email, password, confirmPassword}) => {
+    const submitHandler = async ({name, phone, email, password, confirmPassword}) => {
         closeSnackbar();
         if (password !== confirmPassword) {
             enqueueSnackbar("Passwords don't match", {variant: 'error'});
             return;
         }
+        phone = trim(phone);
         try {
             const {data} = await axios.post('/api/users/register', {
                 name,
+                phone,
                 email,
                 password,
             });
             dispatch({type: 'USER_LOGIN', payload: data});
             Cookies.set('userInfo', JSON.stringify(data));
-            router.push(redirect || '/');
+            await router.push(redirect || '/');
         } catch (err) {
             enqueueSnackbar(getError(err), {variant: 'error'});
         }
@@ -72,6 +75,7 @@ export default function Register() {
                             }}
                             render={({field}) => (
                                 <TextField
+                                    required
                                     variant="outlined"
                                     fullWidth
                                     id="name"
@@ -92,11 +96,40 @@ export default function Register() {
                     </ListItem>
                     <ListItem>
                         <Controller
-                            name="email"
+                            name="phone"
                             control={control}
                             defaultValue=""
                             rules={{
                                 required: true,
+                                pattern: /(^(\+88|0088)?(01){1}[3456789]{1}(\d){8})$/
+                            }}
+                            render={({field}) => (
+                                <TextField
+                                    required
+                                    variant="outlined"
+                                    fullWidth
+                                    id="phone"
+                                    label="Phone Number"
+                                    inputProps={{type: 'phone'}}
+                                    error={Boolean(errors.phone)}
+                                    helperText={
+                                        errors.phone
+                                            ? errors.phone.type === 'pattern'
+                                                ? 'Enter your valid phone number'
+                                                : 'Phone number is required'
+                                            : ''
+                                    }
+                                    {...field}
+                                />
+                            )}
+                        />
+                    </ListItem>
+                    <ListItem>
+                        <Controller
+                            name="email"
+                            control={control}
+                            defaultValue=""
+                            rules={{
                                 pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
                             }}
                             render={({field}) => (
@@ -130,6 +163,7 @@ export default function Register() {
                             }}
                             render={({field}) => (
                                 <TextField
+                                    required
                                     variant="outlined"
                                     fullWidth
                                     id="password"
@@ -139,7 +173,7 @@ export default function Register() {
                                     helperText={
                                         errors.password
                                             ? errors.password.type === 'minLength'
-                                                ? 'Password length is more than 5'
+                                                ? 'Password length must be more than 5'
                                                 : 'Password is required'
                                             : ''
                                     }
@@ -159,6 +193,7 @@ export default function Register() {
                             }}
                             render={({field}) => (
                                 <TextField
+                                    required
                                     variant="outlined"
                                     fullWidth
                                     id="confirmPassword"
@@ -168,7 +203,7 @@ export default function Register() {
                                     helperText={
                                         errors.confirmPassword
                                             ? errors.confirmPassword.type === 'minLength'
-                                                ? 'Confirm Password length is more than 5'
+                                                ? 'Confirm Password length must be more than 5'
                                                 : 'Confirm  Password is required'
                                             : ''
                                     }

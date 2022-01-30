@@ -35,11 +35,11 @@ export default function Login() {
         }
     }, [router, userInfo]);
 
-    const submitHandler = async ({email, password}) => {
+    const submitHandler = async ({phone, password}) => {
         closeSnackbar();
         try {
             const {data} = await axios.post('/api/users/login', {
-                email,
+                phone,
                 password,
             });
             dispatch({type: 'USER_LOGIN', payload: data});
@@ -58,26 +58,26 @@ export default function Login() {
                 <List>
                     <ListItem>
                         <Controller
-                            name="email"
+                            name="phone"
                             control={control}
                             defaultValue=""
                             rules={{
                                 required: true,
-                                pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+                                pattern: /(^(\+88|0088)?(01){1}[3456789]{1}(\d){8})$/,
                             }}
                             render={({field}) => (
                                 <TextField
                                     variant="outlined"
                                     fullWidth
-                                    id="email"
-                                    label="Email"
-                                    inputProps={{type: 'email'}}
-                                    error={Boolean(errors.email)}
+                                    id="phone"
+                                    label="Phone Number"
+                                    inputProps={{type: 'phone'}}
+                                    error={Boolean(errors.phone)}
                                     helperText={
-                                        errors.email
-                                            ? errors.email.type === 'pattern'
-                                                ? 'Email is not valid'
-                                                : 'Email is required'
+                                        errors.phone
+                                            ? errors.phone.type === 'pattern'
+                                                ? 'Phone number is not valid'
+                                                : 'Phone number is required'
                                             : ''
                                     }
                                     {...field}

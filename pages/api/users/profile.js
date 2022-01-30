@@ -11,6 +11,7 @@ handler.put(async (req, res) => {
   await db.connect();
   const user = await User.findById(req.user._id);
   user.name = req.body.name;
+  user.phone = req.body.phone;
   user.email = req.body.email;
   user.password = req.body.password
     ? bcrypt.hashSync(req.body.password)
@@ -22,6 +23,7 @@ handler.put(async (req, res) => {
     token,
     _id: user._id,
     name: user.name,
+    phone: user.phone,
     email: user.email,
     isAdmin: user.isAdmin,
   });

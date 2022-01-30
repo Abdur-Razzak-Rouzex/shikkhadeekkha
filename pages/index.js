@@ -15,6 +15,7 @@ import WhyChooseUsSection from "../components/homepage/whyChooseUsSection";
 import Image from 'next/image'
 import {getError} from "../utils/error";
 import {useSnackbar} from "notistack";
+import TestimonialsCarousel from "../components/homepage/testimonialsCarouselSection";
 
 export default function Home(props) {
     const {state, dispatch} = useContext(Store);
@@ -116,6 +117,43 @@ export default function Home(props) {
                     </Grid>
                 ))}
             </Grid>
+
+            <TestimonialsCarousel
+                title="Testimonials"
+                subtitle="Our clients are happy!"
+                items={[
+                    {
+                        avatar: {src: '/testimonials/brown.jpeg'},
+                        name: 'Emmet Brown',
+                        text:
+                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris',
+                    },
+                    {
+                        avatar: {src: '/testimonials/mcfly.jpeg'},
+                        name: 'Marty Mcfly',
+                        text:
+                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris',
+                    },
+                    {
+                        avatar: {src: '/testimonials/face1.jpeg'},
+                        name: 'Lorem Name',
+                        text:
+                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris',
+                    },
+                    {
+                        avatar: {src: '/testimonials/face2.jpeg'},
+                        name: 'Lorem Name',
+                        text:
+                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris',
+                    },
+                    {
+                        avatar: {src: '/testimonials/face3.jpeg'},
+                        name: 'Lorem Name',
+                        text:
+                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris',
+                    },
+                ]}
+            />
         </Layout>
     );
 }
@@ -128,7 +166,7 @@ export async function getServerSideProps() {
         .sort({
             rating: -1,
         })
-        .limit(6);
+        .limit(3);
 
     return {
         props: {

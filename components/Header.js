@@ -28,6 +28,8 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import LoginIcon from '@mui/icons-material/Login';
+import InfoIcon from '@mui/icons-material/Info';
+import HelpCenterIcon from '@mui/icons-material/HelpCenter';
 
 const Header = () => {
     const {state, dispatch} = useContext(Store);
@@ -136,6 +138,13 @@ const Header = () => {
                                     </Typography>
                                 </Link>
                             </NextLink>
+                            <NextLink href="/FAQs" passHref>
+                                <Link>
+                                    <Typography component="span">
+                                        FAQs
+                                    </Typography>
+                                </Link>
+                            </NextLink>
                             {userInfo ? (
                                 <>
                                     <NextLink href="/profile" passHref>
@@ -215,6 +224,18 @@ const Header = () => {
                             ) : (
                                 <ShoppingCartIcon/>
                             )}
+                        </ListItemIcon>
+                    </ListItem>
+                    <ListItem button onClick={() => redirectTo('/about-us')}>
+                        <ListItemText primary="About Us"/>
+                        <ListItemIcon>
+                            <InfoIcon/>
+                        </ListItemIcon>
+                    </ListItem>
+                    <ListItem button onClick={() => redirectTo('/FAQs')}>
+                        <ListItemText primary="FAQs"/>
+                        <ListItemIcon>
+                            <HelpCenterIcon/>
                         </ListItemIcon>
                     </ListItem>
                     {userInfo ? (

@@ -10,7 +10,6 @@ handler.get(async (req, res) => {
     let allWhyChooseUs;
     if(req.params?.from === 'client') {
         allWhyChooseUs = await WhyChooseUs.find({}).limit(3);
-        console.log('call was in client');
     }else {
         allWhyChooseUs = await WhyChooseUs.find({});
     }

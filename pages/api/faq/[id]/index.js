@@ -17,10 +17,10 @@ handler.put(async (req, res) => {
     await db.connect();
     const faq = await FAQ.findById(req?.query?.id);
     if (faq) {
-        faq.question = req?.body?.question;
+        faq.questions = req?.body?.questions;
         faq.answer = req?.body?.answer;
 
-        await FAQ.save();
+        await faq.save();
         res.send({ message: 'FAQ updated successfully' });
     } else {
         res.status(404).send({ message: 'FAQ Not Found' });

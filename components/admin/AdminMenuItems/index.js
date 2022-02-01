@@ -35,6 +35,16 @@ const AdminMenuItems = ({activeItem}) => {
                     <ListItemText primary="Why Choose Us"/>
                 </ListItem>
             </NextLink>
+            <NextLink href="/admin/testimonial" passHref>
+                <ListItem selected={activeItem === 'testimonials'} button component="a">
+                    <ListItemText primary="Testimonial"/>
+                </ListItem>
+            </NextLink>
+            <NextLink href="/admin/faq" passHref>
+                <ListItem selected={activeItem === 'faqs'} button component="a">
+                    <ListItemText primary="FAQs"/>
+                </ListItem>
+            </NextLink>
         </List>
     )
 }

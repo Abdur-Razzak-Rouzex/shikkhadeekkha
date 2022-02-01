@@ -17,7 +17,7 @@ handler.use(isAuth, isAdmin);
 handler.post(async (req, res) => {
     await db.connect();
     const newFAQ = new FAQ({
-        question: req?.body?.question,
+        questions: req?.body?.questions,
         answer: req?.body?.answer,
     });
 

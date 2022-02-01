@@ -51,6 +51,18 @@ handler.use(isAuth, isAdmin, upload.single('file')).post(async (req, res) => {
                             reject(error);
                         }
                     });
+            }else if (req.body.from === 'testimonial') {
+                stream = cloudinary.uploader.upload_stream(
+                    {
+                        folder: 'Testimonials',
+                    },
+                    (error, result) => {
+                        if (result) {
+                            resolve(result);
+                        } else {
+                            reject(error);
+                        }
+                    });
             } else {
                 stream = cloudinary.uploader.upload_stream((error, result) => {
                     if (result) {

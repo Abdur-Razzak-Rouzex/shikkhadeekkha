@@ -16,10 +16,11 @@ import Image from 'next/image'
 import {getError} from "../utils/error";
 import {useSnackbar} from "notistack";
 import TestimonialsCarousel from "../components/homepage/testimonialsCarouselSection";
+import Testimonial from "../models/Testimonial";
 
 export default function Home(props) {
     const {state, dispatch} = useContext(Store);
-    const {topRatedProducts} = props;
+    const {topRatedProducts, allTestimonials} = props;
     const {enqueueSnackbar} = useSnackbar();
     const [banners, setBanners] = useState([]);
     const [whyChooseUs, setWhyChooseUs] = useState([]);
@@ -120,38 +121,7 @@ export default function Home(props) {
             <TestimonialsCarousel
                 title="Testimonials"
                 subtitle="Our clients are happy!"
-                items={[
-                    {
-                        avatar: {src: '/testimonials/brown.jpeg'},
-                        name: 'Emmet Brown',
-                        text:
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris',
-                    },
-                    {
-                        avatar: {src: '/testimonials/mcfly.jpeg'},
-                        name: 'Marty Mcfly',
-                        text:
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris',
-                    },
-                    {
-                        avatar: {src: '/testimonials/face1.jpeg'},
-                        name: 'Lorem Name',
-                        text:
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris',
-                    },
-                    {
-                        avatar: {src: '/testimonials/face2.jpeg'},
-                        name: 'Lorem Name',
-                        text:
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris',
-                    },
-                    {
-                        avatar: {src: '/testimonials/face3.jpeg'},
-                        name: 'Lorem Name',
-                        text:
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris',
-                    },
-                ]}
+                items={allTestimonials}
             />
         </Layout>
     );
@@ -167,9 +137,13 @@ export async function getServerSideProps() {
         })
         .limit(3);
 
+    const testimonialDocs = await Testimonial.find({})
+        .lean()
+
     return {
         props: {
             topRatedProducts: topRatedProductsDocs.map(db.convertDocToObj),
+            allTestimonials: testimonialDocs.map(db.convertDocToObj),
         },
     };
 }

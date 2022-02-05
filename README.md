@@ -1,9 +1,9 @@
 ## Run it Locally
 ```
-$ git clone https://github.com/basir/next-amazona
-$ cd next-amazona
+$ git clone https://github.com/Abdur-Razzak-Rouzex/shikkhadeekkha.git
+$ cd shikkhadeekkha
 $ npm install
 $ npm run dev
-$ Open http://localhost:3000/api/seed
-$ Open http://localhost:3000
+$ Open http://localhost:7000/api/seed
+$ Open http://localhost:7000
 ```

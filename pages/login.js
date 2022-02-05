@@ -67,6 +67,7 @@ export default function Login() {
                             }}
                             render={({field}) => (
                                 <TextField
+                                    required
                                     variant="outlined"
                                     fullWidth
                                     id="phone"
@@ -96,6 +97,7 @@ export default function Login() {
                             }}
                             render={({field}) => (
                                 <TextField
+                                    required
                                     variant="outlined"
                                     fullWidth
                                     id="password"

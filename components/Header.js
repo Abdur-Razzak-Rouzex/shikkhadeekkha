@@ -155,7 +155,7 @@ const Header = () => {
                                     {userInfo.isAdmin && (
                                         <NextLink href="/admin/dashboard" passHref>
                                             <Link>
-                                                <Typography component="span">Admin Dashboard</Typography>
+                                                <Typography component="span">Dashboard</Typography>
                                             </Link>
                                         </NextLink>
                                     )}
@@ -248,7 +248,7 @@ const Header = () => {
                             </ListItem>
                             {userInfo.isAdmin && (
                                 <ListItem button onClick={() => redirectTo('/admin/dashboard')}>
-                                    <ListItemText primary="Admin Dashboard"/>
+                                    <ListItemText primary="Dashboard"/>
                                     <ListItemIcon>
                                         <DashboardIcon/>
                                     </ListItemIcon>

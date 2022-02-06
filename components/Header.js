@@ -30,6 +30,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import LoginIcon from '@mui/icons-material/Login';
 import InfoIcon from '@mui/icons-material/Info';
 import HelpCenterIcon from '@mui/icons-material/HelpCenter';
+import SchoolIcon from '@mui/icons-material/School';
 
 const Header = () => {
     const {state, dispatch} = useContext(Store);
@@ -145,6 +146,13 @@ const Header = () => {
                                     </Typography>
                                 </Link>
                             </NextLink>
+                            <NextLink href="/admission-form/student-info" passHref>
+                                <Link>
+                                    <Typography component="span">
+                                        Admission
+                                    </Typography>
+                                </Link>
+                            </NextLink>
                             {userInfo ? (
                                 <>
                                     <NextLink href="/profile" passHref>
@@ -236,6 +244,12 @@ const Header = () => {
                         <ListItemText primary="FAQs"/>
                         <ListItemIcon>
                             <HelpCenterIcon/>
+                        </ListItemIcon>
+                    </ListItem>
+                    <ListItem button onClick={() => redirectTo('/admission-form/student-info')}>
+                        <ListItemText primary="Admission"/>
+                        <ListItemIcon>
+                            <SchoolIcon/>
                         </ListItemIcon>
                     </ListItem>
                     {userInfo ? (

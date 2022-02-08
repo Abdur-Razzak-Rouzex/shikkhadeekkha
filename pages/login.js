@@ -33,7 +33,7 @@ export default function Login() {
         if (userInfo) {
             router.push('/');
         }
-    }, [router, userInfo]);
+    }, []);
 
     const submitHandler = async ({phone, password}) => {
         closeSnackbar();

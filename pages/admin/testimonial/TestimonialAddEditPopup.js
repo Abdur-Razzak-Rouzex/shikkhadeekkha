@@ -179,7 +179,7 @@ const TestimonialAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                 </Grid>
                 <Grid item xs={6}/>
                 <Grid item xs={6} sx={{display: 'flex', justifyContent: 'end'}}>
-                    <Button variant="contained" component="label" sx={{minWidth: 250}}>
+                    <Button variant="contained" component="label">
                         Upload avatar
                         <input type="file" onChange={(e) => uploadHandler(e)} hidden accept="image/*"/>
                     </Button>

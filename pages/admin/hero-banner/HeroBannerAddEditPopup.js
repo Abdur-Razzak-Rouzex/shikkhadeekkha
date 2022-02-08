@@ -167,7 +167,7 @@ const HeroBannerAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                 </Grid>
                 <Grid item xs={6}/>
                 <Grid item xs={6} sx={{display: 'flex', justifyContent: 'end'}}>
-                    <Button variant="contained" component="label" sx={{minWidth: 250}}>
+                    <Button variant="contained" component="label">
                         Upload Hero Banner
                         <input type="file" onChange={uploadHandler} hidden accept="image/*"/>
                     </Button>

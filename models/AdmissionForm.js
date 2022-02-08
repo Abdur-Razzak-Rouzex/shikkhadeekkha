@@ -116,17 +116,12 @@ const admissionFormSchema = new mongoose.Schema(
                     type: String
                 }
             ],
-            CoCurricularActivities: [
+            coCurricularActivities: [
                 {
                     type: String
                 }
             ]
         },
-        paymentMethod: { type: String, required: true },
-        paymentResult: { id: String, status: String, email_address: String },
-        itemsPrice: { type: Number, required: true },
-        isPaid: { type: Boolean, required: true, default: false },
-        paidAt: { type: Date },
     },
     {
         timestamps: true,

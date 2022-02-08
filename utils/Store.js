@@ -112,6 +112,39 @@ function reducer(state, action) {
                     },
                 },
             };
+        case 'SAVE_PARENTS_INFO':
+            return {
+                ...state,
+                admission: {
+                    ...state.admission,
+                    parentsInfo: {
+                        ...state.admission.parentsInfo,
+                        ...action.payload,
+                    },
+                },
+            };
+            case 'SAVE_ACADEMIC_GUARDIAN_INFO':
+            return {
+                ...state,
+                admission: {
+                    ...state.admission,
+                    academicGuardianInfo: {
+                        ...state.admission.academicGuardianInfo,
+                        ...action.payload,
+                    },
+                },
+            };
+        case 'SAVE_OTHER_INFO':
+            return {
+                ...state,
+                admission: {
+                    ...state.admission,
+                    otherInfo: {
+                        ...state.admission.otherInfo,
+                        ...action.payload,
+                    },
+                },
+            };
         case 'USER_LOGIN':
             return {...state, userInfo: action.payload};
         case 'USER_LOGOUT':

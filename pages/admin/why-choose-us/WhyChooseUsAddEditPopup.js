@@ -212,7 +212,7 @@ const WhyChooseUsAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                 </Grid>
                 <Grid item xs={6}/>
                 <Grid item xs={6} sx={{display: 'flex', justifyContent: 'end'}}>
-                    <Button variant="contained" component="label" sx={{minWidth: 250}}>
+                    <Button variant="contained" component="label">
                         Upload small image
                         <input type="file" onChange={(e) => uploadHandler(e,'smallImage')} hidden accept="image/*"/>
                     </Button>
@@ -296,7 +296,7 @@ const WhyChooseUsAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                             </Grid>
                             <Grid item xs={6}/>
                             <Grid item xs={6} sx={{display: 'flex', justifyContent: 'end'}}>
-                                <Button variant="contained" component="label" sx={{minWidth: 250}}>
+                                <Button variant="contained" component="label">
                                     Upload large image
                                     <input type="file" onChange={uploadHandler} hidden
                                            accept="image/*"/>

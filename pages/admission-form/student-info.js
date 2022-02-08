@@ -23,7 +23,6 @@ import {EDUCATION_MEDIUM, STUDENT_CLASS} from "../../components/common/constants
 import axios from "axios";
 import {getError} from "../../utils/error";
 import {useSnackbar} from "notistack";
-import data from "../../utils/data";
 
 const initialValues = {
     studentNameBn: '',
@@ -61,6 +60,8 @@ export default function StudentInfo() {
                 educationMedium: studentInfo?.educationMedium,
                 passportSizePhotoUrl: studentInfo?.passportSizePhotoUrl,
             })
+            setStudentClass(studentInfo?.studentClass);
+            setEducationMedium(studentInfo?.educationMedium);
         } else {
             reset(initialValues);
         }
@@ -145,7 +146,6 @@ export default function StudentInfo() {
     }
 
     const submitHandler = ({studentNameBn, studentNameEn, dateOfBirth, studentClass, instituteName, educationMedium, passportSizePhotoUrl}) => {
-        console.log('input data for student info: ', data);
         dispatch({
             type: 'SAVE_STUDENT_INFO',
             payload: {
@@ -279,8 +279,8 @@ export default function StudentInfo() {
                                 <MenuItem value="">
                                     <em>None</em>
                                 </MenuItem>
-                                {EDUCATION_MEDIUM?.map((className, key) => (
-                                    <MenuItem value={className.name} key={key}>{className.title}</MenuItem>
+                                {EDUCATION_MEDIUM?.map((education, key) => (
+                                    <MenuItem value={education.name} key={key}>{education.title}</MenuItem>
                                 ))}
                             </Select>
                             <FormHelperText
@@ -302,22 +302,24 @@ export default function StudentInfo() {
                             fullWidth
                         />
                     </Grid>
-                    <Grid item xs={6}/>
-                    <Grid item xs={6} sx={{display: 'flex', justifyContent: 'end'}}>
-                        <Button variant="contained" component="label" sx={{minWidth: 250}}>
+                    <Grid item xs={5}/>
+                    <Grid item xs={7} sx={{display: 'flex', justifyContent: 'end'}}>
+                        <Button variant="contained" component="label" color='secondary'>
                             আপ্লোড করুন
                             <input type="file" onChange={(e) => uploadHandler(e)} hidden accept="image/*"/>
                         </Button>
                         {loadingUpload && <CircularProgress/>}
                     </Grid>
 
-                    <Button variant="contained"
-                            type="submit"
-                            fullWidth color="primary"
-                            sx={{marginTop: 5}}
-                    >
-                        Continue
-                    </Button>
+                    <Grid item xs={12}>
+                        <Button variant="contained"
+                                type="submit"
+                                fullWidth
+                                color="primary"
+                        >
+                            Continue
+                        </Button>
+                    </Grid>
                 </Grid>
             </Form>
         </Layout>

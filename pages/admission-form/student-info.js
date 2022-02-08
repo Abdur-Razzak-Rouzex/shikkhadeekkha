@@ -1,6 +1,16 @@
-import {Button, Grid, TextField, Typography} from '@mui/material';
+import {
+    Button,
+    FormControl,
+    FormHelperText,
+    Grid,
+    InputLabel,
+    MenuItem,
+    Select,
+    TextField,
+    Typography
+} from '@mui/material';
 import {useRouter} from 'next/router';
-import React, {useContext, useEffect, useMemo} from 'react';
+import React, {useContext, useEffect, useMemo, useState} from 'react';
 import Cookies from 'js-cookie';
 import {useForm} from 'react-hook-form';
 import Form from "../../components/Form";
@@ -9,6 +19,7 @@ import Layout from "../../components/Layout";
 import {Store} from "../../utils/Store";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import {STUDENT_CLASS} from "../../components/common/constants";
 
 const initialValues = {
     studentNameBn: '',
@@ -21,6 +32,10 @@ const initialValues = {
 };
 
 export default function StudentInfo() {
+    const [studentClass, setStudentClass] = useState('');
+    const handleClassChange = (event) => {
+        setStudentClass(event.target.value);
+    };
 
     const validationSchema = useMemo(() => {
         return yup.object().shape({
@@ -116,6 +131,9 @@ export default function StudentInfo() {
 
                     <Grid item xs={12} md={6}>
                         <TextField
+                            InputLabelProps={{
+                                required: true,
+                            }}
                             error={!!errors?.studentNameBn}
                             variant="outlined"
                             fullWidth
@@ -127,6 +145,9 @@ export default function StudentInfo() {
                     </Grid>
                     <Grid item xs={12} md={6}>
                         <TextField
+                            InputLabelProps={{
+                                required: true,
+                            }}
                             error={!!errors?.studentNameEn}
                             variant="outlined"
                             fullWidth
@@ -151,6 +172,27 @@ export default function StudentInfo() {
                             {...register("dateOfBirth")}
                             helperText={errors?.dateOfBirth?.message ?? null}
                         />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <FormControl sx={{ minWidth: 271 }}>
+                            <InputLabel id="studentClass">শ্রেণী</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-helper-label"
+                                id="studentClass"
+                                value={studentClass}
+                                label="শ্রেণী"
+                                onChange={handleClassChange}
+                                error={!!errors?.studentClass}
+                            >
+                                <MenuItem value="">
+                                    <em>None</em>
+                                </MenuItem>
+                                {STUDENT_CLASS?.map((className, key) => (
+                                    <MenuItem value={className.name} key={key}>{className.title}</MenuItem>
+                                ) )}
+                            </Select>
+                            <FormHelperText sx={{color: '#d32f2f'}}>{errors?.studentClass?.message ?? null}</FormHelperText>
+                        </FormControl>
                     </Grid>
                 </Grid>
 

@@ -1,9 +1,8 @@
 import nextConnect from 'next-connect';
-import {isAuth, isAdmin} from '../../../utils/auth';
-import {onError} from '../../../utils/error';
 import multer from 'multer';
 import {v2 as cloudinary} from 'cloudinary';
 import streamifier from 'streamifier';
+import {onError} from '../../utils/error';
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -20,41 +19,14 @@ export const config = {
 const handler = nextConnect({onError});
 const upload = multer();
 
-handler.use(isAuth, isAdmin, upload.single('file')).post(async (req, res) => {
+handler.use(upload.single('file')).post(async (req, res) => {
     const streamUpload = (req) => {
         return new Promise((resolve, reject) => {
             let stream;
-            if (req.body.from === 'heroBanner') {
+            if (req.body.from === 'studentInfo') {
                 stream = cloudinary.uploader.upload_stream(
                     {
-                        folder: 'Hero Banners',
-                        transformation: [
-                            {width: 1500, height: 500},
-                        ]
-                    },
-                    (error, result) => {
-                        if (result) {
-                            resolve(result);
-                        } else {
-                            reject(error);
-                        }
-                    });
-            } else if (req.body.from === 'whyChooseUs') {
-                stream = cloudinary.uploader.upload_stream(
-                    {
-                        folder: 'Why Choose Us',
-                    },
-                    (error, result) => {
-                        if (result) {
-                            resolve(result);
-                        } else {
-                            reject(error);
-                        }
-                    });
-            } else if (req.body.from === 'testimonial') {
-                stream = cloudinary.uploader.upload_stream(
-                    {
-                        folder: 'Testimonials',
+                        folder: 'Students',
                     },
                     (error, result) => {
                         if (result) {

@@ -1,5 +1,5 @@
 import {
-    Button,
+    Button, CircularProgress,
     FormControl,
     FormHelperText,
     Grid,
@@ -19,7 +19,11 @@ import Layout from "../../components/Layout";
 import {Store} from "../../utils/Store";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import {STUDENT_CLASS} from "../../components/common/constants";
+import {EDUCATION_MEDIUM, STUDENT_CLASS} from "../../components/common/constants";
+import axios from "axios";
+import {getError} from "../../utils/error";
+import {useSnackbar} from "notistack";
+import data from "../../utils/data";
 
 const initialValues = {
     studentNameBn: '',
@@ -33,8 +37,43 @@ const initialValues = {
 
 export default function StudentInfo() {
     const [studentClass, setStudentClass] = useState('');
-    const handleClassChange = (event) => {
+    const [educationMedium, setEducationMedium] = useState('');
+    const [loadingUpload, setLoadingUpload] = useState(false);
+    const {enqueueSnackbar} = useSnackbar();
+    const router = useRouter();
+    const {state, dispatch} = useContext(Store);
+    const {
+        userInfo,
+        admission: {studentInfo},
+    } = state;
+
+    useEffect(() => {
+        if (!userInfo?.name) {
+            router.push('/login?redirect=/admission-form/student-info');
+        }
+        if (studentInfo) {
+            reset({
+                studentNameBn: studentInfo?.studentNameBn,
+                studentNameEn: studentInfo?.studentNameEn,
+                dateOfBirth: studentInfo?.dateOfBirth,
+                studentClass: studentInfo?.studentClass,
+                instituteName: studentInfo?.instituteName,
+                educationMedium: studentInfo?.educationMedium,
+                passportSizePhotoUrl: studentInfo?.passportSizePhotoUrl,
+            })
+        } else {
+            reset(initialValues);
+        }
+    }, []);
+
+    const handleClassChange = (id, event) => {
+        setValue(id, event.target.value);
         setStudentClass(event.target.value);
+    };
+
+    const handleEducationMediumChange = (id, event) => {
+        setValue(id, event.target.value);
+        setEducationMedium(event.target.value);
     };
 
     const validationSchema = useMemo(() => {
@@ -57,7 +96,7 @@ export default function StudentInfo() {
                 .label("শ্রেণী"),
             instituteName: yup
                 .string()
-                .required('িক্ষা প্রতিষ্ঠানের নাম অবশ্যই পূরণ করতে হবে')
+                .required('শিক্ষা প্রতিষ্ঠানের নাম অবশ্যই পূরণ করতে হবে')
                 .label("শিক্ষা প্রতিষ্ঠানের নাম"),
             educationMedium: yup
                 .string()
@@ -65,8 +104,8 @@ export default function StudentInfo() {
                 .label("শিক্ষার মাধ্যম"),
             passportSizePhotoUrl: yup
                 .string()
-                .required('পাসপোর্ট সাইজের ছবি অবশ্যই দিতে হবে')
-                .label("পাসপোর্ট সাইজের ছবি"),
+                .required('শিক্ষার্থীর পাসপোর্ট সাইজের ছবি অবশ্যই দিতে হবে')
+                .label("শিক্ষার্থীর পাসপোর্ট সাইজের ছবি"),
         })
     }, []);
 
@@ -74,46 +113,61 @@ export default function StudentInfo() {
         register,
         reset,
         handleSubmit,
+        getValues,
+        setValue,
         formState: {errors},
     } = useForm({
         resolver: yupResolver(validationSchema),
     });
 
-    const router = useRouter();
-    const {state, dispatch} = useContext(Store);
-    const {
-        userInfo,
-        admission: {studentInfo},
-    } = state;
+    const uploadHandler = async (e) => {
+        setLoadingUpload(true);
+        const file = e.target.files[0];
+        const bodyFormData = new FormData();
+        bodyFormData.append('file', file);
+        bodyFormData.append('from', 'studentInfo');
+        try {
+            const {data} = await axios.post('/api/upload', bodyFormData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    authorization: `Bearer ${userInfo.token}`,
+                },
+            });
 
-    useEffect(() => {
-        if (!userInfo?.name) {
-            router.push('/login?redirect=/admission-form/student-info');
+            reset({...getValues(), passportSizePhotoUrl: data.secure_url});
+            setLoadingUpload(false);
+            enqueueSnackbar('Photo uploaded successfully', {variant: 'success'});
+
+        } catch (error) {
+            setLoadingUpload(false);
+            enqueueSnackbar(getError(error), {variant: 'error'});
         }
-        if(studentInfo) {
-            reset({
-                studentNameBn: studentInfo?.studentNameBn,
-                studentNameEn: studentInfo?.studentNameEn,
-                dateOfBirth: studentInfo?.dateOfBirth,
-                studentClass: studentInfo?.studentClass,
-                instituteName: studentInfo?.instituteName,
-                educationMedium: studentInfo?.educationMedium,
-                passportSizePhotoUrl: studentInfo?.passportSizePhotoUrl,
-            })
-        }else {
-            reset(initialValues);
-        }
-    }, []);
+    }
 
     const submitHandler = ({studentNameBn, studentNameEn, dateOfBirth, studentClass, instituteName, educationMedium, passportSizePhotoUrl}) => {
+        console.log('input data for student info: ', data);
         dispatch({
             type: 'SAVE_STUDENT_INFO',
-            payload: {studentNameBn, studentNameEn, dateOfBirth, studentClass, instituteName, educationMedium, passportSizePhotoUrl},
+            payload: {
+                studentNameBn,
+                studentNameEn,
+                dateOfBirth,
+                studentClass,
+                instituteName,
+                educationMedium,
+                passportSizePhotoUrl
+            },
         });
         Cookies.set(
             'studentInfo',
             JSON.stringify({
-                studentNameBn, studentNameEn, dateOfBirth, studentClass, instituteName, educationMedium, passportSizePhotoUrl
+                studentNameBn,
+                studentNameEn,
+                dateOfBirth,
+                studentClass,
+                instituteName,
+                educationMedium,
+                passportSizePhotoUrl
             })
         );
         router.push('/admission-form/parents-info');
@@ -174,14 +228,14 @@ export default function StudentInfo() {
                         />
                     </Grid>
                     <Grid item xs={12} md={6}>
-                        <FormControl sx={{ minWidth: 271 }}>
+                        <FormControl sx={{minWidth: 271}}>
                             <InputLabel id="studentClass">শ্রেণী</InputLabel>
                             <Select
-                                labelId="demo-simple-select-helper-label"
+                                labelId="studentClass"
                                 id="studentClass"
                                 value={studentClass}
                                 label="শ্রেণী"
-                                onChange={handleClassChange}
+                                onChange={(event) => handleClassChange( "studentClass", event)}
                                 error={!!errors?.studentClass}
                             >
                                 <MenuItem value="">
@@ -189,20 +243,82 @@ export default function StudentInfo() {
                                 </MenuItem>
                                 {STUDENT_CLASS?.map((className, key) => (
                                     <MenuItem value={className.name} key={key}>{className.title}</MenuItem>
-                                ) )}
+                                ))}
                             </Select>
-                            <FormHelperText sx={{color: '#d32f2f'}}>{errors?.studentClass?.message ?? null}</FormHelperText>
+                            <FormHelperText
+                                sx={{color: '#d32f2f'}}>{errors?.studentClass?.message ?? null}</FormHelperText>
                         </FormControl>
                     </Grid>
-                </Grid>
 
-                <Button variant="contained"
-                        type="submit"
-                        fullWidth color="primary"
-                        sx={{marginTop: 5}}
-                >
-                    Continue
-                </Button>
+                    <Grid item xs={12} md={6}>
+                        <TextField
+                            InputLabelProps={{
+                                required: true,
+                            }}
+                            error={!!errors?.instituteName}
+                            variant="outlined"
+                            fullWidth
+                            id="instituteName"
+                            label="শিক্ষা প্রতিষ্ঠানের নাম"
+                            {...register("instituteName")}
+                            helperText={errors?.instituteName?.message ?? null}
+                        />
+                    </Grid>
+
+                    <Grid item xs={12} md={6}>
+                        <FormControl sx={{minWidth: 271}}>
+                            <InputLabel id="educationMedium">শিক্ষার মাধ্যম</InputLabel>
+                            <Select
+                                labelId="educationMedium"
+                                id="educationMedium"
+                                value={educationMedium}
+                                label="শিক্ষার মাধ্যম"
+                                onChange={(event) => handleEducationMediumChange( "educationMedium", event)}
+                                error={!!errors?.educationMedium}
+                            >
+                                <MenuItem value="">
+                                    <em>None</em>
+                                </MenuItem>
+                                {EDUCATION_MEDIUM?.map((className, key) => (
+                                    <MenuItem value={className.name} key={key}>{className.title}</MenuItem>
+                                ))}
+                            </Select>
+                            <FormHelperText
+                                sx={{color: '#d32f2f'}}>{errors?.educationMedium?.message ?? null}</FormHelperText>
+                        </FormControl>
+                    </Grid>
+
+                    <Grid item xs={12} md={12}>
+                        <TextField
+                            error={!!errors.passportSizePhotoUrl}
+                            variant="outlined"
+                            id="passportSizePhotoUrl"
+                            label="শিক্ষার্থীর পাসপোর্ট সাইজের ছবি"
+                            {...register("passportSizePhotoUrl")}
+                            helperText={errors.passportSizePhotoUrl?.message ?? null}
+                            InputProps={{
+                                readOnly: true,
+                            }}
+                            fullWidth
+                        />
+                    </Grid>
+                    <Grid item xs={6}/>
+                    <Grid item xs={6} sx={{display: 'flex', justifyContent: 'end'}}>
+                        <Button variant="contained" component="label" sx={{minWidth: 250}}>
+                            আপ্লোড করুন
+                            <input type="file" onChange={(e) => uploadHandler(e)} hidden accept="image/*"/>
+                        </Button>
+                        {loadingUpload && <CircularProgress/>}
+                    </Grid>
+
+                    <Button variant="contained"
+                            type="submit"
+                            fullWidth color="primary"
+                            sx={{marginTop: 5}}
+                    >
+                        Continue
+                    </Button>
+                </Grid>
             </Form>
         </Layout>
     );

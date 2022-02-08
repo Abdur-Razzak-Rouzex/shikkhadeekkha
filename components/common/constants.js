@@ -5,12 +5,17 @@ export const muiDataTableOptions = {
 };
 
 export const STUDENT_CLASS = [
-    {name: 'Five', title: 'পঞ্চম'},
-    {name: 'Six', title: 'ষষ্ঠ'},
-    {name: 'Seven', title: 'সপ্তম'},
-    {name: 'Eight', title: 'অষ্টম'},
-    {name: 'Nine', title: 'নবম'},
-    {name: 'Ten', title: 'দশম'},
-    {name: 'Eleven', title: 'একাদশ'},
-    {name: 'Twelve', title: 'দ্বাদশ'},
+    {name: 'five', title: 'পঞ্চম'},
+    {name: 'six', title: 'ষষ্ঠ'},
+    {name: 'seven', title: 'সপ্তম'},
+    {name: 'eight', title: 'অষ্টম'},
+    {name: 'nine', title: 'নবম'},
+    {name: 'ten', title: 'দশম'},
+    {name: 'eleven', title: 'একাদশ'},
+    {name: 'twelve', title: 'দ্বাদশ'},
+]
+
+export const EDUCATION_MEDIUM = [
+    {name: 'bangla', title: 'বাংলা'},
+    {name: 'english', title: 'ইংরেজী'},
 ]

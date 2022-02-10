@@ -38,7 +38,7 @@ export default function ParentsInfo() {
     const [academicallyResponsiblePerson, setAcademicallyResponsiblePerson] = useState('');
     const {
         userInfo,
-        admission: {parentsInfo},
+        admission: {parentsInfo, studentInfo},
     } = state;
 
     useEffect(() => {

@@ -53,7 +53,7 @@ function PlaceOrder() {
 
             dispatch({type: 'ADMISSION_CLEAR'});
             setLoading(false);
-            router.push('/thank-you');
+            router.push('/welcome');
         } catch (err) {
             setLoading(false);
             enqueueSnackbar(getError(err), {variant: 'error'});

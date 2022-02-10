@@ -9,7 +9,7 @@ export default function Home(props) {
     const {whyChooseUsData} = props;
 
     return (
-        <Layout>
+        <Layout title={'About us'}>
             <Box component="section" sx={{paddingBottom: 5}}>
                 <Container>
                     <Box mb={10} mt={10}>

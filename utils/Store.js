@@ -22,23 +22,19 @@ const initialState = {
     admission: {
         studentInfo: Cookies.get('studentInfo')
             ? JSON.parse(Cookies.get('studentInfo'))
-            : {location: {}},
+            : null,
 
         parentsInfo: Cookies.get('parentsInfo')
-            ? Cookies.get('parentsInfo')
-            : '',
+            ? JSON.parse(Cookies.get('parentsInfo'))
+            : null,
 
         academicGuardianInfo: Cookies.get('academicGuardianInfo')
-            ? Cookies.get('academicGuardianInfo')
-            : '',
+            ? JSON.parse(Cookies.get('academicGuardianInfo'))
+            : null,
 
         otherInfo: Cookies.get('otherInfo')
-            ? Cookies.get('otherInfo')
-            : '',
-
-        paymentMethod: Cookies.get('paymentMethod')
-            ? Cookies.get('paymentMethod')
-            : '',
+            ? JSON.parse(Cookies.get('otherInfo'))
+            : null,
     },
 
     userInfo: Cookies.get('userInfo')
@@ -101,6 +97,18 @@ function reducer(state, action) {
             };
         case 'CART_CLEAR':
             return {...state, cart: {...state.cart, cartItems: []}};
+
+        case 'ADMISSION_CLEAR':
+            return {...state,
+                admission: {
+                    ...state.admission,
+                    studentInfo: null,
+                    parentsInfo: null,
+                    academicGuardianInfo: null,
+                    otherInfo: null
+                }
+            };
+
         case 'SAVE_STUDENT_INFO':
             return {
                 ...state,
@@ -123,7 +131,7 @@ function reducer(state, action) {
                     },
                 },
             };
-            case 'SAVE_ACADEMIC_GUARDIAN_INFO':
+        case 'SAVE_ACADEMIC_GUARDIAN_INFO':
             return {
                 ...state,
                 admission: {

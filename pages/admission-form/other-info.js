@@ -235,6 +235,7 @@ export default function OtherInfo() {
                         <FormControl sx={{m: 1, width: 265}}>
                             <InputLabel id="typeOfElectronicsToBeUsedInLiveClass">লাইভ ক্লাসের জন্য যে ইলেকট্রনিক ডিভাইস</InputLabel>
                             <Select
+                                required
                                 labelId="typeOfElectronicsToBeUsedInLiveClass"
                                 id="typeOfElectronicsToBeUsedInLiveClass"
                                 multiple

@@ -6,12 +6,12 @@ import {Skeleton} from "@mui/material";
 
 const PREFIX = 'DetailsInputView';
 
-const classes = {
+export const classes = {
     inputView: `${PREFIX}-inputView`,
     label: `${PREFIX}-label`,
 };
 
-const StyledGrid = styled(Grid)(() => {
+export const StyledGrid = styled(Grid)(() => {
     return {
         [`& .${classes.inputView}`]: {
             fontWeight: 500,

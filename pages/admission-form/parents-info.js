@@ -88,7 +88,7 @@ export default function ParentsInfo() {
                 .string()
                 .matches(MOBILE_NUMBER_REGEX, 'আপনার সঠিক নাম্বারটি দিন')
                 .required('একাডেমিক উদ্দেশ্যে অভিভাবকের ফোন নাম্বার অবশ্যই পূরণ করতে হবে')
-                .label("একাডেমিক উদ্দেশ্যে অভিভাবকের ফোন নাম্বার "),
+                .label("একাডেমিক উদ্দেশ্যে অভিভাবকের ফোন নাম্বার"),
             parentsWhatsappNumber: yup
                 .string()
                 .matches(MOBILE_NUMBER_REGEX, 'আপনার সঠিক নাম্বারটি দিন')
@@ -102,7 +102,7 @@ export default function ParentsInfo() {
             academicallyResponsiblePerson: yup
                 .string()
                 .required('একাডেমিক উদ্দেশ্যে যিনি যোগাযোগ করবেন তা অবশ্যই পূরণ করতে হবে')
-                .label("শএকাডেমিক উদ্দেশ্যে যিনি যোগাযোগ করবেন"),
+                .label("একাডেমিক উদ্দেশ্যে যিনি যোগাযোগ করবেন"),
         })
     }, []);
 

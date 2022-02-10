@@ -6,14 +6,14 @@ import {Skeleton} from "@mui/material";
 
 const PREFIX = 'DetailsInputView';
 
-export const classes = {
+export const styleClasses = {
     inputView: `${PREFIX}-inputView`,
     label: `${PREFIX}-label`,
 };
 
 export const StyledGrid = styled(Grid)(() => {
     return {
-        [`& .${classes.inputView}`]: {
+        [`& .${styleClasses.inputView}`]: {
             fontWeight: 500,
             fontSize: 14,
             width: '100%',
@@ -27,7 +27,7 @@ export const StyledGrid = styled(Grid)(() => {
             overflow: 'auto',
         },
 
-        [`& .${classes.label}`]: {
+        [`& .${styleClasses.label}`]: {
             fontWeight:700,
             fontSize: 14,
             marginBottom: '5px',
@@ -40,8 +40,8 @@ const DetailsInputView = ({label, value, isLoading = false}) => {
         <Skeleton variant='text' height={50} />
     ) : (
         <StyledGrid item xs={12}>
-            <FormLabel className={classes.label}>{label}</FormLabel>
-            <div className={classes.inputView}>{value}</div>
+            <FormLabel className={styleClasses.label}>{label}</FormLabel>
+            <div className={styleClasses.inputView}>{value}</div>
         </StyledGrid>
     );
 };

@@ -8,7 +8,7 @@ import {Store} from "../../utils/Store";
 import {getError} from "../../utils/error";
 import Layout from "../../components/Layout";
 import classes from '../../utils/classes';
-import {inputView, label} from '../../components/common/elements/DetailsInputView'
+import {styleClasses} from '../../components/common/elements/DetailsInputView'
 import AdmissionWizard from "../../components/AdmissionWizard";
 import DetailsInputView, {StyledGrid} from "../../components/common/elements/DetailsInputView";
 import FormLabel from "@mui/material/FormLabel";
@@ -276,11 +276,11 @@ function PlaceOrder() {
                                     </Grid>
                                     <Grid item xs={12} md={12}>
                                         <StyledGrid item xs={12}>
-                                            <FormLabel className={label}>
+                                            <FormLabel className={styleClasses?.label}>
                                                 লাইভ ক্লাসের জন্য যে ধরনের ইলেকট্রনিক মডিউল ব্যবহার করা হবে
                                             </FormLabel>
                                             {otherInfo?.typeOfElectronicsToBeUsedInLiveClass?.map(((device, index) => (
-                                                <div className={inputView}
+                                                <div className={styleClasses?.inputView}
                                                      key={device}>
                                                     &emsp;{`${index + 1}  :  ${device}`}
                                                 </div>
@@ -289,18 +289,18 @@ function PlaceOrder() {
                                     </Grid>
                                     <Grid item xs={12} md={12}>
                                         <StyledGrid item xs={12}>
-                                            <FormLabel className={label}>
+                                            <FormLabel className={styleClasses?.label}>
                                                 সহ-পাঠ্যক্রমিক ক্রিয়াকলাপ যেগুলোতে আপনি যোগ দিতে চান
                                             </FormLabel>
                                             {typeof otherInfo?.coCurricularActivities === 'undefined' ? (
                                                 <Box sx={{textAlign: 'center'}} mt={3}>
-                                                    <Typography component={'span'} variant={'h6'}>
+                                                    <Box className={styleClasses?.inputView}>
                                                         &emsp;কোন কিছুই যোগ করেননি
-                                                    </Typography>
+                                                    </Box>
                                                 </Box>
                                             ) : (
                                                 otherInfo?.coCurricularActivities?.map(((coCurriculm, index) => (
-                                                    <Box className={inputView}
+                                                    <Box className={styleClasses?.inputView}
                                                          key={coCurriculm}>
                                                         &emsp;{`${index + 1}  :  ${coCurriculm.id}`}
                                                     </Box>

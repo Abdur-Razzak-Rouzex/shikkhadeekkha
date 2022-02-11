@@ -10,6 +10,11 @@ const AdminMenuItems = ({activeItem}) => {
                     <ListItemText primary="Dashboard"/>
                 </ListItem>
             </NextLink>
+            <NextLink href="/admin/admissions" passHref>
+                <ListItem selected={activeItem === 'admission'} button component="a">
+                    <ListItemText primary="Admissions"/>
+                </ListItem>
+            </NextLink>
             <NextLink href="/admin/orders" passHref>
                 <ListItem selected={activeItem === 'orders'} button component="a">
                     <ListItemText primary="Orders"/>

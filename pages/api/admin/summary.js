@@ -5,6 +5,7 @@ import User from '../../../models/User';
 import { isAuth, isAdmin } from '../../../utils/auth';
 import db from '../../../utils/db';
 import { onError } from '../../../utils/error';
+import AdmissionForm from "../../../models/AdmissionForm";
 
 const handler = nc({
   onError,
@@ -16,6 +17,7 @@ handler.get(async (req, res) => {
   const ordersCount = await Order.countDocuments();
   const productsCount = await Product.countDocuments();
   const usersCount = await User.countDocuments();
+  const admissionCount = await AdmissionForm.countDocuments();
   const ordersPriceGroup = await Order.aggregate([
     {
       $group: {
@@ -35,7 +37,7 @@ handler.get(async (req, res) => {
     },
   ]);
 
-  res.send({ ordersCount, productsCount, usersCount, ordersPrice, salesData });
+  res.send({ ordersCount, productsCount, usersCount, ordersPrice, salesData, admissionCount });
 });
 
 export default handler;

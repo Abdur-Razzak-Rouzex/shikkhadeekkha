@@ -43,7 +43,7 @@ function reducer(state, action) {
         case 'DELETE_RESET':
             return {...state, loadingDelete: false, successDelete: false};
         default:
-            state;
+            return state;
     }
 }
 

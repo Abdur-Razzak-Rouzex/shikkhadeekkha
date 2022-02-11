@@ -14,12 +14,12 @@ import {
     ListItem,
     Typography,
 } from '@mui/material';
-import {Bar} from 'react-chartjs-2';
-import {getError} from '../../utils/error';
-import {Store} from '../../utils/Store';
-import Layout from '../../components/Layout';
-import classes from '../../utils/classes';
-import AdminMenuItems from "../../components/admin/AdminMenuItems";
+import {Store} from "../../../utils/Store";
+import AdminMenuItems from "../../../components/admin/AdminMenuItems";
+import classes from '../../../utils/classes';
+import Layout from "../../../components/Layout";
+import {getError} from "../../../utils/error";
+
 
 function reducer(state, action) {
     switch (action.type) {
@@ -34,7 +34,7 @@ function reducer(state, action) {
     }
 }
 
-function AdminDashboard() {
+function AdmissionDashboard() {
     const {state} = useContext(Store);
     const router = useRouter();
 
@@ -53,7 +53,7 @@ function AdminDashboard() {
         const fetchData = async () => {
             try {
                 dispatch({type: 'FETCH_REQUEST'});
-                const {data} = await axios.get(`/api/admin/summary`, {
+                const {data} = await axios.get(`/api/admission/admission-summary`, {
                     headers: {authorization: `Bearer ${userInfo.token}`},
                 });
                 dispatch({type: 'FETCH_SUCCESS', payload: data});
@@ -64,11 +64,11 @@ function AdminDashboard() {
         fetchData();
     }, [router, userInfo.name, userInfo.token]);
     return (
-        <Layout title="Dashboard">
+        <Layout title="Admission Requests">
             <Grid container spacing={1}>
                 <Grid item md={3} xs={12}>
                     <Card sx={classes.section}>
-                        <AdminMenuItems activeItem="dashboard"/>
+                        <AdminMenuItems activeItem="admission"/>
                     </Card>
                 </Grid>
                 <Grid item md={9} xs={12}>
@@ -81,86 +81,137 @@ function AdminDashboard() {
                                     <Typography sx={classes.error}>{error}</Typography>
                                 ) : (
                                     <Grid container spacing={5}>
-                                        <Grid item xs = {12} md={3} >
+                                        <Grid item xs={12} md={3}>
                                             <Card raised>
                                                 <CardContent>
                                                     <Typography variant="h1">
-                                                        ${summary?.ordersPrice}
+                                                        {summary?.ccap}
                                                     </Typography>
-                                                    <Typography>Sales</Typography>
+                                                    <Typography>CCAP</Typography>
                                                 </CardContent>
                                                 <CardActions>
-                                                    <NextLink href="/admin/orders" passHref>
+                                                    <NextLink href="/admin/admissions/CCAP [Cadet College Admission Program]" passHref>
                                                         <Button size="small" color="primary">
-                                                            View sales
+                                                            View CCAP
                                                         </Button>
                                                     </NextLink>
                                                 </CardActions>
                                             </Card>
                                         </Grid>
-                                        <Grid item xs = {12} md={3} >
+                                        <Grid item xs={12} md={3}>
                                             <Card raised>
                                                 <CardContent>
                                                     <Typography variant="h1">
-                                                        {summary?.ordersCount}
+                                                        {summary?.seven}
                                                     </Typography>
-                                                    <Typography>Orders</Typography>
+                                                    <Typography>Seven</Typography>
                                                 </CardContent>
                                                 <CardActions>
-                                                    <NextLink href="/admin/orders" passHref>
+                                                    <NextLink href="/admin/admissions/Class Seven [Academic Program]" passHref>
                                                         <Button size="small" color="primary">
-                                                            View orders
+                                                            View Seven
                                                         </Button>
                                                     </NextLink>
                                                 </CardActions>
                                             </Card>
                                         </Grid>
-                                        <Grid item xs = {12} md={3} >
+                                        <Grid item xs={12} md={3}>
                                             <Card raised>
                                                 <CardContent>
                                                     <Typography variant="h1">
-                                                        {summary?.productsCount}
+                                                        {summary?.eight}
                                                     </Typography>
-                                                    <Typography>Products</Typography>
+                                                    <Typography>Eight</Typography>
                                                 </CardContent>
                                                 <CardActions>
-                                                    <NextLink href="/admin/products" passHref>
+                                                    <NextLink href="/admin/admissions/Class Eight [Academic Program]" passHref>
                                                         <Button size="small" color="primary">
-                                                            View products
+                                                            View Eight
                                                         </Button>
                                                     </NextLink>
                                                 </CardActions>
                                             </Card>
                                         </Grid>
-                                        <Grid item xs = {12} md={3} >
+                                        <Grid item xs={12} md={3}>
                                             <Card raised>
                                                 <CardContent>
                                                     <Typography variant="h1">
-                                                        {summary?.usersCount}
+                                                        {summary?.nine}
                                                     </Typography>
-                                                    <Typography>Users</Typography>
+                                                    <Typography>Nine</Typography>
                                                 </CardContent>
                                                 <CardActions>
-                                                    <NextLink href="/admin/users" passHref>
+                                                    <NextLink href="/admin/admissions/Class Nine [Academic Program]" passHref>
                                                         <Button size="small" color="primary">
-                                                            View users
+                                                            View Nine
                                                         </Button>
                                                     </NextLink>
                                                 </CardActions>
                                             </Card>
                                         </Grid>
-                                        <Grid item xs = {12} md={3} >
+                                        <Grid item xs={12} md={3}>
                                             <Card raised>
                                                 <CardContent>
                                                     <Typography variant="h1">
-                                                        {summary?.admissionCount}
+                                                        {summary?.ten}
                                                     </Typography>
-                                                    <Typography>Admissions</Typography>
+                                                    <Typography>Ten</Typography>
                                                 </CardContent>
                                                 <CardActions>
-                                                    <NextLink href="/admin/admissions" passHref>
+                                                    <NextLink href="/admin/admissions/Class Ten [Academic Program]" passHref>
                                                         <Button size="small" color="primary">
-                                                            View Requests
+                                                            View Ten
+                                                        </Button>
+                                                    </NextLink>
+                                                </CardActions>
+                                            </Card>
+                                        </Grid>
+                                        <Grid item xs={12} md={3}>
+                                            <Card raised>
+                                                <CardContent>
+                                                    <Typography variant="h1">
+                                                        {summary?.ani}
+                                                    </Typography>
+                                                    <Typography>ANI</Typography>
+                                                </CardContent>
+                                                <CardActions>
+                                                    <NextLink href="/admin/admissions/ANI [SSC Examinee]" passHref>
+                                                        <Button size="small" color="primary">
+                                                            View ANI
+                                                        </Button>
+                                                    </NextLink>
+                                                </CardActions>
+                                            </Card>
+                                        </Grid>
+                                        <Grid item xs={12} md={3}>
+                                            <Card raised>
+                                                <CardContent>
+                                                    <Typography variant="h1">
+                                                        {summary?.hsc1}
+                                                    </Typography>
+                                                    <Typography>HSC 01</Typography>
+                                                </CardContent>
+                                                <CardActions>
+                                                    <NextLink href="/admin/admissions/HSC 01" passHref>
+                                                        <Button size="small" color="primary">
+                                                            View HSC 01
+                                                        </Button>
+                                                    </NextLink>
+                                                </CardActions>
+                                            </Card>
+                                        </Grid>
+                                        <Grid item xs={12} md={3}>
+                                            <Card raised>
+                                                <CardContent>
+                                                    <Typography variant="h1">
+                                                        {summary?.hsc2}
+                                                    </Typography>
+                                                    <Typography>HSC 02</Typography>
+                                                </CardContent>
+                                                <CardActions>
+                                                    <NextLink href="/admin/admissions/HSC 02" passHref>
+                                                        <Button size="small" color="primary">
+                                                            HSC 02
                                                         </Button>
                                                     </NextLink>
                                                 </CardActions>
@@ -168,28 +219,6 @@ function AdminDashboard() {
                                         </Grid>
                                     </Grid>
                                 )}
-                            </ListItem>
-                            <ListItem>
-                                <Typography component="h1" variant="h1">
-                                    Sales Chart
-                                </Typography>
-                            </ListItem>
-                            <ListItem>
-                                <Bar
-                                    data={{
-                                        labels: summary.salesData.map((x) => x._id),
-                                        datasets: [
-                                            {
-                                                label: 'Sales',
-                                                backgroundColor: 'rgba(162, 222, 208, 1)',
-                                                data: summary.salesData.map((x) => x.totalSales),
-                                            },
-                                        ],
-                                    }}
-                                    options={{
-                                        legend: {display: true, position: 'right'},
-                                    }}
-                                />
                             </ListItem>
                         </List>
                     </Card>
@@ -199,4 +228,4 @@ function AdminDashboard() {
     );
 }
 
-export default dynamic(() => Promise.resolve(AdminDashboard), {ssr: false});
+export default dynamic(() => Promise.resolve(AdmissionDashboard), {ssr: false});

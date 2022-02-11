@@ -11,7 +11,7 @@ export default function Welcome() {
         <Layout title={'স্বাগতম'}>
             <Box component="section" sx={{paddingBottom: 5}}>
                 <Container>
-                    <Card mt={3}>
+                    <Card mt={3} raised>
                         <Box mt={3}>
                             <Typography variant="h1" align="center" component="h1">
                                 শিক্ষাদীক্ষা পরিবারে আপনাকে স্বাগতম

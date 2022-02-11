@@ -59,13 +59,18 @@ export default function OtherInfo() {
 
     const {
         userInfo,
-        admission: {otherInfo},
+        admission: {academicGuardianInfo, otherInfo},
     } = state;
 
     useEffect(() => {
         if (!userInfo?.name) {
             router.push('/login?redirect=/admission-form/student-info');
         }
+
+        if (!academicGuardianInfo?.guardianName) {
+            router.push('/admission-form/academic-guardian-info');
+        }
+
         if (otherInfo) {
             reset({
                 selectedCourse: otherInfo?.selectedCourse,

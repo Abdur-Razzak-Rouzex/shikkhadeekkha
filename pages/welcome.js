@@ -5,7 +5,7 @@ import Image from "next/image";
 import React from "react";
 import NextLink from "next/link";
 
-export default function welcome() {
+export default function Welcome() {
 
     return (
         <Layout title={'স্বাগতম'}>

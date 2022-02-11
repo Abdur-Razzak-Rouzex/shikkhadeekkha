@@ -25,7 +25,6 @@ export default function Shipping() {
     const {location} = shippingAddress;
 
     useEffect(() => {
-        console.log('use info from shipping: ', userInfo);
         if (!userInfo?.name) {
             router.push('/login?redirect=/shipping');
         }

@@ -12,6 +12,7 @@ import {styleClasses} from '../../components/common/elements/DetailsInputView'
 import AdmissionWizard from "../../components/AdmissionWizard";
 import DetailsInputView, {StyledGrid} from "../../components/common/elements/DetailsInputView";
 import FormLabel from "@mui/material/FormLabel";
+import Cookies from "js-cookie";
 
 function PlaceOrder() {
     const router = useRouter();
@@ -27,6 +28,18 @@ function PlaceOrder() {
     useEffect(() => {
         if (!userInfo?.name || !userInfo?.token) {
             router.push('/login?redirect=/admission-form/student-info');
+        }
+        if (!studentInfo?.studentNameBn) {
+            router.push('/admission-form/student-info');
+        }
+        if (!parentsInfo?.fatherName) {
+            router.push('/admission-form/parents-info');
+        }
+        if (!academicGuardianInfo?.guardianName) {
+            router.push('/admission-form/academic-guardian-info');
+        }
+        if (!otherInfo?.selectedCourse) {
+            router.push('/admission-form/other-info');
         }
     }, []);
 
@@ -52,7 +65,12 @@ function PlaceOrder() {
             );
 
             dispatch({type: 'ADMISSION_CLEAR'});
+            Cookies.remove('studentInfo');
+            Cookies.remove('parentsInfo');
+            Cookies.remove('academicGuardianInfo');
+            Cookies.remove('otherInfo');
             setLoading(false);
+            enqueueSnackbar('আপনার ভর্তি আবেদন পত্র সফল ভাবে জমা হয়েছে', {variant: 'success'});
             router.push('/welcome');
         } catch (err) {
             setLoading(false);
@@ -69,7 +87,7 @@ function PlaceOrder() {
                 sx={{color: 'red', fontSize: 'bold', textAlign: 'center'}}
             >
                 {/* eslint-disable-next-line react/no-unescaped-entities */}
-                বিঃ দ্রঃ আপনার দেওয়া তথ্যগুলি সঠিক আছে কি না, যাচায় করে নিন এবং "সাবমিট করুন" বাটনটি চাপুন
+                বিঃ দ্রঃ আপনার দেওয়া তথ্যগুলি সঠিক আছে কি না, যাচায় করে নিন এবং "জমা দিন" বাটনটি চাপুন
             </Typography>
 
             <Grid container sx={{justifyContent: 'center'}}>
@@ -322,7 +340,7 @@ function PlaceOrder() {
                                 color="primary"
                                 fullWidth
                             >
-                                সাবমিট করুন
+                                জমা দিন
                             </Button>
                         </ListItem>
                         {loading && (

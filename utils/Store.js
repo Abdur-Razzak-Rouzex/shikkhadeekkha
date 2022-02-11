@@ -99,7 +99,8 @@ function reducer(state, action) {
             return {...state, cart: {...state.cart, cartItems: []}};
 
         case 'ADMISSION_CLEAR':
-            return {...state,
+            return {
+                ...state,
                 admission: {
                     ...state.admission,
                     studentInfo: null,

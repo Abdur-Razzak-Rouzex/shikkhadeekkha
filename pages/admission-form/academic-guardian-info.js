@@ -24,13 +24,18 @@ export default function AcademicGuardianInfo() {
     const {state, dispatch} = useContext(Store);
     const {
         userInfo,
-        admission: {academicGuardianInfo},
+        admission: {parentsInfo, academicGuardianInfo},
     } = state;
 
     useEffect(() => {
         if (!userInfo?.name) {
             router.push('/login?redirect=/admission-form/student-info');
         }
+
+        if (!parentsInfo?.fatherName) {
+            router.push('/admission-form/parents-info');
+        }
+
         if (academicGuardianInfo) {
             reset({
                 guardianName: academicGuardianInfo?.guardianName,

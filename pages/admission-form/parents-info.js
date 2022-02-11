@@ -45,6 +45,10 @@ export default function ParentsInfo() {
         if (!userInfo?.name) {
             router.push('/login?redirect=/admission-form/student-info');
         }
+
+        if (!studentInfo?.studentNameBn) {
+            router.push('/admission-form/student-info');
+        }
         if (parentsInfo) {
             reset({
                 fatherName: parentsInfo?.fatherName,

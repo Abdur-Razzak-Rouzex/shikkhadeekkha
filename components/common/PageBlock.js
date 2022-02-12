@@ -18,7 +18,7 @@ const PageBlock = ({children, extra}) => {
                 }
             />
             <Divider/>
-            <CardContent sx={{padding: 0}}>
+            <CardContent sx={{padding: 0}} style={{paddingBottom: 0}}>
                 {children}
             </CardContent>
         </Card>

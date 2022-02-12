@@ -1,12 +1,5 @@
 import {styled} from '@mui/material/styles';
-import {
-    Box,
-    CardMedia,
-    Container,
-    Grid,
-    Typography,
-} from '@mui/material';
-import DateRangeIcon from '@mui/icons-material/DateRange';
+import {CardMedia, Container, Grid, Typography,} from '@mui/material';
 import NoDataFoundComponent from "../common/NoDataFoundComponent";
 
 const PREFIX = 'RecentActivitiesDetails';

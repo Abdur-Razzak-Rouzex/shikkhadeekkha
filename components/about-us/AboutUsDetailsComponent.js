@@ -37,7 +37,7 @@ const RecentActivitiesDetails = ({whyChooseUsData}) => {
         <StyledContainer maxWidth={'lg'}>
             {whyChooseUsData ? (
                 <Grid container>
-                    <Grid item xs={12} mt={5}>
+                    {/*<Grid item xs={12} mt={5}>
                         <Grid container>
                             <Grid item xs={6}>
                                 <Box className={classes.date}>
@@ -48,10 +48,17 @@ const RecentActivitiesDetails = ({whyChooseUsData}) => {
                                 </Box>
                             </Grid>
                         </Grid>
-                    </Grid>
+                    </Grid>*/}
 
                     <Grid item xs={12}>
-                        <Typography component="h1" variant="h1" fontWeight={'bold'}>{whyChooseUsData?.title}</Typography>
+                        <Typography
+                            component="h1"
+                            variant="h1"
+                            fontWeight={'bold'}
+                            sx={{textAlign: 'center'}}
+                        >
+                            {whyChooseUsData?.title}
+                        </Typography>
                     </Grid>
                     <Grid item xs={12} my={3}>
                         {whyChooseUsData?.largeImage && (

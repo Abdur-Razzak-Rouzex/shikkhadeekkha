@@ -47,8 +47,6 @@ const AdmissionInThisCoursePage = () => {
                         headers: {authorization: `Bearer ${userInfo.token}`},
                     })
 
-                    console.log('the requested course info: ', data);
-
                     data.map((item, index) => {
                         modifiedData.push({sl: index + 1, ...item});
                     })
@@ -114,7 +112,7 @@ const AdmissionInThisCoursePage = () => {
                 },
             },
             {
-                name: "studentNameBn",
+                name: "studentInfo.studentNameBn",
                 label: "Student Name",
                 options: {
                     filter: true,
@@ -122,7 +120,7 @@ const AdmissionInThisCoursePage = () => {
                 }
             },
             {
-                name: "instituteName",
+                name: "studentInfo.instituteName",
                 label: "Institute Name",
                 options: {
                     filter: true,
@@ -130,7 +128,7 @@ const AdmissionInThisCoursePage = () => {
                 }
             },
             {
-                name: "educationMedium",
+                name: "studentInfo.educationMedium",
                 label: " Education Medium",
                 options: {
                     filter: true,

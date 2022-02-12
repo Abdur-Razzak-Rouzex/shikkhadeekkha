@@ -53,7 +53,7 @@ const AdmissionInThisCourseDetails = ({itemId, userInfo, ...props}) => {
                         </>
                     }>
                     <Grid container sx={{justifyContent: 'center'}}>
-                        <Grid item xs={12} md={8}>
+                        <Grid item xs={12} md={12}>
                             {/** student info */}
                             <Card sx={classes.section}>
                                 <List>

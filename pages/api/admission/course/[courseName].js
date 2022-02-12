@@ -6,12 +6,10 @@ const handler = nc();
 
 handler.get(async (req, res) => {
     await db.connect();
-    const faq = await AdmissionForm.find({
-        otherInfo: {
-            selectedCourse: req?.query?.courseName
-        }
+    const admissionInfo = await AdmissionForm.find({
+        "otherInfo.selectedCourse": req?.query?.courseName
     });
-    res.send(faq);
+    res.send(admissionInfo);
 });
 
 export default handler;

@@ -1,7 +1,8 @@
 export const muiDataTableOptions = {
     filterType: 'dropdown',
     serverSide: true,
-    selectableRowsHideCheckboxes: true
+    selectableRowsHideCheckboxes: true,
+    enableNestedDataAccess: '.',
 };
 
 export const STUDENT_CLASS = [

@@ -13,7 +13,6 @@ const handler = nextConnect({
 handler.get(async (req, res) => {
   db.connect();
   const product = await Product.findById(req.query.id);
-  db.disconnect();
   if (product) {
     res.send(product.reviews);
   } else {

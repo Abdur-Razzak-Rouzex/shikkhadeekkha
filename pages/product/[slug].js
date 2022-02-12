@@ -53,6 +53,8 @@ export default function ProductScreen(props) {
                 }
             );
             setLoading(false);
+            setRating(0);
+            setComment('');
             enqueueSnackbar('Review submitted successfully', {variant: 'success'});
             fetchReviews();
         } catch (err) {
@@ -72,11 +74,12 @@ export default function ProductScreen(props) {
 
     useEffect(() => {
         fetchReviews();
-    }, );
+    }, []);
 
     if (!product) {
         return <Box>Product Not Found</Box>;
     }
+
     const addToCartHandler = async () => {
         const existItem = state.cart.cartItems.find((x) => x._id === product._id);
         const quantity = existItem ? existItem.quantity + 1 : 1;
@@ -124,7 +127,7 @@ export default function ProductScreen(props) {
                         <ListItem>
                             <Rating value={product.rating} readOnly/>
                             <Link href="#reviews">
-                                <Typography>({product.numReviews} reviews)</Typography>
+                                <Typography>({product?.numReviews} reviews)</Typography>
                             </Link>
                         </ListItem>
                         <ListItem>
@@ -182,13 +185,13 @@ export default function ProductScreen(props) {
                         <Grid container>
                             <Grid item sx={classes.reviewItem}>
                                 <Typography>
-                                    <strong>{review.name}</strong>
+                                    <strong>{review?.name}</strong>
                                 </Typography>
-                                <Typography>{review.createdAt.substring(0, 10)}</Typography>
+                                <Typography>{review?.createdAt.substring(0, 10)}</Typography>
                             </Grid>
                             <Grid item>
-                                <Rating value={review.rating} readOnly/>
-                                <Typography>{review.comment}</Typography>
+                                <Rating value={review?.rating} readOnly/>
+                                <Typography>{review?.comment}</Typography>
                             </Grid>
                         </Grid>
                     </ListItem>

@@ -12,6 +12,12 @@ import axios from "axios";
 import {Store} from "../../../utils/Store";
 import {useRouter} from "next/router";
 
+import {FilePond, registerPlugin} from 'react-filepond';
+import 'filepond/dist/filepond.min.css';
+import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
+import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+registerPlugin(FilePondPluginImagePreview);
+
 const initialValues = {
     name: '',
     slug: '',
@@ -30,12 +36,12 @@ const initialValues = {
 const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
     const {enqueueSnackbar} = useSnackbar();
     const isEdit = itemId != null;
-    const [loadingUpload, setLoadingUpload] = useState(false);
     const {state} = useContext(Store);
     const {userInfo} = state;
     const router = useRouter();
     const [itemData, setItemData] = useState({});
     const [categories, setCategories] = useState({});
+    const [files, setFiles] = useState([]);
 
     useEffect(() => {
         if (!userInfo?.name) {
@@ -55,7 +61,7 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
             try {
                 const {data} = await axios.get('/api/category');
                 setCategories(data);
-            }catch (e) {
+            } catch (e) {
                 enqueueSnackbar(getError(e), {variant: 'error'});
             }
         }
@@ -65,7 +71,8 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
             getCategories();
         }
 
-    }, [itemId])
+        console.log('files: ', files);
+    }, [itemId, files])
 
     const validationSchema = useMemo(() => {
         return yup.object().shape({
@@ -126,36 +133,10 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
         register,
         reset,
         handleSubmit,
-        getValues,
         formState: {errors, isSubmitting},
     } = useForm({
         resolver: yupResolver(validationSchema),
     });
-
-    const uploadHandler = async (e) => {
-        setLoadingUpload(true);
-        const file = e.target.files[0];
-        const bodyFormData = new FormData();
-        bodyFormData.append('file', file);
-        bodyFormData.append('from', 'testimonial');
-        try {
-            const {data} = await axios.post('/api/admin/upload', bodyFormData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    authorization: `Bearer ${userInfo.token}`,
-                },
-            });
-
-
-            reset({...getValues(), avatar: data.secure_url});
-            setLoadingUpload(false);
-            enqueueSnackbar('Avatar uploaded successfully', {variant: 'success'});
-
-        } catch (error) {
-            setLoadingUpload(false);
-            enqueueSnackbar(getError(error), {variant: 'error'});
-        }
-    }
 
     useEffect(() => {
         if (itemData) {
@@ -256,6 +237,15 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                         multiline={true}
                         {...register("message")}
                         helperText={errors?.message?.message ?? null}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <FilePond
+                        files={files}
+                        onupdatefiles={setFiles}
+                        server="/api/upload"
+                        name="file"
+                        labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
                     />
                 </Grid>
             </Grid>

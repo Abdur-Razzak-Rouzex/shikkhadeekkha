@@ -11,12 +11,7 @@ import CancelButton from "../../../components/common/button/CancelButton";
 import axios from "axios";
 import {Store} from "../../../utils/Store";
 import {useRouter} from "next/router";
-
-import {FilePond, registerPlugin} from 'react-filepond';
-import 'filepond/dist/filepond.min.css';
-import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
-import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
-registerPlugin(FilePondPluginImagePreview);
+import FilePondUploader from "../../../components/common/FilePondUploader";
 
 const initialValues = {
     name: '',
@@ -41,7 +36,6 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
     const router = useRouter();
     const [itemData, setItemData] = useState({});
     const [categories, setCategories] = useState({});
-    const [files, setFiles] = useState([]);
 
     useEffect(() => {
         if (!userInfo?.name) {
@@ -70,9 +64,7 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
             getCourse();
             getCategories();
         }
-
-        console.log('files: ', files);
-    }, [itemId, files])
+    }, [itemId])
 
     const validationSchema = useMemo(() => {
         return yup.object().shape({
@@ -133,6 +125,7 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
         register,
         reset,
         handleSubmit,
+        setValue,
         formState: {errors, isSubmitting},
     } = useForm({
         resolver: yupResolver(validationSchema),
@@ -158,6 +151,10 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
             reset(initialValues);
         }
     }, [itemData, reset]);
+
+    const getSecureUrl = (secureUrl) => {
+        setValue('image', secureUrl);
+    }
 
     const onSubmit = async (data) => {
         try {
@@ -240,12 +237,10 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                     />
                 </Grid>
                 <Grid item xs={12}>
-                    <FilePond
-                        files={files}
-                        onupdatefiles={setFiles}
-                        server="/api/upload"
-                        name="file"
-                        labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
+                    <FilePondUploader
+                        required={true}
+                        id="image"
+                        getUrl={getSecureUrl}
                     />
                 </Grid>
             </Grid>

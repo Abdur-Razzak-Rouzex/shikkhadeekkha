@@ -74,7 +74,7 @@ const WhyChooseUsAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                 .label("Is FlipBook"),
             flipBookLink: yup
                 .mixed()
-                .label("Is FlipBook")
+                .label("FlipBook link")
                 .when('isFlipBook', {
                     is: true,
                     then: yup.string().required(),
@@ -277,7 +277,7 @@ const WhyChooseUsAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                                     rows={10}
                                     multiline={true}
                                     {...register("contentBody")}
-                                    helperText={errors.flipBookLink?.message ?? null}
+                                    helperText={errors.contentBody?.message ?? null}
                                 />
                             </Grid>
                             <Grid item xs={12} md={12}>

@@ -12,6 +12,7 @@ import axios from "axios";
 import {Store} from "../../../utils/Store";
 import {useRouter} from "next/router";
 import FilePondUploader from "../../../components/common/FilePondUploader";
+import CkEditor from "../../../components/common/CkEditor";
 
 const initialValues = {
     name: '',
@@ -241,6 +242,10 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                         required={true}
                         id="image"
                         getUrl={getSecureUrl}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <CkEditor
                     />
                 </Grid>
             </Grid>

@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import {Grid, TextField, Typography} from '@mui/material';
+import {FormControl, FormHelperText, Grid, InputLabel, MenuItem, Select, TextField, Typography} from '@mui/material';
 import {useForm} from 'react-hook-form';
 import React, {useContext, useEffect, useMemo, useState} from 'react';
 import {useSnackbar} from 'notistack';
@@ -13,6 +13,9 @@ import {Store} from "../../../utils/Store";
 import {useRouter} from "next/router";
 import FilePondUploader from "../../../components/common/FilePondUploader";
 import CkEditor from "../../../components/common/CkEditor";
+import CustomCheckBox from "../../../components/common/CustomCheckBox";
+import {LANGUAGE_MEDIUM} from "../../../components/common/constants";
+import CustomRadioButton from "../../../components/common/CustomRadioButton";
 
 const initialValues = {
     name: '',
@@ -21,11 +24,11 @@ const initialValues = {
     subCategory: '',
     image: '',
     courseFee: 0,
-    languageMedium: 'Bangla',
-    offerInPercentage: 0,
+    languageMedium: LANGUAGE_MEDIUM[0],
     isFeatured: false,
     isOffered: false,
-    docStatus: 'active',
+    offerInPercentage: 0,
+    docStatus: true,
     description: '',
 };
 
@@ -36,7 +39,16 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
     const {userInfo} = state;
     const router = useRouter();
     const [itemData, setItemData] = useState({});
-    const [categories, setCategories] = useState({});
+
+    const [categories, setCategories] = useState([]);
+    const [subCategories, setSubCategories] = useState([]);
+    const [category, setCategory] = useState('');
+    const [subcategory, setSubcategory] = useState('');
+
+    const [isFeaturedValue, setIsFeaturedValue] = useState(false);
+    const [isOfferedValue, setIsOfferedValue] = useState(false);
+    const [docStatusValue, setDocStatusValue] = useState(true);
+    const [languageMediumValue, setLanguageMediumValue] = useState(LANGUAGE_MEDIUM[0]);
 
     useEffect(() => {
         if (!userInfo?.name) {
@@ -60,10 +72,10 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                 enqueueSnackbar(getError(e), {variant: 'error'});
             }
         }
+        getCategories();
 
         if (itemId) {
             getCourse();
-            getCategories();
         }
     }, [itemId])
 
@@ -116,7 +128,7 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                     then: yup.number().required(),
                 }),
             docStatus: yup
-                .string()
+                .boolean()
                 .required()
                 .label("Status"),
         })
@@ -148,6 +160,12 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                 isOffered: itemData?.isOffered,
                 docStatus: itemData?.docStatus,
             });
+            setCategory(itemData?.category);
+            setSubcategory(itemData?.subCategory);
+            setIsFeaturedValue(itemData?.isFeatured);
+            setIsOfferedValue(itemData?.isOffered);
+            setDocStatusValue(itemData?.docStatus);
+
         } else {
             reset(initialValues);
         }
@@ -155,6 +173,37 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
 
     const getSecureUrl = (secureUrl) => {
         setValue('image', secureUrl);
+    }
+    const handleCategoryChange = (event) => {
+        setValue('category', event.target.value);
+        setCategory(event.target.value);
+        const cat = categories.findIndex(cat => cat.name === event.target.value);
+        setSubCategories(categories[cat]?.subCategory);
+    }
+    const handleSubcategoryChange = (event) => {
+        setValue('subCategory', event.target.value);
+        setSubcategory(event.target.value);
+    }
+
+    const getEditorData = (data) => {
+        setValue('description', data);
+    }
+
+    const handleIsFeatured = (event) => {
+        setIsFeaturedValue(event.target.checked)
+        setValue('isFeatured', event.target.checked);
+    }
+    const handleIsOffered = (event) => {
+        setIsOfferedValue(event.target.checked)
+        setValue('isOffered', event.target.checked);
+    }
+    const handleDocStatusChange = (event) => {
+        setDocStatusValue(event.target.checked)
+        setValue('docStatus', event.target.checked);
+    }
+    const handleLanguageChange = (event) => {
+        setLanguageMediumValue(event.target.value)
+        setValue('languageMedium', event.target.value);
     }
 
     const onSubmit = async (data) => {
@@ -172,6 +221,7 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                     data,
                     {headers: {authorization: `Bearer ${userInfo.token}`}}
                 );
+                console.log('submitted data you expected to be: ', data);
                 enqueueSnackbar('Course created successfully', {variant: 'success'});
             }
             props.onClose();
@@ -204,48 +254,140 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
             <Grid container spacing={5}>
                 <Grid item xs={12}>
                     <TextField
+                        required
                         error={!!errors.name}
                         variant="outlined"
                         fullWidth
                         id="name"
-                        label="Name"
+                        label="Course Name"
                         {...register("name")}
                         helperText={errors.name?.message ?? null}
                     />
                 </Grid>
                 <Grid item xs={12}>
                     <TextField
-                        error={!!errors.designation}
+                        required
+                        error={!!errors.slug}
                         variant="outlined"
                         fullWidth
-                        id="designation"
-                        label="Designation"
-                        {...register("designation")}
-                        helperText={errors.designation?.message ?? null}
+                        id="slug"
+                        label="Unique url slug"
+                        {...register("slug")}
+                        helperText={errors.slug?.message ?? null}
                     />
                 </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        error={!!errors.message}
-                        variant="outlined"
-                        fullWidth
-                        id="message"
-                        label="Message"
-                        rows={3}
-                        multiline={true}
-                        {...register("message")}
-                        helperText={errors?.message?.message ?? null}
-                    />
+
+                <Grid item xs={12} md={6}>
+                    <FormControl sx={{minWidth: 271}}>
+                        <InputLabel id="category">Select Category</InputLabel>
+                        <Select
+                            labelId="category"
+                            id="category"
+                            value={category || ''}
+                            label="Select Category"
+                            onChange={(event) => handleCategoryChange(event)}
+                            error={!!errors?.category}
+                        >
+                            <MenuItem value="">
+                                <em>None</em>
+                            </MenuItem>
+                            {categories?.map((cat, key) => (
+                                <MenuItem value={cat.name} key={key}>{cat.name}</MenuItem>
+                            ))}
+                        </Select>
+                        <FormHelperText
+                            sx={{color: '#d32f2f'}}>{errors?.category?.message ?? null}</FormHelperText>
+                    </FormControl>
                 </Grid>
-                <Grid item xs={12}>
+
+                <Grid item xs={12} md={6}>
+                    <FormControl sx={{minWidth: 271}}>
+                        <InputLabel id="subCategory">Select Sub-Category</InputLabel>
+                        <Select
+                            labelId="subCategory"
+                            id="subCategory"
+                            value={subcategory || ''}
+                            label="Select Sub-Category"
+                            onChange={(event) => handleSubcategoryChange(event)}
+                            error={!!errors?.subCategory}
+                        >
+                            <MenuItem value="">
+                                <em>None</em>
+                            </MenuItem>
+                            {subCategories?.map((subCat, key) => (
+                                <MenuItem value={subCat} key={key}>{subCat}</MenuItem>
+                            ))}
+                        </Select>
+                        <FormHelperText
+                            sx={{color: '#d32f2f'}}>{errors?.subCategory?.message ?? null}</FormHelperText>
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12} md={6}>
                     <FilePondUploader
                         required={true}
                         id="image"
                         getUrl={getSecureUrl}
                     />
                 </Grid>
+                <Grid item xs={12} md={6}>
+                    <TextField
+                        required
+                        error={!!errors.courseFee}
+                        variant="outlined"
+                        fullWidth
+                        id="courseFee"
+                        label="Course Fee"
+                        {...register("courseFee")}
+                        helperText={errors.courseFee?.message ?? null}
+                    />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <CustomRadioButton
+                        label='Language Medium'
+                        value={languageMediumValue}
+                        handleChange={handleLanguageChange}
+                        options={LANGUAGE_MEDIUM}
+                    />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <CustomCheckBox
+                        checked={isFeaturedValue}
+                        handleChange={handleIsFeatured}
+                        label='Is Featured'
+                    />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <CustomCheckBox
+                        checked={isOfferedValue}
+                        handleChange={handleIsOffered}
+                        label='Is Offered'
+                    />
+                </Grid>
+
+                {isOfferedValue && (
+                    <Grid item xs={12} md={6}>
+                        <TextField
+                            error={!!errors.offerInPercentage}
+                            variant="outlined"
+                            fullWidth
+                            id="offerInPercentage"
+                            label="Offer In Percentage"
+                            {...register("offerInPercentage")}
+                            helperText={errors.offerInPercentage?.message ?? null}
+                        />
+                    </Grid>
+                )}
+
+                <Grid item xs={12} md={6}>
+                    <CustomCheckBox
+                        checked={docStatusValue}
+                        handleChange={handleDocStatusChange}
+                        label='Publish'
+                    />
+                </Grid>
                 <Grid item xs={12}>
                     <CkEditor
+                        getEditorData={getEditorData}
                     />
                 </Grid>
             </Grid>

@@ -38,12 +38,10 @@ const CourseSchema = new mongoose.Schema(
         },
         rating: {
             type: Number,
-            required: true,
             default: 0
         },
         numOfReviews: {
             type: Number,
-            required: true,
             default: 0
         },
         description: {
@@ -62,9 +60,9 @@ const CourseSchema = new mongoose.Schema(
             default: false
         },
         docStatus: {
-            type: String,
+            type: Boolean,
             required: true,
-            default: 'active'
+            default: true
         }
     },
     {

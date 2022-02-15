@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 
-function CkEditor() {
+function CkEditor({getEditorData}) {
     let editorRef = useRef();
     const { CKEditor, ClassicEditor } = editorRef.current || {}; // if it don't find any document then it will be an empty object
 
@@ -27,6 +27,7 @@ function CkEditor() {
                 onChange={(event, editor) => {
                     // do something when editor's content changed
                     const data = editor.getData();
+                    getEditorData(data)
                     console.log({ event, editor, data });
                 }}
                 onBlur={(event, editor) => {

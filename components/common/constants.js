@@ -5,6 +5,9 @@ export const muiDataTableOptions = {
     enableNestedDataAccess: '.',
 };
 
+export const LANGUAGE_MEDIUM = ['bangla', 'english', 'both'
+]
+
 export const STUDENT_CLASS = [
     {name: 'five', title: 'পঞ্চম'},
     {name: 'six', title: 'ষষ্ঠ'},

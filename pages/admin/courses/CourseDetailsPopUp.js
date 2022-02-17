@@ -104,29 +104,35 @@ const CourseDetailsPopup = ({itemId, openEditModal, ...props}) => {
                         <Grid item xs={12} md={6}>
                             <DetailsInputView
                                 label="Is Featured"
-                                value={itemData?.isFeatured}
+                                value={itemData?.isFeatured ? 'true' : 'false'}
                             />
                         </Grid>
 
                         <Grid item xs={12} md={6}>
                             <DetailsInputView
                                 label="Is Offered"
-                                value={itemData?.isOffered}
+                                value={itemData?.isOffered ? 'true' : 'false'}
                             />
                         </Grid>
 
                         <Grid item xs={12} md={6}>
                             <DetailsInputView
                                 label="Publish Status"
-                                value={itemData?.docStatus}
+                                value={itemData?.docStatus ? 'Published' : 'Not Published'}
                             />
                         </Grid>
 
-                        TODO:// {/** there will be dangerous html */}
-                        <Grid item xs={12} md={6}>
+                        <Grid item xs={12} md={12}>
                             <DetailsInputView
                                 label="Course Description"
-                                value={itemData?.description}
+                                value={
+                                    <div
+                                        dangerouslySetInnerHTML={{
+                                            __html: itemData?.description,
+                                        }}
+                                    />
+                                }
+                                setHeight={true}
                             />
                         </Grid>
                     </Grid>

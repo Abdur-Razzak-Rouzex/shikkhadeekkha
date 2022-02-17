@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 
-function CkEditor({getEditorData}) {
+function CkEditor({getEditorData, defaultData = ''}) {
     let editorRef = useRef();
     const { CKEditor, ClassicEditor } = editorRef.current || {}; // if it don't find any document then it will be an empty object
 
@@ -19,7 +19,7 @@ function CkEditor({getEditorData}) {
         return (
             <CKEditor
                 editor={ClassicEditor}
-                data=""
+                data={defaultData}
                 onReady={(editor) => {
                     // You can store the "editor" and use when it is needed.
                     console.log("Editor is ready to use!", editor);

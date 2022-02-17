@@ -28,20 +28,24 @@ export const StyledGrid = styled(Grid)(() => {
         },
 
         [`& .${styleClasses.label}`]: {
-            fontWeight:700,
+            fontWeight: 700,
             fontSize: 14,
             marginBottom: '5px',
         },
     };
 });
 
-const DetailsInputView = ({label, value, isLoading = false}) => {
+const DetailsInputView = ({label, value, isLoading = false, setHeight = false}) => {
     return isLoading ? (
-        <Skeleton variant='text' height={50} />
+        <Skeleton variant='text' height={50}/>
     ) : (
         <StyledGrid item xs={12}>
             <FormLabel className={styleClasses.label}>{label}</FormLabel>
-            <div className={styleClasses.inputView}>{value}</div>
+            {setHeight ? (
+                <div className={styleClasses.inputView} style={{minHeight: '400px'}}>{value}</div>
+            ) : (
+                <div className={styleClasses.inputView}>{value}</div>
+            )}
         </StyledGrid>
     );
 };

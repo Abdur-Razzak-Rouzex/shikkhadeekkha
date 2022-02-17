@@ -388,6 +388,7 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                 <Grid item xs={12}>
                     <CkEditor
                         getEditorData={getEditorData}
+                        defaultData={itemData?.description}
                     />
                 </Grid>
             </Grid>

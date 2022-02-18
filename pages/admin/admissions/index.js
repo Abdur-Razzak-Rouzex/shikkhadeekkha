@@ -4,6 +4,7 @@ import {useRouter} from 'next/router';
 import NextLink from 'next/link';
 import React, {useContext, useEffect, useReducer} from 'react';
 import {
+    Box,
     Button,
     Card,
     CardActions,
@@ -19,6 +20,7 @@ import AdminMenuItems from "../../../components/admin/AdminMenuItems";
 import classes from '../../../utils/classes';
 import Layout from "../../../components/Layout";
 import {getError} from "../../../utils/error";
+import SchoolIcon from '@mui/icons-material/School';
 
 
 function reducer(state, action) {
@@ -76,151 +78,58 @@ function AdmissionDashboard() {
                         <List>
                             <ListItem>
                                 {loading ? (
-                                    <CircularProgress/>
+                                    <Box
+                                        sx={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            marginTop: '100px'
+                                        }}
+                                    >
+                                        <CircularProgress color="secondary"/>
+                                    </Box>
                                 ) : error ? (
                                     <Typography sx={classes.error}>{error}</Typography>
                                 ) : (
-                                    <Grid container spacing={5}>
+                                    <Grid container spacing={5} sx={{marginBottom: 20}}>
                                         <Grid item xs={12}>
                                             <Typography variant="h1" sx={{textAlign: 'center', marginBottom: 0}}>
                                                 Admission Requests
                                             </Typography>
                                         </Grid>
-                                        <Grid item xs={12} md={3}>
-                                            <Card raised>
-                                                <CardContent>
-                                                    <Typography variant="h1">
-                                                        {summary?.ccap}
-                                                    </Typography>
-                                                    <Typography>CCAP</Typography>
-                                                </CardContent>
-                                                <CardActions>
-                                                    <NextLink href="/admin/admissions/CCAP [Cadet College Admission Program]" passHref>
-                                                        <Button size="small" color="primary">
-                                                            View CCAP
-                                                        </Button>
-                                                    </NextLink>
-                                                </CardActions>
-                                            </Card>
-                                        </Grid>
-                                        <Grid item xs={12} md={3}>
-                                            <Card raised>
-                                                <CardContent>
-                                                    <Typography variant="h1">
-                                                        {summary?.seven}
-                                                    </Typography>
-                                                    <Typography>Seven</Typography>
-                                                </CardContent>
-                                                <CardActions>
-                                                    <NextLink href="/admin/admissions/Class Seven [Academic Program]" passHref>
-                                                        <Button size="small" color="primary">
-                                                            View Seven
-                                                        </Button>
-                                                    </NextLink>
-                                                </CardActions>
-                                            </Card>
-                                        </Grid>
-                                        <Grid item xs={12} md={3}>
-                                            <Card raised>
-                                                <CardContent>
-                                                    <Typography variant="h1">
-                                                        {summary?.eight}
-                                                    </Typography>
-                                                    <Typography>Eight</Typography>
-                                                </CardContent>
-                                                <CardActions>
-                                                    <NextLink href="/admin/admissions/Class Eight [Academic Program]" passHref>
-                                                        <Button size="small" color="primary">
-                                                            View Eight
-                                                        </Button>
-                                                    </NextLink>
-                                                </CardActions>
-                                            </Card>
-                                        </Grid>
-                                        <Grid item xs={12} md={3}>
-                                            <Card raised>
-                                                <CardContent>
-                                                    <Typography variant="h1">
-                                                        {summary?.nine}
-                                                    </Typography>
-                                                    <Typography>Nine</Typography>
-                                                </CardContent>
-                                                <CardActions>
-                                                    <NextLink href="/admin/admissions/Class Nine [Academic Program]" passHref>
-                                                        <Button size="small" color="primary">
-                                                            View Nine
-                                                        </Button>
-                                                    </NextLink>
-                                                </CardActions>
-                                            </Card>
-                                        </Grid>
-                                        <Grid item xs={12} md={3}>
-                                            <Card raised>
-                                                <CardContent>
-                                                    <Typography variant="h1">
-                                                        {summary?.ten}
-                                                    </Typography>
-                                                    <Typography>Ten</Typography>
-                                                </CardContent>
-                                                <CardActions>
-                                                    <NextLink href="/admin/admissions/Class Ten [Academic Program]" passHref>
-                                                        <Button size="small" color="primary">
-                                                            View Ten
-                                                        </Button>
-                                                    </NextLink>
-                                                </CardActions>
-                                            </Card>
-                                        </Grid>
-                                        <Grid item xs={12} md={3}>
-                                            <Card raised>
-                                                <CardContent>
-                                                    <Typography variant="h1">
-                                                        {summary?.ani}
-                                                    </Typography>
-                                                    <Typography>ANI</Typography>
-                                                </CardContent>
-                                                <CardActions>
-                                                    <NextLink href="/admin/admissions/ANI [SSC Examinee]" passHref>
-                                                        <Button size="small" color="primary">
-                                                            View ANI
-                                                        </Button>
-                                                    </NextLink>
-                                                </CardActions>
-                                            </Card>
-                                        </Grid>
-                                        <Grid item xs={12} md={3}>
-                                            <Card raised>
-                                                <CardContent>
-                                                    <Typography variant="h1">
-                                                        {summary?.hsc1}
-                                                    </Typography>
-                                                    <Typography>HSC 01</Typography>
-                                                </CardContent>
-                                                <CardActions>
-                                                    <NextLink href="/admin/admissions/HSC 01" passHref>
-                                                        <Button size="small" color="primary">
-                                                            View HSC 01
-                                                        </Button>
-                                                    </NextLink>
-                                                </CardActions>
-                                            </Card>
-                                        </Grid>
-                                        <Grid item xs={12} md={3}>
-                                            <Card raised>
-                                                <CardContent>
-                                                    <Typography variant="h1">
-                                                        {summary?.hsc2}
-                                                    </Typography>
-                                                    <Typography>HSC 02</Typography>
-                                                </CardContent>
-                                                <CardActions>
-                                                    <NextLink href="/admin/admissions/HSC 02" passHref>
-                                                        <Button size="small" color="primary">
-                                                            HSC 02
-                                                        </Button>
-                                                    </NextLink>
-                                                </CardActions>
-                                            </Card>
+                                        <Grid item xs={12}>
+                                            <Grid container spacing={5}>
+                                                {summary?.length > 0 ? (
+                                                    summary.map((course) => (
+                                                        <Grid item xs={12} md={3} key={course?.courseName}>
+                                                            <Card raised>
+                                                                <CardContent sx={{minHeight: 180}}>
+                                                                    <Typography variant="h1" sx={{display: 'flex', justifyContent: 'space-between'}}>
+                                                                        <SchoolIcon/> {course?.numOfAdmission}
+                                                                    </Typography>
+                                                                    <Typography color='secondary'>{course?.courseName}</Typography>
+                                                                </CardContent>
+                                                                <CardActions>
+                                                                    <NextLink
+                                                                        href={`/admin/admissions/${course?.courseName}`}
+                                                                        passHref>
+                                                                        <Button size="small" color="primary">
+                                                                            View All
+                                                                        </Button>
+                                                                    </NextLink>
+                                                                </CardActions>
+                                                            </Card>
+                                                        </Grid>
+                                                    ))
+                                                ) : (
+                                                    <Grid item xs={12}>
+                                                        <Typography variant="h1"
+                                                                    sx={{textAlign: 'center', margin: 'auto'}}>
+                                                            No course available
+                                                        </Typography>
+                                                    </Grid>
+                                                )}
+                                            </Grid>
                                         </Grid>
                                     </Grid>
                                 )}

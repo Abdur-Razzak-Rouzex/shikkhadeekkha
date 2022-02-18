@@ -16,7 +16,7 @@ import {muiDataTableOptions} from "../../../components/common/constants";
 import DatatableButtonGroup from "../../../components/common/button/DatatableButtonGroup";
 import ReadButton from "../../../components/common/button/ReadButton";
 import DeleteButton from "../../../components/common/button/DeleteButton";
-import AdmissionInThisCourseDetails from "./AdmissionInThisCoursePageDetails";
+import AdmissionInThisCourseDetails from "./AdmissionInThisCourseDetailsPage";
 
 const AdmissionInThisCoursePage = () => {
     const {enqueueSnackbar} = useSnackbar();

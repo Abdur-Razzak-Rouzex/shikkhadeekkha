@@ -3,6 +3,7 @@ import {isAuth, isAdmin} from '../../../utils/auth';
 import db from '../../../utils/db';
 import {onError} from '../../../utils/error';
 import AdmissionForm from "../../../models/AdmissionForm";
+import Course from "../../../models/Course";
 
 const handler = nc({
     onError,
@@ -12,6 +13,9 @@ handler.use(isAuth, isAdmin);
 
 handler.get(async (req, res) => {
     await db.connect();
+
+    const availableCourseNames = Course.find({}).select('name');
+    console.log('availableCourseNames: ', availableCourseNames);
 
     const ccap = await AdmissionForm.count({
         'otherInfo.selectedCourse': 'CCAP [Cadet College Admission Program]'

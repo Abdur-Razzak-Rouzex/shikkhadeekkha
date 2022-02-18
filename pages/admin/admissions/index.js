@@ -81,6 +81,11 @@ function AdmissionDashboard() {
                                     <Typography sx={classes.error}>{error}</Typography>
                                 ) : (
                                     <Grid container spacing={5}>
+                                        <Grid item xs={12}>
+                                            <Typography variant="h1" sx={{textAlign: 'center', marginBottom: 0}}>
+                                                Admission Requests
+                                            </Typography>
+                                        </Grid>
                                         <Grid item xs={12} md={3}>
                                             <Card raised>
                                                 <CardContent>

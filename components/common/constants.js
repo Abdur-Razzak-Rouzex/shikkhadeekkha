@@ -43,17 +43,6 @@ export const DEVICE_TYPES = [
     'Other [Do not have any option to attach additional camera ]',
 ]
 
-export const AVAILABLE_COURSES = [
-    {name: 'CCAP [Cadet College Admission Program]', title: 'CCAP [Cadet College Admission Program]'},
-    {name: 'Class Seven [Academic Program]', title: 'Class Seven [Academic Program]'},
-    {name: 'Class Eight [Academic Program]', title: 'Class Eight [Academic Program]'},
-    {name: 'Class Nine [Academic Program]', title: 'Class Nine [Academic Program]'},
-    {name: 'Class Ten [Academic Program]', title: 'Class Ten [Academic Program]'},
-    {name: 'ANI [SSC Examinee]', title: 'ANI [SSC Examinee]'},
-    {name: 'HSC 01', title: 'HSC 01'},
-    {name: 'HSC 02', title: 'HSC 02'},
-]
-
 export const CO_CURRICULAR_ACTIVITIES = [
     'Chess',
     '16 Beads [ষোল গুটি]',

@@ -22,12 +22,10 @@ import Layout from "../../components/Layout";
 import {Store} from "../../utils/Store";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import {
-    AVAILABLE_COURSES,
-    CO_CURRICULAR_ACTIVITIES,
-    DEVICE_TYPES,
-    MOBILE_NUMBER_REGEX
-} from "../../components/common/constants";
+import {CO_CURRICULAR_ACTIVITIES, DEVICE_TYPES, MOBILE_NUMBER_REGEX} from "../../components/common/constants";
+import axios from "axios";
+import {getError} from "../../utils/error";
+import {useSnackbar} from "notistack";
 
 const initialValues = {
     selectedCourse: '',
@@ -51,9 +49,11 @@ const MenuProps = {
 };
 
 export default function OtherInfo() {
+    const {enqueueSnackbar} = useSnackbar();
     const router = useRouter();
     const {state, dispatch} = useContext(Store);
     const [selectedCourse, setSelectedCourse] = useState('');
+    const [courses, setCourses] = useState([]);
     const [coCurricularActivities, setCoCurricularActivities] = useState([]);
     const [typeOfElectronicsToBeUsedInLiveClass, setTypeOfElectronicsToBeUsedInLiveClass] = useState([]);
 
@@ -70,6 +70,17 @@ export default function OtherInfo() {
         if (!academicGuardianInfo?.guardianName) {
             router.push('/admission-form/academic-guardian-info');
         }
+
+        const getCourses = async () => {
+            try {
+                const {data} = await axios.get(`/api/course/`);
+                setCourses(data);
+            } catch (error) {
+                enqueueSnackbar(getError(error), {variant: 'error'});
+            }
+        };
+
+        getCourses();
 
         if (otherInfo) {
             reset({
@@ -212,8 +223,8 @@ export default function OtherInfo() {
                                 <MenuItem value="">
                                     <em>None</em>
                                 </MenuItem>
-                                {AVAILABLE_COURSES?.map((course, key) => (
-                                    <MenuItem value={course.name} key={key}>{course.title}</MenuItem>
+                                {courses?.map((course, key) => (
+                                    <MenuItem value={course.name} key={key}>{course.name}</MenuItem>
                                 ))}
                             </Select>
                             <FormHelperText

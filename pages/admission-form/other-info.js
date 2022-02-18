@@ -22,7 +22,12 @@ import Layout from "../../components/Layout";
 import {Store} from "../../utils/Store";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import {CO_CURRICULAR_ACTIVITIES, DEVICE_TYPES, MOBILE_NUMBER_REGEX} from "../../components/common/constants";
+import {
+    CO_CURRICULAR_ACTIVITIES,
+    DEVICE_TYPES,
+    MOBILE_NUMBER_REGEX,
+    PARENTS_TYPE
+} from "../../components/common/constants";
 import axios from "axios";
 import {getError} from "../../utils/error";
 import {useSnackbar} from "notistack";
@@ -59,7 +64,7 @@ export default function OtherInfo() {
 
     const {
         userInfo,
-        admission: {academicGuardianInfo, otherInfo},
+        admission: {parentsInfo, academicGuardianInfo, otherInfo},
     } = state;
 
     useEffect(() => {
@@ -67,8 +72,12 @@ export default function OtherInfo() {
             router.push('/login?redirect=/admission-form/student-info');
         }
 
-        if (!academicGuardianInfo?.guardianName) {
-            router.push('/admission-form/academic-guardian-info');
+        if (!parentsInfo?.fatherName) {
+            router.push('/admission-form/parents-info');
+        } else if (parentsInfo?.academicallyResponsiblePerson === PARENTS_TYPE[3].name) {
+            if (!academicGuardianInfo?.guardianName) {
+                router.push('/admission-form/academic-guardian-info');
+            }
         }
 
         const getCourses = async () => {
@@ -248,8 +257,9 @@ export default function OtherInfo() {
                     </Grid>
 
                     <Grid item xs={12} md={6}>
-                        <FormControl sx={{m: 1, width: 265}}>
-                            <InputLabel id="typeOfElectronicsToBeUsedInLiveClass">লাইভ ক্লাসের জন্য যে ইলেকট্রনিক ডিভাইস</InputLabel>
+                        <FormControl sx={{width: 265}}>
+                            <InputLabel id="typeOfElectronicsToBeUsedInLiveClass">লাইভ ক্লাসের জন্য যে ইলেকট্রনিক
+                                ডিভাইস</InputLabel>
                             <Select
                                 required
                                 labelId="typeOfElectronicsToBeUsedInLiveClass"
@@ -288,7 +298,7 @@ export default function OtherInfo() {
                     </Grid>
 
                     <Grid item xs={12} md={6}>
-                        <FormControl sx={{m: 1, width: 265}}>
+                        <FormControl sx={{width: 265}}>
                             <InputLabel id="coCurricularActivities">সহ-পাঠ্যক্রমিক ক্রিয়াকলাপ</InputLabel>
                             <Select
                                 labelId="coCurricularActivities"

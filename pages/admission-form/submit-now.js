@@ -13,6 +13,7 @@ import AdmissionWizard from "../../components/AdmissionWizard";
 import DetailsInputView, {StyledGrid} from "../../components/common/elements/DetailsInputView";
 import FormLabel from "@mui/material/FormLabel";
 import Cookies from "js-cookie";
+import {PARENTS_TYPE} from "../../components/common/constants";
 
 function PlaceOrder() {
     const router = useRouter();
@@ -35,8 +36,10 @@ function PlaceOrder() {
         if (!parentsInfo?.fatherName) {
             router.push('/admission-form/parents-info');
         }
-        if (!academicGuardianInfo?.guardianName) {
-            router.push('/admission-form/academic-guardian-info');
+        if (parentsInfo?.academicallyResponsiblePerson === PARENTS_TYPE[3].name) {
+            if (!academicGuardianInfo?.guardianName) {
+                router.push('/admission-form/academic-guardian-info');
+            }
         }
         if (!otherInfo?.selectedCourse) {
             router.push('/admission-form/other-info');
@@ -214,49 +217,51 @@ function PlaceOrder() {
                     </Card>
 
                     {/** Academic Guardian info */}
-                    <Card sx={classes.section}>
-                        <List>
-                            <ListItem sx={{justifyContent: 'center'}}>
-                                <Typography component="h2" variant="h2">
-                                    একাডেমিক অভিভাবক
-                                </Typography>
-                            </ListItem>
-                            <ListItem>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={12} md={6}>
-                                        <DetailsInputView
-                                            label="অভিভাবকের নাম"
-                                            value={academicGuardianInfo?.guardianName}
-                                        />
+                    {parentsInfo?.academicallyResponsiblePerson === PARENTS_TYPE[3].name && (
+                        <Card sx={classes.section}>
+                            <List>
+                                <ListItem sx={{justifyContent: 'center'}}>
+                                    <Typography component="h2" variant="h2">
+                                        একাডেমিক অভিভাবক
+                                    </Typography>
+                                </ListItem>
+                                <ListItem>
+                                    <Grid container spacing={2}>
+                                        <Grid item xs={12} md={6}>
+                                            <DetailsInputView
+                                                label="অভিভাবকের নাম"
+                                                value={academicGuardianInfo?.guardianName}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} md={6}>
+                                            <DetailsInputView
+                                                label="সম্পর্ক"
+                                                value={academicGuardianInfo?.relation}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} md={6}>
+                                            <DetailsInputView
+                                                label="মোবাইল নাম্বার"
+                                                value={academicGuardianInfo?.guardianMobileNumber}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} md={6}>
+                                            <DetailsInputView
+                                                label="হোয়াটসঅ্যাপ নাম্বার"
+                                                value={academicGuardianInfo?.guardianWhatsappNumber}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} md={6}>
+                                            <DetailsInputView
+                                                label="ইমেইল"
+                                                value={academicGuardianInfo?.guardianEmail}
+                                            />
+                                        </Grid>
                                     </Grid>
-                                    <Grid item xs={12} md={6}>
-                                        <DetailsInputView
-                                            label="সম্পর্ক"
-                                            value={academicGuardianInfo?.relation}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} md={6}>
-                                        <DetailsInputView
-                                            label="মোবাইল নাম্বার"
-                                            value={academicGuardianInfo?.guardianMobileNumber}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} md={6}>
-                                        <DetailsInputView
-                                            label="হোয়াটসঅ্যাপ নাম্বার"
-                                            value={academicGuardianInfo?.guardianWhatsappNumber}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} md={6}>
-                                        <DetailsInputView
-                                            label="ইমেইল"
-                                            value={academicGuardianInfo?.guardianEmail}
-                                        />
-                                    </Grid>
-                                </Grid>
-                            </ListItem>
-                        </List>
-                    </Card>
+                                </ListItem>
+                            </List>
+                        </Card>
+                    )}
 
                     {/** Other info */}
                     <Card sx={classes.section}>
@@ -320,7 +325,7 @@ function PlaceOrder() {
                                                 otherInfo?.coCurricularActivities?.map(((coCurriculm, index) => (
                                                     <Box className={styleClasses?.inputView}
                                                          key={coCurriculm}>
-                                                        &emsp;{`${index + 1}  :  ${coCurriculm.id}`}
+                                                        &emsp;{`${index + 1}  :  ${coCurriculm}`}
                                                     </Box>
                                                 )))
                                             )}

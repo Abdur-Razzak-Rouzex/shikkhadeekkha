@@ -75,22 +75,18 @@ const admissionFormSchema = new mongoose.Schema(
         academicGuardianInfo: {
             guardianName: {
                 type: String,
-                required: true,
             },
             relation: {
                 type: String,
-                required: true,
             },
             guardianMobileNumber: {
                 type: String,
-                required: true,
             },
             guardianWhatsappNumber: {
                 type: String,
             },
             guardianEmail: {
                 type: String,
-                required: true,
             },
         },
 

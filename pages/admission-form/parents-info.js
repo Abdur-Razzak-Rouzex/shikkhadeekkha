@@ -49,6 +49,7 @@ export default function ParentsInfo() {
         if (!studentInfo?.studentNameBn) {
             router.push('/admission-form/student-info');
         }
+
         if (parentsInfo) {
             reset({
                 fatherName: parentsInfo?.fatherName,
@@ -66,6 +67,7 @@ export default function ParentsInfo() {
     }, []);
 
     const handleChange = (id, event) => {
+        console.log('setAcademicallyResponsiblePerson: ', event.target.value);
         setValue(id, event.target.value);
         setAcademicallyResponsiblePerson(event.target.value);
     };
@@ -156,7 +158,12 @@ export default function ParentsInfo() {
                 academicallyResponsiblePerson
             })
         );
-        router.push('/admission-form/academic-guardian-info');
+
+        if (academicallyResponsiblePerson === PARENTS_TYPE[3].name) {
+            router.push('/admission-form/academic-guardian-info');
+        } else {
+            router.push('/admission-form/other-info');
+        }
     };
 
     return (
@@ -274,8 +281,9 @@ export default function ParentsInfo() {
 
                     <Grid item xs={12} md={6}>
                         <FormControl sx={{minWidth: 271}}>
-                            <InputLabel id="academicallyResponsiblePerson">একাডেমিক উদ্দেশ্যে যিনি যোগাযোগ
-                                করবেন</InputLabel>
+                            <InputLabel id="academicallyResponsiblePerson">
+                                একাডেমিক উদ্দেশ্যে যিনি যোগাযোগ করবেন
+                            </InputLabel>
                             <Select
                                 labelId="academicallyResponsiblePerson"
                                 id="academicallyResponsiblePerson"

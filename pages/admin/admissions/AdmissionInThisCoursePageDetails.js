@@ -9,6 +9,7 @@ import {useSnackbar} from "notistack";
 import DetailsInputView, {styleClasses, StyledGrid} from "../../../components/common/elements/DetailsInputView";
 import classes from "../../../utils/classes";
 import FormLabel from "@mui/material/FormLabel";
+import {PARENTS_TYPE} from "../../../components/common/constants";
 
 const AdmissionInThisCourseDetails = ({itemId, userInfo, ...props}) => {
     const router = useRouter();
@@ -176,49 +177,51 @@ const AdmissionInThisCourseDetails = ({itemId, userInfo, ...props}) => {
                             </Card>
 
                             {/** Academic Guardian info */}
-                            <Card sx={classes.section}>
-                                <List>
-                                    <ListItem sx={{justifyContent: 'center'}}>
-                                        <Typography component="h2" variant="h2">
-                                            একাডেমিক অভিভাবক
-                                        </Typography>
-                                    </ListItem>
-                                    <ListItem>
-                                        <Grid container spacing={2}>
-                                            <Grid item xs={12} md={6}>
-                                                <DetailsInputView
-                                                    label="অভিভাবকের নাম"
-                                                    value={itemData?.academicGuardianInfo?.guardianName}
-                                                />
+                            {itemData?.parentsInfo?.academicallyResponsiblePerson === PARENTS_TYPE[3].name && (
+                                <Card sx={classes.section}>
+                                    <List>
+                                        <ListItem sx={{justifyContent: 'center'}}>
+                                            <Typography component="h2" variant="h2">
+                                                একাডেমিক অভিভাবক
+                                            </Typography>
+                                        </ListItem>
+                                        <ListItem>
+                                            <Grid container spacing={2}>
+                                                <Grid item xs={12} md={6}>
+                                                    <DetailsInputView
+                                                        label="অভিভাবকের নাম"
+                                                        value={itemData?.academicGuardianInfo?.guardianName}
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={12} md={6}>
+                                                    <DetailsInputView
+                                                        label="সম্পর্ক"
+                                                        value={itemData?.academicGuardianInfo?.relation}
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={12} md={6}>
+                                                    <DetailsInputView
+                                                        label="মোবাইল নাম্বার"
+                                                        value={itemData?.academicGuardianInfo?.guardianMobileNumber}
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={12} md={6}>
+                                                    <DetailsInputView
+                                                        label="হোয়াটসঅ্যাপ নাম্বার"
+                                                        value={itemData?.academicGuardianInfo?.guardianWhatsappNumber}
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={12} md={6}>
+                                                    <DetailsInputView
+                                                        label="ইমেইল"
+                                                        value={itemData?.academicGuardianInfo?.guardianEmail}
+                                                    />
+                                                </Grid>
                                             </Grid>
-                                            <Grid item xs={12} md={6}>
-                                                <DetailsInputView
-                                                    label="সম্পর্ক"
-                                                    value={itemData?.academicGuardianInfo?.relation}
-                                                />
-                                            </Grid>
-                                            <Grid item xs={12} md={6}>
-                                                <DetailsInputView
-                                                    label="মোবাইল নাম্বার"
-                                                    value={itemData?.academicGuardianInfo?.guardianMobileNumber}
-                                                />
-                                            </Grid>
-                                            <Grid item xs={12} md={6}>
-                                                <DetailsInputView
-                                                    label="হোয়াটসঅ্যাপ নাম্বার"
-                                                    value={itemData?.academicGuardianInfo?.guardianWhatsappNumber}
-                                                />
-                                            </Grid>
-                                            <Grid item xs={12} md={6}>
-                                                <DetailsInputView
-                                                    label="ইমেইল"
-                                                    value={itemData?.academicGuardianInfo?.guardianEmail}
-                                                />
-                                            </Grid>
-                                        </Grid>
-                                    </ListItem>
-                                </List>
-                            </Card>
+                                        </ListItem>
+                                    </List>
+                                </Card>
+                            )}
 
                             {/** Other info */}
                             <Card sx={classes.section}>
@@ -282,7 +285,7 @@ const AdmissionInThisCourseDetails = ({itemId, userInfo, ...props}) => {
                                                         itemData?.otherInfo?.coCurricularActivities?.map(((coCurriculm, index) => (
                                                             <Box className={styleClasses?.inputView}
                                                                  key={coCurriculm}>
-                                                                &emsp;{`${index + 1}  :  ${coCurriculm.id}`}
+                                                                &emsp;{`${index + 1}  :  ${coCurriculm}`}
                                                             </Box>
                                                         )))
                                                     )}

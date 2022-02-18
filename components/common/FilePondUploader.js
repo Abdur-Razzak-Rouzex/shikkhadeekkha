@@ -6,7 +6,7 @@ import React, {useState} from "react";
 
 registerPlugin(FilePondPluginImagePreview);
 
-export default function FilePondUploader({getUrl, id, required = false}) {
+export default function FilePondUploader({getUrl, id, required = false, title = 'Drag & Drop your files or'}) {
     const [files, setFiles] = useState([]);
 
     return (
@@ -26,7 +26,7 @@ export default function FilePondUploader({getUrl, id, required = false}) {
                 },
             }}
             name="file"
-            labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
+            labelIdle={`${title} or <span class="filepond--label-action">Browse</span>`}
         />
     )
 }

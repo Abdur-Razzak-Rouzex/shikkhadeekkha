@@ -1,5 +1,5 @@
 import {
-    Button, CircularProgress,
+    Button,
     FormControl,
     FormHelperText,
     Grid,
@@ -20,9 +20,7 @@ import {Store} from "../../utils/Store";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import {EDUCATION_MEDIUM, STUDENT_CLASS} from "../../components/common/constants";
-import axios from "axios";
-import {getError} from "../../utils/error";
-import {useSnackbar} from "notistack";
+import FilePondUploader from "../../components/common/FilePondUploader";
 
 const initialValues = {
     studentNameBn: '',
@@ -37,8 +35,6 @@ const initialValues = {
 export default function StudentInfo() {
     const [studentClass, setStudentClass] = useState('');
     const [educationMedium, setEducationMedium] = useState('');
-    const [loadingUpload, setLoadingUpload] = useState(false);
-    const {enqueueSnackbar} = useSnackbar();
     const router = useRouter();
     const {state, dispatch} = useContext(Store);
     const {
@@ -114,35 +110,14 @@ export default function StudentInfo() {
         register,
         reset,
         handleSubmit,
-        getValues,
         setValue,
         formState: {errors},
     } = useForm({
         resolver: yupResolver(validationSchema),
     });
 
-    const uploadHandler = async (e) => {
-        setLoadingUpload(true);
-        const file = e.target.files[0];
-        const bodyFormData = new FormData();
-        bodyFormData.append('file', file);
-        bodyFormData.append('from', 'studentInfo');
-        try {
-            const {data} = await axios.post('/api/upload', bodyFormData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    authorization: `Bearer ${userInfo.token}`,
-                },
-            });
-
-            reset({...getValues(), passportSizePhotoUrl: data.secure_url});
-            setLoadingUpload(false);
-            enqueueSnackbar('Photo uploaded successfully', {variant: 'success'});
-
-        } catch (error) {
-            setLoadingUpload(false);
-            enqueueSnackbar(getError(error), {variant: 'error'});
-        }
+    const getSecureUrl = (secureUrl) => {
+        setValue('passportSizePhotoUrl', secureUrl);
     }
 
     const submitHandler = ({studentNameBn, studentNameEn, dateOfBirth, studentClass, instituteName, educationMedium, passportSizePhotoUrl}) => {
@@ -289,26 +264,12 @@ export default function StudentInfo() {
                     </Grid>
 
                     <Grid item xs={12} md={12}>
-                        <TextField
-                            error={!!errors.passportSizePhotoUrl}
-                            variant="outlined"
+                        <FilePondUploader
+                            required={true}
+                            title='* upload a passport size photo'
                             id="passportSizePhotoUrl"
-                            label="শিক্ষার্থীর পাসপোর্ট সাইজের ছবি"
-                            {...register("passportSizePhotoUrl")}
-                            helperText={errors.passportSizePhotoUrl?.message ?? null}
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                            fullWidth
+                            getUrl={getSecureUrl}
                         />
-                    </Grid>
-                    <Grid item xs={5}/>
-                    <Grid item xs={7} sx={{display: 'flex', justifyContent: 'end'}}>
-                        <Button variant="contained" component="label" color='secondary'>
-                            আপ্লোড করুন
-                            <input type="file" onChange={(e) => uploadHandler(e)} hidden accept="image/*"/>
-                        </Button>
-                        {loadingUpload && <CircularProgress/>}
                     </Grid>
 
                     <Grid item xs={12}>

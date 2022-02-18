@@ -23,7 +23,7 @@ handler.post(async (req, res) => {
             category: req.body.category,
             subCategory: req.body.subCategory,
             image: req.body.image,
-            courseFee: req.body.courseFee,
+            price: req.body.price,
             languageMedium: req.body.languageMedium,
             offerInPercentage: req.body.offerInPercentage,
             isFeatured: req.body.isFeatured,

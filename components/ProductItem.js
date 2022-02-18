@@ -3,31 +3,31 @@ import React from 'react';
 import NextLink from 'next/link';
 import Rating from '@mui/material/Rating';
 
-export default function ProductItem({product, addToCartHandler}) {
+export default function ProductItem({item, addToCartHandler}) {
     return (
         <Card>
-            <NextLink href={`/product/${product.slug}`} passHref>
+            <NextLink href={`/product/${item?.slug}`} passHref>
                 <CardActionArea>
                     <CardMedia
                         component="img"
-                        image={product.image}
-                        title={product.name}
+                        image={item?.image}
+                        title={item?.name}
                     />
                     <CardContent>
                         <Grid container spacing={1}>
                             <Grid item xs={12}>
-                                <Typography>{product.name}</Typography>
+                                <Typography>{item?.name}</Typography>
                             </Grid>
                             <Grid item xs={12} sx={{textAlign: 'end'}}>
                                 <Chip
-                                    label={`${product?.price} ৳`}
+                                    label={`${item?.price} ৳`}
                                     size='medium'
                                     color='secondary'
                                 />
                             </Grid>
                             <Grid item xs={6}>
                                 <Rating
-                                    value={product.rating}
+                                    value={item?.rating}
                                     readOnly
                                     precision={0.25}
                                 />
@@ -37,7 +37,7 @@ export default function ProductItem({product, addToCartHandler}) {
                                     size="small"
                                     color="primary"
                                     variant="contained"
-                                    onClick={() => addToCartHandler(product)}
+                                    onClick={() => addToCartHandler(item)}
                                 >
                                     Add to cart
                                 </Button>

@@ -25,15 +25,15 @@ const PAGE_SIZE = 3;
 
 const prices = [
     {
-        name: '$1 to $50',
+        name: '1 tk to 50 tk',
         value: '1-50',
     },
     {
-        name: '$51 to $200',
+        name: '51 tk to 200 tk',
         value: '51-200',
     },
     {
-        name: '$201 to $1000',
+        name: '201 tk to 1000 tk',
         value: '201-1000',
     },
 ];
@@ -51,6 +51,7 @@ export default function Search(props) {
         rating = 'all',
         sort = 'featured',
     } = router.query;
+
     const {products, countProducts, categories, brands, pages} = props;
 
     const filterSearch = ({
@@ -110,7 +111,6 @@ export default function Search(props) {
             return;
         }
         dispatch({type: 'CART_ADD_ITEM', payload: {...product, quantity}});
-        router.push('/cart');
     };
     return (
         <Layout title="search">

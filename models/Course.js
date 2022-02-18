@@ -7,6 +7,10 @@ const CourseSchema = new mongoose.Schema(
             type: String,
             required: true
         },
+        type: {
+            type: String,
+            default: 'course',
+        },
         slug: {
             type: String,
             required: true,
@@ -23,7 +27,7 @@ const CourseSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        courseFee: {
+        price: {
             type: Number,
             required: true
         },

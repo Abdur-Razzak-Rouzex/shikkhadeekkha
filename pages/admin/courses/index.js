@@ -134,7 +134,7 @@ const WhyChooseUs = () => {
                 }
             },
             {
-                name: "courseFee",
+                name: "price",
                 label: "Course Fee",
                 options: {
                     filter: true,

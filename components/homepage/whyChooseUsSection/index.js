@@ -36,7 +36,7 @@ export const Feature = ({item: {smallImage, title, shortDescription, _id}}) => {
 
 export default function WhyChooseUsSection({items, title, subtitle}) {
     return (
-        <Box component="section" sx={{paddingBottom: 5}}>
+        <Box component="section" sx={{paddingY: 5}}>
             <Container>
                 {title && <TitleAndSubtitle title={title} subtitle={subtitle}/>}
                 <Grid container spacing={3}>

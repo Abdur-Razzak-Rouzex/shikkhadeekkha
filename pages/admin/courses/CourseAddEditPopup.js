@@ -23,7 +23,7 @@ const initialValues = {
     category: '',
     subCategory: '',
     image: '',
-    courseFee: 0,
+    price: 0,
     languageMedium: LANGUAGE_MEDIUM[0],
     isFeatured: false,
     isOffered: false,
@@ -100,7 +100,7 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                 .string()
                 .required()
                 .label("Course Image"),
-            courseFee: yup
+            price: yup
                 .number()
                 .required()
                 .label("Course Fee"),
@@ -152,7 +152,7 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                 category: itemData?.category,
                 subCategory: itemData?.subCategory,
                 image: itemData?.image,
-                courseFee: itemData?.courseFee,
+                price: itemData?.price,
                 languageMedium: itemData?.languageMedium,
                 offerInPercentage: itemData?.offerInPercentage,
                 description: itemData?.description,
@@ -332,13 +332,13 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                 <Grid item xs={12} md={6}>
                     <TextField
                         required
-                        error={!!errors.courseFee}
+                        error={!!errors.price}
                         variant="outlined"
                         fullWidth
-                        id="courseFee"
+                        id="price"
                         label="Course Fee"
-                        {...register("courseFee")}
-                        helperText={errors.courseFee?.message ?? null}
+                        {...register("price")}
+                        helperText={errors.price?.message ?? null}
                     />
                 </Grid>
                 <Grid item xs={12} md={6}>

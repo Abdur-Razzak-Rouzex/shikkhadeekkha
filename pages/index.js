@@ -3,6 +3,7 @@ import {Grid, Link, Skeleton, Typography} from '@mui/material';
 import Layout from '../components/Layout';
 import db from '../utils/db';
 import Product from '../models/Product';
+import Course from '../models/Course';
 import axios from 'axios';
 import React, {useContext, useEffect, useState} from 'react';
 import {Store} from '../utils/Store';
@@ -20,7 +21,7 @@ import Testimonial from "../models/Testimonial";
 
 export default function Home(props) {
     const {state, dispatch} = useContext(Store);
-    const {topRatedProducts, allTestimonials} = props;
+    const {topRatedProducts, allTestimonials, featuredCourses} = props;
     const {enqueueSnackbar} = useSnackbar();
     const [banners, setBanners] = useState([]);
     const [whyChooseUs, setWhyChooseUs] = useState([]);
@@ -100,23 +101,35 @@ export default function Home(props) {
 
             <TopLineSection topline={topLine}/>
 
-            <WhyChooseUsSection
-                title="Why choose us?"
-                subtitle="Read the next reasons"
-                items={whyChooseUs}
-            />
+            <Typography variant="h2">Featured Courses</Typography>
+            <Grid container spacing={3}>
+                {featuredCourses.map((course) => (
+                    <Grid item md={4} key={course.name}>
+                        <ProductItem
+                            item={course}
+                            addToCartHandler={addToCartHandler}
+                        />
+                    </Grid>
+                ))}
+            </Grid>
 
             <Typography variant="h2">Popular Products</Typography>
             <Grid container spacing={3}>
                 {topRatedProducts.map((product) => (
                     <Grid item md={4} key={product.name}>
                         <ProductItem
-                            product={product}
+                            item={product}
                             addToCartHandler={addToCartHandler}
                         />
                     </Grid>
                 ))}
             </Grid>
+
+            <WhyChooseUsSection
+                title="Why choose us?"
+                subtitle="Read the next reasons"
+                items={whyChooseUs}
+            />
 
             <TestimonialsCarousel
                 title="Testimonials"
@@ -137,12 +150,17 @@ export async function getServerSideProps() {
         })
         .limit(3);
 
+    const featuredCoursesDocs = await Course.find({isFeatured: true, docStatus: true}, '-reviews')
+        .lean()
+        .limit(3);
+
     const testimonialDocs = await Testimonial.find({})
         .lean()
 
     return {
         props: {
             topRatedProducts: topRatedProductsDocs.map(db.convertDocToObj),
+            featuredCourses: featuredCoursesDocs.map(db.convertDocToObj),
             allTestimonials: testimonialDocs.map(db.convertDocToObj),
         },
     };

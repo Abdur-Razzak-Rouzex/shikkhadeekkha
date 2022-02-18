@@ -83,7 +83,7 @@ const CourseDetailsPopup = ({itemId, openEditModal, ...props}) => {
                         <Grid item xs={12} md={6}>
                             <DetailsInputView
                                 label="Course Fee"
-                                value={itemData?.courseFee}
+                                value={itemData?.price}
                             />
                         </Grid>
 

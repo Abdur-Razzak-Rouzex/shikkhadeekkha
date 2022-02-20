@@ -50,7 +50,7 @@ function Profile() {
         setValue('name', userInfo?.name);
         setValue('phone', userInfo?.phone);
         setValue('email', userInfo?.email);
-    }, []);
+    }, [userInfo?.name]);
 
     const submitHandler = async ({name, phone, email, password, confirmPassword}) => {
         closeSnackbar();

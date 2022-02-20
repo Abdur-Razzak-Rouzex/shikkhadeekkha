@@ -270,6 +270,7 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                         error={!!errors.slug}
                         variant="outlined"
                         fullWidth
+                        placeholder='E.g. cadet-college-admission'
                         id="slug"
                         label="Unique url slug"
                         {...register("slug")}

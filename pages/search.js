@@ -210,7 +210,7 @@ export default function Search(props) {
                         {products.map((product) => (
                             <Grid item md={4} key={product.name}>
                                 <ProductItem
-                                    product={product}
+                                    item={product}
                                     addToCartHandler={addToCartHandler}
                                 />
                             </Grid>

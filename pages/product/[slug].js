@@ -93,10 +93,17 @@ export default function ProductScreen(props) {
     return (
         <Layout title={product?.name || 'No Product Found'}>
             <Box sx={classes.section}>
-                <NextLink href="/" passHref>
-                    <Link>
-                        <Typography>back to products</Typography>
-                    </Link>
+                <NextLink href="/search" passHref>
+                    {product?.type === 'course' ? (
+                        <Link>
+                            <Typography>View all courses</Typography>
+                        </Link>
+                    ) : (
+                        <Link>
+                            <Typography>View all products</Typography>
+                        </Link>
+                    )}
+
                 </NextLink>
             </Box>
             {product ? (
@@ -185,7 +192,7 @@ export default function ProductScreen(props) {
                                 <Grid container>
                                     <Grid item sx={classes.reviewItem}>
                                         <Typography>
-                                            <strong>{review?.name}</strong>
+                                            <strong>{review?.user?.name}</strong>
                                         </Typography>
                                         <Typography>{review?.createdAt.substring(0, 10)}</Typography>
                                     </Grid>

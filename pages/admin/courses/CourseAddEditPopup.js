@@ -19,11 +19,13 @@ import CustomRadioButton from "../../../components/common/CustomRadioButton";
 
 const initialValues = {
     name: '',
+    type: 'course',
     slug: '',
     category: '',
     subCategory: '',
     image: '',
     price: 0,
+    brand: 'general',
     languageMedium: LANGUAGE_MEDIUM[0],
     isFeatured: false,
     isOffered: false,
@@ -38,7 +40,7 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
     const {state} = useContext(Store);
     const {userInfo} = state;
     const router = useRouter();
-    const [itemData, setItemData] = useState({});
+    const [itemData, setItemData] = useState(initialValues);
 
     const [categories, setCategories] = useState([]);
     const [subCategories, setSubCategories] = useState([]);
@@ -85,6 +87,12 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                 .string()
                 .required()
                 .label("Course Name"),
+            type: yup
+                .string()
+                .default('course'),
+            brand: yup
+                .string()
+                .default('general'),
             slug: yup
                 .string()
                 .required()
@@ -107,7 +115,8 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
             languageMedium: yup
                 .string()
                 .required()
-                .label("Language Medium"),
+                .label("Language Medium")
+                .default('bangla'),
             description: yup
                 .string()
                 .required()
@@ -115,11 +124,13 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
             isFeatured: yup
                 .boolean()
                 .required()
-                .label("Is Featured"),
+                .label("Is Featured")
+                .default(false),
             isOffered: yup
                 .boolean()
                 .required()
-                .label("Is Offered"),
+                .label("Is Offered")
+                .default(false),
             offerInPercentage: yup
                 .mixed()
                 .label("Offer Price In percentage")
@@ -130,7 +141,8 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
             docStatus: yup
                 .boolean()
                 .required()
-                .label("Status"),
+                .label("Status")
+                .default(true),
         })
     }, []);
 
@@ -148,10 +160,12 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
         if (itemData) {
             reset({
                 name: itemData?.name,
+                type: itemData?.type,
                 slug: itemData?.slug,
                 category: itemData?.category,
                 subCategory: itemData?.subCategory,
                 image: itemData?.image,
+                brand: itemData?.brand,
                 price: itemData?.price,
                 languageMedium: itemData?.languageMedium,
                 offerInPercentage: itemData?.offerInPercentage,
@@ -169,7 +183,7 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
         } else {
             reset(initialValues);
         }
-    }, [itemData, reset]);
+    }, [itemData]);
 
     const getSecureUrl = (secureUrl) => {
         setValue('image', secureUrl);
@@ -177,7 +191,7 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
     const handleCategoryChange = (event) => {
         setValue('category', event.target.value);
         setCategory(event.target.value);
-        const cat = categories.findIndex(cat => cat.name === event.target.value);
+        const cat = categories.findIndex(cat => cat._id === event.target.value);
         setSubCategories(categories[cat]?.subCategory);
     }
     const handleSubcategoryChange = (event) => {
@@ -221,7 +235,7 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                     data,
                     {headers: {authorization: `Bearer ${userInfo.token}`}}
                 );
-                console.log('submitted data you expected to be: ', data);
+
                 enqueueSnackbar('Course created successfully', {variant: 'success'});
             }
             props.onClose();
@@ -293,7 +307,7 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                                 <em>None</em>
                             </MenuItem>
                             {categories?.map((cat, key) => (
-                                <MenuItem value={cat.name} key={key}>{cat.name}</MenuItem>
+                                <MenuItem value={cat._id} key={key}>{cat.name}</MenuItem>
                             ))}
                         </Select>
                         <FormHelperText

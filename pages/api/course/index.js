@@ -19,11 +19,13 @@ handler.post(async (req, res) => {
     if (course?.slug !== req?.body?.slug) {
         const newCourse = new Course({
             name: req.body.name,
+            type: req.body.type,
             slug: req.body.slug,
             category: req.body.category,
             subCategory: req.body.subCategory,
             image: req.body.image,
             price: req.body.price,
+            brand: req.body.brand,
             languageMedium: req.body.languageMedium,
             offerInPercentage: req.body.offerInPercentage,
             isFeatured: req.body.isFeatured,

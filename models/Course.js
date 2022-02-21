@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import {reviewSchema} from "./Product";
 
 const CourseSchema = new mongoose.Schema(
     {
@@ -17,7 +16,8 @@ const CourseSchema = new mongoose.Schema(
             unique: true
         },
         category: {
-            type: String,
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Category',
             required: true
         },
         subCategory: {
@@ -31,9 +31,16 @@ const CourseSchema = new mongoose.Schema(
             type: Number,
             required: true
         },
+        brand: {
+            type: String,
+            default: 'general'
+        },
+        countInStock: {
+            type: Number,
+            default: 0
+        },
         languageMedium: {
             type: String,
-            required: true,
             default: 'Bangla'
         },
         offerInPercentage: {
@@ -52,7 +59,6 @@ const CourseSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        reviews: [reviewSchema],
         isFeatured: {
             type: Boolean,
             required: true,

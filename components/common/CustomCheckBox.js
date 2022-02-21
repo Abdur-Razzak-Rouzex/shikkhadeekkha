@@ -10,7 +10,7 @@ export default function CustomCheckBox({checked, handleChange, label, color = 's
             <FormControlLabel
                 control={
                     <Checkbox
-                        checked={checked || false}
+                        checked={checked}
                         onChange={handleChange}
                         inputProps={{'aria-label': 'controlled'}}
                         color={color}

@@ -7,8 +7,8 @@ const handler = nc();
 
 handler.get(async (req, res) => {
     await db.connect();
-    const product = await Course.findById(req.query.id);
-    res.send(product);
+    const course = await Course.findById(req.query.id).populate('category');
+    res.send(course);
 });
 
 handler.use(isAuth, isAdmin);

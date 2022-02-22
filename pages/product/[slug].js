@@ -127,7 +127,7 @@ export default function ProductScreen(props) {
                                     </Typography>
                                 </ListItem>
                                 <ListItem>
-                                    <Typography>Category: {course?.category}</Typography>
+                                    <Typography>Category: {course?.category?.name}</Typography>
                                 </ListItem>
                                 <ListItem>
                                     <Typography>Brand: {course?.brand}</Typography>
@@ -139,7 +139,12 @@ export default function ProductScreen(props) {
                                     </Link>
                                 </ListItem>
                                 <ListItem>
-                                    <Typography> Description: {course?.description}</Typography>
+                                    {/*<Typography> Description: {course?.description}</Typography>*/}
+                                    <div
+                                        dangerouslySetInnerHTML={{
+                                            __html: course?.description,
+                                        }}
+                                    />
                                 </ListItem>
                             </List>
                         </Grid>
@@ -181,6 +186,8 @@ export default function ProductScreen(props) {
                             </Card>
                         </Grid>
                     </Grid>
+
+                    {/** bottom tab section */}
                     <List>
                         <ListItem>
                             <Typography name="reviews" id="reviews" variant="h2">
@@ -283,8 +290,7 @@ export async function getServerSideProps(context) {
     const {slug} = params;
 
     await db.connect();
-    const course = await Course.findOne({slug: slug}).populate('category', 'name');
-    console.log('the single course: ', course);
+    const course = await Course.findOne({slug: slug}).lean().populate('category', 'name');
     if (course === null) {
         return {
             props: {

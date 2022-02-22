@@ -38,6 +38,9 @@ function convertDocToObj(doc) {
     doc._id = doc?._id.toString();
     doc.createdAt = doc?.createdAt.toString();
     doc.updatedAt = doc?.updatedAt.toString();
+    if(doc?.category) {
+        doc.category._id = doc.category._id.toString()
+    }
     return doc;
 }
 

@@ -16,5 +16,5 @@ const faqSchema = new mongoose.Schema(
     }
 );
 
-const User = mongoose.models.FAQ || mongoose.model('FAQ', faqSchema);
-export default User;
+const FAQ = mongoose.models.FAQ || mongoose.model('FAQ', faqSchema);
+export default FAQ;

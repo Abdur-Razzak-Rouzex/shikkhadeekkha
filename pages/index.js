@@ -150,7 +150,7 @@ export async function getServerSideProps() {
         })
         .limit(3);
 
-    const featuredCoursesDocs = await Course.find({isFeatured: true, docStatus: true}, '-reviews')
+    const featuredCoursesDocs = await Course.find({isFeatured: true, docStatus: true}, ['-reviews', '-category'])
         .lean()
         .limit(3);
 

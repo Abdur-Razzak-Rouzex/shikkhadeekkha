@@ -1,5 +1,4 @@
-import TitleAndSubtitle from "../../common/TitleAndSubtitle";
-import {Box, Button, Card, CardActions, CardContent, CardMedia, Container, Grid, Link, Typography} from "@mui/material";
+import {Box, Button, Card, CardActions, CardContent, CardMedia, Grid, Link, Typography} from "@mui/material";
 import NextLink from "next/link";
 
 export const Feature = ({item: {smallImage, title, shortDescription, _id}}) => {
@@ -34,17 +33,14 @@ export const Feature = ({item: {smallImage, title, shortDescription, _id}}) => {
     );
 };
 
-export default function WhyChooseUsSection({items, title, subtitle}) {
+export default function WhyChooseUsSection({items}) {
     return (
-        <Box component="section" sx={{paddingY: 5}}>
-            <Container>
-                {title && <TitleAndSubtitle title={title} subtitle={subtitle}/>}
-                <Grid container spacing={3}>
-                    {items?.map((item, key) => (
-                        <Feature item={item} key={key}/>
-                    ))}
-                </Grid>
-            </Container>
+        <Box component="section">
+            <Grid container spacing={3}>
+                {items?.map((item, key) => (
+                    <Feature item={item} key={key}/>
+                ))}
+            </Grid>
         </Box>
     );
 }

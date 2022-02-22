@@ -20,8 +20,9 @@ import {Store} from '../utils/Store';
 import axios from 'axios';
 import Rating from '@mui/material/Rating';
 import {Pagination} from '@mui/material';
+import {useSnackbar} from "notistack";
 
-const PAGE_SIZE = 3;
+const PAGE_SIZE = 12;
 
 const prices = [
     {
@@ -42,6 +43,7 @@ const ratings = [1, 2, 3, 4, 5];
 
 export default function Search(props) {
     const router = useRouter();
+    const {enqueueSnackbar} = useSnackbar();
 
     const {
         query = 'all',
@@ -54,17 +56,7 @@ export default function Search(props) {
 
     const {products, countProducts, categories, brands, pages} = props;
 
-    const filterSearch = ({
-                              page,
-                              category,
-                              brand,
-                              sort,
-                              min,
-                              max,
-                              searchQuery,
-                              price,
-                              rating,
-                          }) => {
+    const filterSearch = ({page, category, brand, sort, min, max, searchQuery, price, rating,}) => {
         const path = router.pathname;
         const {query} = router;
         if (page) query.page = page;
@@ -107,7 +99,7 @@ export default function Search(props) {
         const quantity = existItem ? existItem.quantity + 1 : 1;
         const {data} = await axios.get(`/api/products/${product._id}`);
         if (data.countInStock < quantity) {
-            window.alert('Sorry. Product is out of stock');
+            enqueueSnackbar('Sorry. Product is out of stock', {variant: 'error'});
             return;
         }
         dispatch({type: 'CART_ADD_ITEM', payload: {...product, quantity}});

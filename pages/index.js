@@ -1,8 +1,7 @@
 import NextLink from 'next/link';
-import {Grid, Link, Skeleton, Typography} from '@mui/material';
+import {Button, Grid, Link, Skeleton, Typography} from '@mui/material';
 import Layout from '../components/Layout';
 import db from '../utils/db';
-import Product from '../models/Product';
 import Course from '../models/Course';
 import axios from 'axios';
 import React, {useContext, useEffect, useState} from 'react';
@@ -18,14 +17,16 @@ import {getError} from "../utils/error";
 import {useSnackbar} from "notistack";
 import TestimonialsCarousel from "../components/homepage/testimonialsCarouselSection";
 import Testimonial from "../models/Testimonial";
+import {useRouter} from "next/router";
 
 export default function Home(props) {
     const {state, dispatch} = useContext(Store);
-    const {topRatedProducts, allTestimonials, featuredCourses} = props;
+    const {allTestimonials, featuredCourses} = props;
     const {enqueueSnackbar} = useSnackbar();
     const [banners, setBanners] = useState([]);
     const [whyChooseUs, setWhyChooseUs] = useState([]);
     const [loader, setLoader] = useState(false);
+    const router = useRouter();
 
     useEffect(() => {
         const getBanners = async () => {
@@ -56,14 +57,18 @@ export default function Home(props) {
     }
 
     const addToCartHandler = async (product) => {
-        const existItem = state.cart.cartItems.find((x) => x._id === product._id);
-        const quantity = existItem ? existItem.quantity + 1 : 1;
-        const {data} = await axios.get(`/api/products/${product._id}`);
-        if (data.countInStock < quantity) {
-            window.alert('Sorry. Product is out of stock');
-            return;
+        if (product?.type === 'course') {
+            router.push(`/product/${product?.slug}`)
+        } else {
+            const existItem = state.cart.cartItems.find((x) => x._id === product._id);
+            const quantity = existItem ? existItem.quantity + 1 : 1;
+            const {data} = await axios.get(`/api/products/${product._id}`);
+            if (data.countInStock < quantity) {
+                enqueueSnackbar('Sorry. Product is out of stock', {variant: 'error'});
+                return;
+            }
+            dispatch({type: 'CART_ADD_ITEM', payload: {...product, quantity}});
         }
-        dispatch({type: 'CART_ADD_ITEM', payload: {...product, quantity}});
     };
 
     return (
@@ -101,7 +106,17 @@ export default function Home(props) {
 
             <TopLineSection topline={topLine}/>
 
-            <Typography variant="h2">Featured Courses</Typography>
+            {/** course section */}
+            <Grid container mt={5}>
+                <Grid item xs={6}>
+                    <Typography variant="h2">Featured Courses</Typography>
+                </Grid>
+                <Grid item xs={6} sx={{textAlign: 'end', margin: 'auto'}}>
+                    <Button size="small" color='secondary' variant='contained' href='/search'>
+                        View All
+                    </Button>
+                </Grid>
+            </Grid>
             <Grid container spacing={3}>
                 {featuredCourses.map((course) => (
                     <Grid item md={4} key={course.name}>
@@ -113,7 +128,17 @@ export default function Home(props) {
                 ))}
             </Grid>
 
-            <Typography variant="h2">Popular Products</Typography>
+            {/** products section */}
+            {/*<Grid container mt={5}>
+                <Grid item xs={6}>
+                    <Typography variant="h2">Popular Products</Typography>
+                </Grid>
+                <Grid item xs={6} sx={{textAlign: 'end', margin: 'auto'}}>
+                    <Button size="small" color='secondary' variant='contained' href='/search'>
+                        View All
+                    </Button>
+                </Grid>
+            </Grid>
             <Grid container spacing={3}>
                 {topRatedProducts.map((product) => (
                     <Grid item md={4} key={product.name}>
@@ -123,11 +148,20 @@ export default function Home(props) {
                         />
                     </Grid>
                 ))}
-            </Grid>
+            </Grid>*/}
 
+            {/** Why choose us section */}
+            <Grid container mt={5}>
+                <Grid item xs={6}>
+                    <Typography variant="h2">Know More About Our Programs, Products & Courses</Typography>
+                </Grid>
+                <Grid item xs={6} sx={{textAlign: 'end', margin: 'auto'}}>
+                    <Button size="small" color='secondary' variant='contained' href='/about-us'>
+                        View All
+                    </Button>
+                </Grid>
+            </Grid>
             <WhyChooseUsSection
-                title="Why choose us?"
-                subtitle="Read the next reasons"
                 items={whyChooseUs}
             />
 
@@ -143,12 +177,12 @@ export default function Home(props) {
 export async function getServerSideProps() {
     await db.connect();
 
-    const topRatedProductsDocs = await Product.find({}, '-reviews')
-        .lean()
-        .sort({
-            rating: -1,
-        })
-        .limit(3);
+    /*    const topRatedProductsDocs = await Product.find({}, '-reviews')
+            .lean()
+            .sort({
+                rating: -1,
+            })
+            .limit(3);*/
 
     const featuredCoursesDocs = await Course.find({isFeatured: true, docStatus: true}, ['-reviews', '-category'])
         .lean()
@@ -159,7 +193,7 @@ export async function getServerSideProps() {
 
     return {
         props: {
-            topRatedProducts: topRatedProductsDocs.map(db.convertDocToObj),
+            /*topRatedProducts: topRatedProductsDocs.map(db.convertDocToObj),*/
             featuredCourses: featuredCoursesDocs.map(db.convertDocToObj),
             allTestimonials: testimonialDocs.map(db.convertDocToObj),
         },

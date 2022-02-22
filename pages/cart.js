@@ -24,6 +24,7 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import {useRouter} from 'next/router';
+import {useSnackbar} from "notistack";
 
 function CartScreen() {
     const router = useRouter();
@@ -31,11 +32,12 @@ function CartScreen() {
     const {
         cart: {cartItems},
     } = state;
+    const {enqueueSnackbar} = useSnackbar();
 
     const updateCartHandler = async (item, quantity) => {
         const {data} = await axios.get(`/api/products/${item._id}`);
         if (data.countInStock < quantity) {
-            window.alert('Sorry. Product is out of stock');
+            enqueueSnackbar('Sorry. Product is out of stock', {variant: 'error'});
             return;
         }
         dispatch({type: 'CART_ADD_ITEM', payload: {...item, quantity}});

@@ -26,7 +26,7 @@ const TestimonialAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
     const {state} = useContext(Store);
     const {userInfo} = state;
     const router = useRouter();
-    const [itemData, setItemData] = useState({});
+    const [itemData, setItemData] = useState(initialValues);
 
     useEffect(() => {
         if (!userInfo?.name) {

@@ -25,17 +25,16 @@ handler.use(isAuth).post(async (req, res) => {
     await db.connect();
     const course = await Course.findById(req.query.id);
     if (course) {
-        const newReview = {
+        const newReview = new Review({
             product: mongoose.Types.ObjectId(req?.query?.id),
             user: mongoose.Types.ObjectId(req.user._id),
             rating: Number(req.body.rating),
             comment: req.body.comment,
-        };
+        });
         await newReview.save();
 
         const reviews = await Review.find({product: req?.query?.id});
-        console.log('type of reviews from data: ', typeof reviews);
-        course.numReviews = reviews.length;
+        course.numOfReviews = reviews.length;
         course.rating = reviews.reduce((a, c) => c.rating + a, 0) / (reviews.length);
         await course.save();
 

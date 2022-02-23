@@ -135,7 +135,7 @@ export default function ProductScreen(props) {
                                 <ListItem>
                                     <Rating value={course?.rating} readOnly/>
                                     <Link href="#reviews">
-                                        <Typography>({course?.numReviews} reviews)</Typography>
+                                        <Typography>({course?.numOfReviews} reviews)</Typography>
                                     </Link>
                                 </ListItem>
                                 <ListItem>

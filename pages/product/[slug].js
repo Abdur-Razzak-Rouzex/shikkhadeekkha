@@ -39,6 +39,21 @@ export default function ProductScreen(props) {
     const [comment, setComment] = useState('');
     const [loading, setLoading] = useState(false);
 
+    const fetchReviews = async () => {
+        try {
+            const {data} = await axios.get(`/api/products/${course?._id}/reviews`);
+            setReviews(data);
+        } catch (err) {
+            enqueueSnackbar(getError(err), {variant: 'error'});
+        }
+    };
+
+    useEffect(() => {
+        if (course) {
+            fetchReviews();
+        }
+    }, [course]);
+
     const reviewSubmitHandler = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -63,21 +78,6 @@ export default function ProductScreen(props) {
             enqueueSnackbar(getError(err), {variant: 'error'});
         }
     };
-
-    const fetchReviews = async () => {
-        try {
-            const {data} = await axios.get(`/api/products/${course?._id}/reviews`);
-            setReviews(data);
-        } catch (err) {
-            enqueueSnackbar(getError(err), {variant: 'error'});
-        }
-    };
-
-    useEffect(() => {
-        if (course) {
-            fetchReviews();
-        }
-    }, [course]);
 
     const addToCartHandler = async () => {
         const existItem = state.cart.cartItems.find((x) => x?._id === course?._id);

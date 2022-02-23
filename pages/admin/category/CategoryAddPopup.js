@@ -23,7 +23,7 @@ const CategoryAddPopup = ({itemId, refreshDataTable, ...props}) => {
     const {state} = useContext(Store);
     const {userInfo} = state;
     const router = useRouter();
-    const [itemData, setItemData] = useState({});
+    const [itemData, setItemData] = useState(initialValues);
 
 
     useEffect(() => {
@@ -150,7 +150,7 @@ const CategoryAddPopup = ({itemId, refreshDataTable, ...props}) => {
                         </Grid>
                     </>
                 ) : (
-                    <Grid item xs={6}>
+                    <Grid item xs={12}>
                         <TextField
                             error={!!errors.name}
                             variant="outlined"

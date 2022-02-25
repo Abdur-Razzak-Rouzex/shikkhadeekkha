@@ -23,6 +23,8 @@ import {getError} from '../utils/error';
 import {Store} from '../utils/Store';
 import Layout from '../components/Layout';
 import classes from '../utils/classes';
+import moment from "moment";
+import {COURSE_TYPE} from "../components/common/constants";
 
 function reducer(state, action) {
     switch (action.type) {
@@ -118,13 +120,15 @@ function OrderHistory() {
                                                         <TableCell>${order.totalPrice}</TableCell>
                                                         <TableCell>
                                                             {order.isPaid
-                                                                ? `paid at ${order.paidAt}`
-                                                                : 'not paid'}
+                                                                ? `Paid at ${moment(order?.paidAt).format('MMMM Do YYYY, h:mm:ss a')}`
+                                                                : 'Not Paid'}
                                                         </TableCell>
                                                         <TableCell>
                                                             {order.isDelivered
-                                                                ? `delivered at ${order.deliveredAt}`
-                                                                : 'not delivered'}
+                                                                ? `Delivered at ${moment(order?.deliveredAt).format('MMMM Do YYYY, h:mm:ss a')}`
+                                                                : order?.orderItems[0]?.type === COURSE_TYPE
+                                                                    ? 'Delivered' : 'Not Delivered'
+                                                            }
                                                         </TableCell>
                                                         <TableCell>
                                                             <NextLink href={`/order/${order._id}`} passHref>

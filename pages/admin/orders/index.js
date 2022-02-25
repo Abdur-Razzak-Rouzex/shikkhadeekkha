@@ -1,3 +1,4 @@
+import moment from "moment";
 import axios from 'axios';
 import dynamic from 'next/dynamic';
 import {useRouter} from 'next/router';
@@ -23,6 +24,7 @@ import {Store} from '../../../utils/Store';
 import Layout from '../../../components/Layout';
 import classes from '../../../utils/classes';
 import AdminMenuItems from "../../../components/admin/AdminMenuItems";
+import {COURSE_TYPE} from "../../../components/common/constants";
 
 function reducer(state, action) {
     switch (action.type) {
@@ -109,17 +111,19 @@ function AdminOrders() {
                                                         <TableCell>
                                                             {order.user ? order.user.name : 'DELETED USER'}
                                                         </TableCell>
-                                                        <TableCell>{order.createdAt}</TableCell>
-                                                        <TableCell>${order.totalPrice}</TableCell>
+                                                        <TableCell>{moment(order.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</TableCell>
+                                                        <TableCell>{order.totalPrice} ৳</TableCell>
                                                         <TableCell>
                                                             {order.isPaid
-                                                                ? `paid at ${order.paidAt}`
+                                                                ? `paid at ${moment(order?.paidAt).format('MMMM Do YYYY, h:mm:ss a')}`
                                                                 : 'not paid'}
                                                         </TableCell>
                                                         <TableCell>
                                                             {order.isDelivered
-                                                                ? `delivered at ${order.deliveredAt}`
-                                                                : 'not delivered'}
+                                                                ? `Delivered at ${moment(order?.deliveredAt).format('MMMM Do YYYY, h:mm:ss a')}`
+                                                                : order?.orderItems[0]?.type === COURSE_TYPE
+                                                                    ? 'Delivered' : 'Not Delivered'
+                                                            }
                                                         </TableCell>
                                                         <TableCell>
                                                             <NextLink href={`/order/${order._id}`} passHref>

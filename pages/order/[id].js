@@ -4,29 +4,30 @@ import Layout from '../../components/Layout';
 import {Store} from '../../utils/Store';
 import NextLink from 'next/link';
 import Image from 'next/image';
+import moment from "moment";
 import {
-    Grid,
-    TableContainer,
-    Table,
-    Typography,
-    TableHead,
-    TableBody,
-    TableRow,
-    TableCell,
-    Link,
-    CircularProgress,
     Button,
     Card,
+    Chip,
+    CircularProgress,
+    Grid,
+    Link,
     List,
     ListItem,
-    Box, Chip,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Typography,
 } from '@mui/material';
 import axios from 'axios';
 import {useRouter} from 'next/router';
 import classes from '../../utils/classes';
 import {useSnackbar} from 'notistack';
 import {getError} from '../../utils/error';
-import {PayPalButtons, usePayPalScriptReducer} from '@paypal/react-paypal-js';
+/*import {PayPalButtons, usePayPalScriptReducer} from '@paypal/react-paypal-js';*/
 import {COURSE_TYPE} from "../../components/common/constants";
 
 function reducer(state, action) {
@@ -65,7 +66,7 @@ function reducer(state, action) {
 
 function Order({params}) {
     const orderId = params.id;
-    const [{isPending}, paypalDispatch] = usePayPalScriptReducer();
+    /*const [{isPending}, paypalDispatch] = usePayPalScriptReducer();*/
 
     const router = useRouter();
     const {state} = useContext(Store);
@@ -79,6 +80,7 @@ function Order({params}) {
         order: {},
         error: '',
     });
+
     const {
         shippingAddress,
         paymentMethod,
@@ -96,6 +98,7 @@ function Order({params}) {
         if (!userInfo?.name) {
             return router.push('/login');
         }
+
         const fetchOrder = async () => {
             try {
                 dispatch({type: 'FETCH_REQUEST'});
@@ -107,6 +110,7 @@ function Order({params}) {
                 dispatch({type: 'FETCH_FAIL', payload: getError(err)});
             }
         };
+
         if (
             !order._id ||
             successPay ||
@@ -120,64 +124,71 @@ function Order({params}) {
             if (successDeliver) {
                 dispatch({type: 'DELIVER_RESET'});
             }
-        } else {
-            const loadPaypalScript = async () => {
-                const {data: clientId} = await axios.get('/api/keys/paypal', {
-                    headers: {authorization: `Bearer ${userInfo.token}`},
-                });
-                paypalDispatch({
-                    type: 'resetOptions',
-                    value: {
-                        'client-id': clientId,
-                        currency: 'USD',
-                    },
-                });
-                paypalDispatch({type: 'setLoadingStatus', value: 'pending'});
-            };
-            loadPaypalScript();
         }
-    }, [order, successPay, successDeliver, userInfo.name, userInfo.token, orderId, router, paypalDispatch]);
+    }, [order, successPay, successDeliver]);
 
     const {enqueueSnackbar} = useSnackbar();
 
-    function createOrder(data, actions) {
-        return actions.order
-            .create({
-                purchase_units: [
-                    {
-                        amount: {value: totalPrice},
-                    },
-                ],
-            })
-            .then((orderID) => {
-                return orderID;
+    /*    function createOrder(data, actions) {
+            return actions.order
+                .create({
+                    purchase_units: [
+                        {
+                            amount: {value: totalPrice},
+                        },
+                    ],
+                })
+                .then((orderID) => {
+                    return orderID;
+                });
+        }*/
+
+    /*    function onApprove(data, actions) {
+            return actions.order.capture().then(async function (details) {
+                try {
+                    dispatch({type: 'PAY_REQUEST'});
+                    const {data} = await axios.put(
+                        `/api/orders/${order._id}/pay`,
+                        details,
+                        {
+                            headers: {authorization: `Bearer ${userInfo.token}`},
+                        }
+                    );
+                    dispatch({type: 'PAY_SUCCESS', payload: data});
+                    enqueueSnackbar('Order is paid', {variant: 'success'});
+                } catch (err) {
+                    dispatch({type: 'PAY_FAIL', payload: getError(err)});
+                    enqueueSnackbar(getError(err), {variant: 'error'});
+                }
             });
+        }*/
+
+    /*
+        function onError(err) {
+            enqueueSnackbar(getError(err), {variant: 'error'});
+        }
+    */
+
+    /** payment handler */
+    async function makePaymentHandler() {
+        try {
+            dispatch({type: 'PAY_REQUEST'});
+            const {data} = await axios.put(
+                `/api/orders/${order._id}/pay`,
+                {},
+                {
+                    headers: {authorization: `Bearer ${userInfo.token}`},
+                }
+            );
+            dispatch({type: 'PAY_SUCCESS', payload: data});
+            enqueueSnackbar('Order is paid', {variant: 'success'});
+        } catch (err) {
+            dispatch({type: 'PAY_FAIL', payload: getError(err)});
+            enqueueSnackbar(getError(err), {variant: 'error'});
+        }
     }
 
-    function onApprove(data, actions) {
-        return actions.order.capture().then(async function (details) {
-            try {
-                dispatch({type: 'PAY_REQUEST'});
-                const {data} = await axios.put(
-                    `/api/orders/${order._id}/pay`,
-                    details,
-                    {
-                        headers: {authorization: `Bearer ${userInfo.token}`},
-                    }
-                );
-                dispatch({type: 'PAY_SUCCESS', payload: data});
-                enqueueSnackbar('Order is paid', {variant: 'success'});
-            } catch (err) {
-                dispatch({type: 'PAY_FAIL', payload: getError(err)});
-                enqueueSnackbar(getError(err), {variant: 'error'});
-            }
-        });
-    }
-
-    function onError(err) {
-        enqueueSnackbar(getError(err), {variant: 'error'});
-    }
-
+    /** delivery handler */
     async function deliverOrderHandler() {
         try {
             dispatch({type: 'DELIVER_REQUEST'});
@@ -274,7 +285,7 @@ function Order({params}) {
                                             {
                                                 isPaid ?
                                                     <Chip
-                                                        label={`Paid at ${paidAt}`}
+                                                        label={`Paid at ${moment(paidAt).format('MMMM Do YYYY, h:mm:ss a')}`}
                                                         size='medium'
                                                         color='secondary'
                                                     />
@@ -386,7 +397,7 @@ function Order({params}) {
                                         </Grid>
                                     </Grid>
                                 </ListItem>
-                                {!isPaid && (
+                                {/*{!isPaid && (
                                     <ListItem>
                                         {isPending ? (
                                             <CircularProgress/>
@@ -400,8 +411,21 @@ function Order({params}) {
                                             </Box>
                                         )}
                                     </ListItem>
+                                )}*/}
+                                {userInfo?.isAdmin && !isPaid && (
+                                    <ListItem>
+                                        {loadingDeliver && <CircularProgress/>}
+                                        <Button
+                                            fullWidth
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={makePaymentHandler}
+                                        >
+                                            Make Payment
+                                        </Button>
+                                    </ListItem>
                                 )}
-                                {userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+                                {userInfo?.isAdmin && order?.isPaid && !order?.isDelivered && orderItems[0].type !== COURSE_TYPE && (
                                     <ListItem>
                                         {loadingDeliver && <CircularProgress/>}
                                         <Button

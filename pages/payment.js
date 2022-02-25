@@ -91,7 +91,6 @@ export default function Payment() {
                                     control={<Radio/>}
                                 />*/}
                                 <FormControlLabel
-                                    checked={true}
                                     label="Cash"
                                     value="Cash"
                                     control={<Radio/>}

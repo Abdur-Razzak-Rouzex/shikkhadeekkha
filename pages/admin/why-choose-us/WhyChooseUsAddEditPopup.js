@@ -145,6 +145,7 @@ const WhyChooseUsAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                 flipBookLink: itemData?.flipBookLink,
                 contentBody: itemData?.contentBody,
             });
+            setIsFlipBookChecked(itemData?.isFlipBook)
         } else {
             reset(initialValues);
         }
@@ -214,7 +215,7 @@ const WhyChooseUsAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                 <Grid item xs={6} sx={{display: 'flex', justifyContent: 'end'}}>
                     <Button variant="contained" component="label">
                         Upload small image
-                        <input type="file" onChange={(e) => uploadHandler(e,'smallImage')} hidden accept="image/*"/>
+                        <input type="file" onChange={(e) => uploadHandler(e, 'smallImage')} hidden accept="image/*"/>
                     </Button>
                     {loadingUpload && <CircularProgress/>}
                 </Grid>

@@ -81,21 +81,25 @@ const WhyChooseUsDetailsPopup = ({itemId, openEditModal, userInfo, ...props}) =>
                         <Grid item xs={12} md={6}>
                             <DetailsInputView
                                 label="isFlipBook"
-                                value={itemData?.isFlipBook}
+                                value={itemData?.isFlipBook ? 'True' : 'False'}
                             />
                         </Grid>
-                        <Grid item xs={12} md={6}>
-                            <DetailsInputView
-                                label="Flip Book Link"
-                                value={itemData?.flipBookLink}
-                            />
-                        </Grid>
-                        <Grid item xs={12} md={12}>
-                            <DetailsInputView
-                                label="Content Body"
-                                value={itemData?.contentBody}
-                            />
-                        </Grid>
+                        {itemData?.isFlipBook && (
+                            <Grid item xs={12} md={6}>
+                                <DetailsInputView
+                                    label="Flip Book Link"
+                                    value={itemData?.flipBookLink}
+                                />
+                            </Grid>
+                        )}
+                        {!itemData?.isFlipBook && (
+                            <Grid item xs={12} md={12}>
+                                <DetailsInputView
+                                    label="Content Body"
+                                    value={itemData?.contentBody}
+                                />
+                            </Grid>
+                        )}
                     </Grid>
                 </CustomDetailsViewMuiModal>
             )}

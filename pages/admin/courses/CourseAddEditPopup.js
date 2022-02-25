@@ -174,7 +174,7 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                 isOffered: itemData?.isOffered,
                 docStatus: itemData?.docStatus,
             });
-            setCategory(itemData?.category);
+            setCategory(itemData?.category?._id);
             setSubcategory(itemData?.subCategory);
             setIsFeaturedValue(itemData?.isFeatured);
             setIsOfferedValue(itemData?.isOffered);

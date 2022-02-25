@@ -8,7 +8,7 @@ import CheckoutWizard from '../components/CheckoutWizard';
 import {
     Button,
     FormControl,
-    FormControlLabel,
+    FormControlLabel, Grid,
     List,
     ListItem,
     Radio,
@@ -16,22 +16,31 @@ import {
     Typography,
 } from '@mui/material';
 import {useSnackbar} from 'notistack';
+import {COURSE_TYPE} from "../components/common/constants";
 
 export default function Payment() {
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
     const router = useRouter();
-    const [paymentMethod, setPaymentMethod] = useState('');
+    const [paymentMethod, setPaymentMethod] = useState('Cash');
     const {state, dispatch} = useContext(Store);
     const {
-        cart: {shippingAddress},
+        userInfo,
+        cart: {cartItems, shippingAddress},
     } = state;
+
     useEffect(() => {
-        if (!shippingAddress.address) {
-            router.push('/shipping');
-        } else {
-            setPaymentMethod(Cookies.get('paymentMethod') || '');
+        if (!userInfo?.name) {
+            router.push('/login?redirect=/payment');
         }
-    }, [router, shippingAddress.address]);
+        if (cartItems[0]?.type !== COURSE_TYPE) {
+            if (!shippingAddress?.address) {
+                router.push('/shipping');
+            }
+        }
+
+        setPaymentMethod(Cookies.get('paymentMethod') || '');
+
+    }, [router, shippingAddress?.address, cartItems]);
 
     const submitHandler = (e) => {
         closeSnackbar();
@@ -48,8 +57,19 @@ export default function Payment() {
         <Layout title="Payment Method">
             <CheckoutWizard activeStep={2}/>
             <Form onSubmit={submitHandler}>
-                <Typography component="h1" variant="h1">
+                <Typography component="h1" variant="h1" sx={{marginBottom: 0}}>
                     Payment Method
+                </Typography>
+                <Typography
+                    component="span"
+                    variant="span"
+                    sx={{
+                        marginLeft: "35px",
+                        fontSize: "15px",
+                        color: "#a22929",
+                    }}
+                >
+                    * Very soon we will add online payment system
                 </Typography>
                 <List>
                     <ListItem>
@@ -60,7 +80,7 @@ export default function Payment() {
                                 value={paymentMethod}
                                 onChange={(e) => setPaymentMethod(e.target.value)}
                             >
-                                <FormControlLabel
+                                {/*<FormControlLabel
                                     label="PayPal"
                                     value="PayPal"
                                     control={<Radio/>}
@@ -69,8 +89,9 @@ export default function Payment() {
                                     label="Stripe"
                                     value="Stripe"
                                     control={<Radio/>}
-                                />
+                                />*/}
                                 <FormControlLabel
+                                    checked={true}
                                     label="Cash"
                                     value="Cash"
                                     control={<Radio/>}
@@ -78,22 +99,29 @@ export default function Payment() {
                             </RadioGroup>
                         </FormControl>
                     </ListItem>
-                    <ListItem>
-                        <Button fullWidth type="submit" variant="contained" color="primary">
-                            Continue
-                        </Button>
-                    </ListItem>
-                    <ListItem>
-                        <Button
-                            fullWidth
-                            type="button"
-                            variant="contained"
-                            color="secondary"
-                            onClick={() => router.push('/shipping')}
-                        >
-                            Back
-                        </Button>
-                    </ListItem>
+                    <Grid container>
+                        <Grid item md={6} xs={12}>
+                            <ListItem>
+                                <Button
+                                    fullWidth
+                                    type="button"
+                                    variant="contained"
+                                    color="secondary"
+                                    onClick={() => router.push('/shipping')}
+                                >
+                                    Back
+                                </Button>
+                            </ListItem>
+                        </Grid>
+                        <Grid item md={6} xs={12}>
+                            <ListItem>
+                                <Button fullWidth type="submit" variant="contained" color="primary">
+                                    Continue
+                                </Button>
+                            </ListItem>
+                        </Grid>
+                    </Grid>
+
                 </List>
             </Form>
         </Layout>

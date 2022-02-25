@@ -59,3 +59,5 @@ export const MOBILE_NUMBER_REGEX = new RegExp('^(?:\\+88|88)?(01[3-9]\\d{8})$');
 export const EMAIL_REGEX = new RegExp(
     '(<|^)[a-z\\d.]+([a-z\\d.\\s_-]{0,30})+@(?:[a-z\\d]+\\.)+([a-z]{2,})(>|$)',
 );
+
+export const COURSE_TYPE = 'course'

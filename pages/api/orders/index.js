@@ -10,6 +10,7 @@ const handler = nc({
 handler.use(isAuth);
 
 handler.post(async (req, res) => {
+  console.log('rhe requiests: body: ', req.body);
   await db.connect();
   const newOrder = new Order({
     ...req.body,

@@ -6,14 +6,15 @@ import db from '../../../../utils/db';
 import {isAuth} from '../../../../utils/auth';
 import Review from "../../../../models/Review";
 import Course from "../../../../models/Course";
+import User from "../../../../models/User";
 
 const handler = nextConnect({
     onError,
 });
 
 handler.get(async (req, res) => {
-    db.connect();
-    const review = await Review.find({product: req.query.id}).populate('user', 'name');
+    await db.connect();
+    const review = await Review.find({product: req.query.id}).populate('user', 'name', User);
     if (review) {
         res.send(review);
     } else {

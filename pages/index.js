@@ -56,18 +56,18 @@ export default function Home(props) {
         description: 'A short and strong description'
     }
 
-    const addToCartHandler = async (product) => {
-        if (product?.type === 'course') {
-            router.push(`/product/${product?.slug}`)
+    const addToCartHandler = async (item) => {
+        if (item?.type === 'course') {
+            router.push(`/product/${item?.slug}`)
         } else {
-            const existItem = state.cart.cartItems.find((x) => x._id === product._id);
+            const existItem = state.cart.cartItems.find((x) => x._id === item?._id);
             const quantity = existItem ? existItem.quantity + 1 : 1;
-            const {data} = await axios.get(`/api/products/${product._id}`);
+            const {data} = await axios.get(`/api/products/${item?._id}`);
             if (data.countInStock < quantity) {
                 enqueueSnackbar('Sorry. Product is out of stock', {variant: 'error'});
                 return;
             }
-            dispatch({type: 'CART_ADD_ITEM', payload: {...product, quantity}});
+            dispatch({type: 'CART_ADD_ITEM', payload: {...item, quantity}});
         }
     };
 

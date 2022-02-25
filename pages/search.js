@@ -13,7 +13,6 @@ import {useRouter} from 'next/router';
 import React, {useContext} from 'react';
 import Layout from '../components/Layout';
 import db from '../utils/db';
-import Product from '../models/Product';
 import classes from '../utils/classes';
 import ProductItem from '../components/ProductItem';
 import {Store} from '../utils/Store';
@@ -21,21 +20,34 @@ import axios from 'axios';
 import Rating from '@mui/material/Rating';
 import {Pagination} from '@mui/material';
 import {useSnackbar} from "notistack";
+import Course from "../models/Course";
 
 const PAGE_SIZE = 12;
 
 const prices = [
     {
-        name: '1 tk to 50 tk',
-        value: '1-50',
+        name: '1 tk to 100 tk',
+        value: '1-100',
     },
     {
-        name: '51 tk to 200 tk',
-        value: '51-200',
+        name: '101 tk to 500 tk',
+        value: '101-500',
     },
     {
-        name: '201 tk to 1000 tk',
-        value: '201-1000',
+        name: ' 501tk to 1,000 tk',
+        value: '501-1000',
+    },
+    {
+        name: ' 1,001tk to 3,000 tk',
+        value: '1001-3000',
+    },
+    {
+        name: ' 3,001tk to 5,000 tk',
+        value: '3001-5000',
+    },
+    {
+        name: ' 5,001tk to 10,000 tk',
+        value: '5001-10000',
     },
 ];
 
@@ -47,22 +59,25 @@ export default function Search(props) {
 
     const {
         query = 'all',
-        category = 'all',
+        subCategory = 'all',
         brand = 'all',
         price = 'all',
         rating = 'all',
         sort = 'featured',
     } = router.query;
 
-    const {products, countProducts, categories, brands, pages} = props;
+    /*const {courses, countProducts, categories, brands, pages} = props;*/
+    const {courses, countProducts, subCategories, brands, pages} = props;
 
-    const filterSearch = ({page, category, brand, sort, min, max, searchQuery, price, rating,}) => {
+    /*const filterSearch = ({page, category, brand, sort, min, max, searchQuery, price, rating,}) => {*/
+    const filterSearch = ({page, subCategory, brand, sort, min, max, searchQuery, price, rating,}) => {
         const path = router.pathname;
         const {query} = router;
         if (page) query.page = page;
         if (searchQuery) query.searchQuery = searchQuery;
         if (sort) query.sort = sort;
-        if (category) query.category = category;
+        /*if (category) query.category = category;*/
+        if (subCategory) query.subCategory = subCategory;
         if (brand) query.brand = brand;
         if (price) query.price = price;
         if (rating) query.rating = rating;
@@ -74,8 +89,11 @@ export default function Search(props) {
             query: query,
         });
     };
-    const categoryHandler = (e) => {
-        filterSearch({category: e.target.value});
+    /*    const categoryHandler = (e) => {
+            filterSearch({category: e.target.value});
+        };*/
+    const subCategoryHandler = (e) => {
+        filterSearch({subCategory: e.target.value});
     };
     const pageHandler = (e, page) => {
         filterSearch({page});
@@ -94,22 +112,27 @@ export default function Search(props) {
     };
 
     const {state, dispatch} = useContext(Store);
-    const addToCartHandler = async (product) => {
-        const existItem = state.cart.cartItems.find((x) => x._id === product._id);
-        const quantity = existItem ? existItem.quantity + 1 : 1;
-        const {data} = await axios.get(`/api/products/${product._id}`);
-        if (data.countInStock < quantity) {
-            enqueueSnackbar('Sorry. Product is out of stock', {variant: 'error'});
-            return;
+    const addToCartHandler = async (item) => {
+        if (item?.type === 'course') {
+            router.push(`/product/${item?.slug}`)
+        } else {
+            const existItem = state.cart.cartItems.find((x) => x._id === item?._id);
+            const quantity = existItem ? existItem.quantity + 1 : 1;
+            const {data} = await axios.get(`/api/products/${item?._id}`);
+            if (data.countInStock < quantity) {
+                enqueueSnackbar('Sorry. Product is out of stock', {variant: 'error'});
+                return;
+            }
+            dispatch({type: 'CART_ADD_ITEM', payload: {...item, quantity}});
         }
-        dispatch({type: 'CART_ADD_ITEM', payload: {...product, quantity}});
+
     };
     return (
         <Layout title="search">
             <Grid sx={classes.section} container spacing={1}>
                 <Grid item md={3}>
                     <List>
-                        <ListItem>
+                        {/*<ListItem>
                             <Box sx={classes.fullWidth}>
                                 <Typography>Categories</Typography>
                                 <Select fullWidth value={category} onChange={categoryHandler}>
@@ -118,6 +141,20 @@ export default function Search(props) {
                                         categories.map((category) => (
                                             <MenuItem key={category} value={category}>
                                                 {category}
+                                            </MenuItem>
+                                        ))}
+                                </Select>
+                            </Box>
+                        </ListItem>*/}
+                        <ListItem>
+                            <Box sx={classes.fullWidth}>
+                                <Typography>Sub-Categories</Typography>
+                                <Select fullWidth value={subCategory} onChange={subCategoryHandler}>
+                                    <MenuItem value="all">All</MenuItem>
+                                    {subCategories &&
+                                        subCategories.map((subCategory) => (
+                                            <MenuItem key={subCategory} value={subCategory}>
+                                                {subCategory}
                                             </MenuItem>
                                         ))}
                                 </Select>
@@ -169,14 +206,16 @@ export default function Search(props) {
                 <Grid item md={9}>
                     <Grid container justifyContent="space-between" alignItems="center">
                         <Grid item>
-                            {products.length === 0 ? 'No' : countProducts} Results
+                            {courses.length === 0 ? 'No' : countProducts} Results
                             {query !== 'all' && query !== '' && ' : ' + query}
-                            {category !== 'all' && ' : ' + category}
+                            {/*{category !== 'all' && ' : ' + category}*/}
+                            {subCategory !== 'all' && ' : ' + subCategory}
                             {brand !== 'all' && ' : ' + brand}
                             {price !== 'all' && ' : Price ' + price}
                             {rating !== 'all' && ' : Rating ' + rating + ' & up'}
                             {(query !== 'all' && query !== '') ||
-                            category !== 'all' ||
+                            /*category !== 'all' ||*/
+                            subCategory !== 'all' ||
                             brand !== 'all' ||
                             rating !== 'all' ||
                             price !== 'all' ? (
@@ -199,7 +238,7 @@ export default function Search(props) {
                         </Grid>
                     </Grid>
                     <Grid sx={classes.section} container spacing={3}>
-                        {products.map((product) => (
+                        {courses.map((product) => (
                             <Grid item md={4} key={product.name}>
                                 <ProductItem
                                     item={product}
@@ -224,7 +263,8 @@ export async function getServerSideProps({query}) {
     await db.connect();
     const pageSize = query.pageSize || PAGE_SIZE;
     const page = query.page || 1;
-    const category = query.category || '';
+    /*const category = query.category || '';*/
+    const subcategory = query.subCategory || '';
     const brand = query.brand || '';
     const price = query.price || '';
     const rating = query.rating || '';
@@ -240,7 +280,8 @@ export async function getServerSideProps({query}) {
                 },
             }
             : {};
-    const categoryFilter = category && category !== 'all' ? {category} : {};
+    /*const categoryFilter = category && category !== 'all' ? {category} : {};*/
+    const subCategoryFilter = subcategory && subcategory !== 'all' ? {subcategory} : {};
     const brandFilter = brand && brand !== 'all' ? {brand} : {};
     const ratingFilter =
         rating && rating !== 'all'
@@ -274,40 +315,44 @@ export async function getServerSideProps({query}) {
                             ? {createdAt: -1}
                             : {_id: -1};
 
-    const categories = await Product.find().distinct('category');
-    const brands = await Product.find().distinct('brand');
-    const productDocs = await Product.find(
+    /*const categories = await Category.find();*/
+    const subCategories = await Course.find().distinct('subCategory');
+    const brands = await Course.find().distinct('brand');
+    const courseDocs = await Course.find(
         {
             ...queryFilter,
-            ...categoryFilter,
+            /*...categoryFilter,*/
+            ...subCategoryFilter,
             ...priceFilter,
             ...brandFilter,
             ...ratingFilter,
         },
-        '-reviews'
+        ['-reviews', '-category'],
     )
         .sort(order)
         .skip(pageSize * (page - 1))
         .limit(pageSize)
         .lean();
 
-    const countProducts = await Product.countDocuments({
+    const countProducts = await Course.countDocuments({
         ...queryFilter,
-        ...categoryFilter,
+        /*...categoryFilter,*/
+        ...subCategoryFilter,
         ...priceFilter,
         ...brandFilter,
         ...ratingFilter,
     });
 
-    const products = productDocs.map(db.convertDocToObj);
+    const courses = courseDocs.map(db.convertDocToObj);
 
     return {
         props: {
-            products,
+            courses,
             countProducts,
             page,
             pages: Math.ceil(countProducts / pageSize),
-            categories,
+            /*categories,*/
+            subCategories,
             brands,
         },
     };

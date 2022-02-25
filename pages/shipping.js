@@ -7,6 +7,7 @@ import Cookies from 'js-cookie';
 import {Controller, useForm} from 'react-hook-form';
 import CheckoutWizard from '../components/CheckoutWizard';
 import Form from '../components/Form';
+import {COURSE_TYPE} from "../components/common/constants";
 
 export default function Shipping() {
     const {
@@ -19,7 +20,7 @@ export default function Shipping() {
     const {state, dispatch} = useContext(Store);
     const {
         userInfo,
-        cart: {shippingAddress},
+        cart: {cartItems,shippingAddress},
     } = state;
 
     const {location} = shippingAddress;
@@ -27,6 +28,9 @@ export default function Shipping() {
     useEffect(() => {
         if (!userInfo?.name) {
             router.push('/login?redirect=/shipping');
+        }
+        if(cartItems[0]?.type === COURSE_TYPE) {
+            router.push('/payment');
         }
         setValue('fullName', shippingAddress.fullName);
         setValue('address', shippingAddress.address);

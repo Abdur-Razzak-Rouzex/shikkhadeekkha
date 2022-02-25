@@ -27,6 +27,7 @@ import CheckoutWizard from '../components/CheckoutWizard';
 import {useSnackbar} from 'notistack';
 import {getError} from '../utils/error';
 import Cookies from 'js-cookie';
+import {COURSE_TYPE} from "../components/common/constants";
 
 function PlaceOrder() {
     const router = useRouter();
@@ -37,11 +38,11 @@ function PlaceOrder() {
     } = state;
     const round2 = (num) => Math.round(num * 100 + Number.EPSILON) / 100; // 123.456 => 123.46
     const itemsPrice = round2(
-        cartItems.reduce((a, c) => a + c.price * c.quantity, 0)
+        cartItems.reduce((a, c) => a + c.offeredPrice * c.quantity, 0)
     );
-    const shippingPrice = itemsPrice > 200 ? 0 : 15;
-    const taxPrice = round2(itemsPrice * 0.15);
-    const totalPrice = round2(itemsPrice + shippingPrice + taxPrice);
+
+    /*const totalPrice = round2(itemsPrice + shippingPrice);*/
+    const totalPrice = round2(itemsPrice);
 
     useEffect(() => {
         if (!paymentMethod) {
@@ -54,6 +55,7 @@ function PlaceOrder() {
 
     const {closeSnackbar, enqueueSnackbar} = useSnackbar();
     const [loading, setLoading] = useState(false);
+
     const placeOrderHandler = async () => {
         closeSnackbar();
         try {
@@ -65,8 +67,6 @@ function PlaceOrder() {
                     shippingAddress,
                     paymentMethod,
                     itemsPrice,
-                    shippingPrice,
-                    taxPrice,
                     totalPrice,
                 },
                 {
@@ -93,20 +93,22 @@ function PlaceOrder() {
 
             <Grid container spacing={1}>
                 <Grid item md={9} xs={12}>
-                    <Card sx={classes.section}>
-                        <List>
-                            <ListItem>
-                                <Typography component="h2" variant="h2">
-                                    Shipping Address
-                                </Typography>
-                            </ListItem>
-                            <ListItem>
-                                {shippingAddress.fullName}, {shippingAddress.address},{' '}
-                                {shippingAddress.city}, {shippingAddress.postalCode},{' '}
-                                {shippingAddress.country}
-                            </ListItem>
-                        </List>
-                    </Card>
+                    {cartItems[0]?.type !== COURSE_TYPE && (
+                        <Card sx={classes.section}>
+                            <List>
+                                <ListItem>
+                                    <Typography component="h2" variant="h2">
+                                        Shipping Address
+                                    </Typography>
+                                </ListItem>
+                                <ListItem>
+                                    {shippingAddress.fullName}, {shippingAddress.address},{' '}
+                                    {shippingAddress.city}, {shippingAddress.postalCode},{' '}
+                                    {shippingAddress.country}
+                                </ListItem>
+                            </List>
+                        </Card>
+                    )}
                     <Card sx={classes.section}>
                         <List>
                             <ListItem>
@@ -162,7 +164,7 @@ function PlaceOrder() {
                                                         <Typography>{item.quantity}</Typography>
                                                     </TableCell>
                                                     <TableCell align="right">
-                                                        <Typography>${item.price}</Typography>
+                                                        <Typography>{item.offeredPrice} ৳</Typography>
                                                     </TableCell>
                                                 </TableRow>
                                             ))}
@@ -185,20 +187,10 @@ function PlaceOrder() {
                                         <Typography>Items:</Typography>
                                     </Grid>
                                     <Grid item xs={6}>
-                                        <Typography align="right">${itemsPrice}</Typography>
+                                        <Typography align="right">{itemsPrice} ৳</Typography>
                                     </Grid>
                                 </Grid>
-                            </ListItem>
-                            <ListItem>
-                                <Grid container>
-                                    <Grid item xs={6}>
-                                        <Typography>Tax:</Typography>
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                        <Typography align="right">${taxPrice}</Typography>
-                                    </Grid>
-                                </Grid>
-                            </ListItem>
+                            </ListItem>{/*
                             <ListItem>
                                 <Grid container>
                                     <Grid item xs={6}>
@@ -208,7 +200,7 @@ function PlaceOrder() {
                                         <Typography align="right">${shippingPrice}</Typography>
                                     </Grid>
                                 </Grid>
-                            </ListItem>
+                            </ListItem>*/}
                             <ListItem>
                                 <Grid container>
                                     <Grid item xs={6}>
@@ -218,7 +210,7 @@ function PlaceOrder() {
                                     </Grid>
                                     <Grid item xs={6}>
                                         <Typography align="right">
-                                            <strong>${totalPrice}</strong>
+                                            <strong>{totalPrice} ৳</strong>
                                         </Typography>
                                     </Grid>
                                 </Grid>

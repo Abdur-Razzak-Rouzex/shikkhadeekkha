@@ -2,14 +2,14 @@ import {Button, Card, CardActionArea, CardContent, CardMedia, Chip, Grid, Typogr
 import React, {useEffect, useState} from 'react';
 import NextLink from 'next/link';
 import Rating from '@mui/material/Rating';
+import {calculateOfferPrice} from "../utils/helpers";
 
 export default function ProductItem({item, addToCartHandler}) {
     const [offeredPrice, setOfferedPrice] = useState(0);
 
     useEffect(() => {
         if (item?.isOffered) {
-            const newPrice = item?.price - (item?.price * (item?.offerInPercentage / 100));
-            setOfferedPrice(Math.ceil(newPrice))
+            setOfferedPrice(calculateOfferPrice(item?.price, item?.offerInPercentage))
         }
     }, [item]);
 
@@ -29,11 +29,11 @@ export default function ProductItem({item, addToCartHandler}) {
                             </Grid>
                             {item?.isOffered ? (
                                 <>
-                                    <Grid item xs={12} sx={{textAlign: 'end'}}>
+                                    <Grid item xs={12} sx={{display: 'flex', justifyContent: 'space-between'}}>
                                         <del style={{color: 'red'}}>
                                             <Chip
                                                 label={`${item?.price} ৳`}
-                                                size='medium'
+                                                size='small'
                                                 color='primary'
                                             />
                                         </del>

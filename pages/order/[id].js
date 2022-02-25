@@ -19,7 +19,7 @@ import {
     Card,
     List,
     ListItem,
-    Box,
+    Box, Chip,
 } from '@mui/material';
 import axios from 'axios';
 import {useRouter} from 'next/router';
@@ -27,6 +27,7 @@ import classes from '../../utils/classes';
 import {useSnackbar} from 'notistack';
 import {getError} from '../../utils/error';
 import {PayPalButtons, usePayPalScriptReducer} from '@paypal/react-paypal-js';
+import {COURSE_TYPE} from "../../components/common/constants";
 
 function reducer(state, action) {
     switch (action.type) {
@@ -83,7 +84,6 @@ function Order({params}) {
         paymentMethod,
         orderItems,
         itemsPrice,
-        taxPrice,
         shippingPrice,
         totalPrice,
         isPaid,
@@ -208,46 +208,85 @@ function Order({params}) {
             ) : (
                 <Grid container spacing={1}>
                     <Grid item md={9} xs={12}>
+                        {orderItems[0]?.type !== COURSE_TYPE && (
+                            <Card sx={classes.section}>
+                                <List>
+                                    <ListItem>
+                                        <Typography component="h2" variant="h2">
+                                            Shipping Address
+                                        </Typography>
+                                    </ListItem>
+                                    <ListItem>
+                                        {shippingAddress?.fullName}, {shippingAddress?.address},{' '}
+                                        {shippingAddress?.city}, {shippingAddress?.postalCode},{' '}
+                                        {shippingAddress?.country}
+                                        &nbsp;
+                                        {shippingAddress?.location && (
+                                            <Link
+                                                variant="button"
+                                                target="_new"
+                                                href={`https://maps.google.com?q=${shippingAddress?.location?.lat},${shippingAddress?.location?.lng}`}
+                                            >
+                                                Show On Map
+                                            </Link>
+                                        )}
+                                    </ListItem>
+                                    <ListItem>
+                                        Delivery Status:{' '}
+                                        {isDelivered
+                                            ? `Delivered at ${deliveredAt}`
+                                            : 'Not Delivered'}
+                                    </ListItem>
+                                </List>
+                            </Card>
+                        )}
                         <Card sx={classes.section}>
                             <List>
                                 <ListItem>
                                     <Typography component="h2" variant="h2">
-                                        Shipping Address
+                                        Payment
                                     </Typography>
                                 </ListItem>
                                 <ListItem>
-                                    {shippingAddress.fullName}, {shippingAddress.address},{' '}
-                                    {shippingAddress.city}, {shippingAddress.postalCode},{' '}
-                                    {shippingAddress.country}
-                                    &nbsp;
-                                    {shippingAddress.location && (
-                                        <Link
-                                            variant="button"
-                                            target="_new"
-                                            href={`https://maps.google.com?q=${shippingAddress.location.lat},${shippingAddress.location.lng}`}
-                                        >
-                                            Show On Map
-                                        </Link>
-                                    )}
+                                    <Grid container>
+                                        <Grid item xs={6}>
+                                            <Typography>
+                                                Payment Method:
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Chip
+                                                label={paymentMethod}
+                                                size='medium'
+                                                color='primary'
+                                            />
+                                        </Grid>
+                                    </Grid>
                                 </ListItem>
                                 <ListItem>
-                                    Status:{' '}
-                                    {isDelivered
-                                        ? `delivered at ${deliveredAt}`
-                                        : 'not delivered'}
-                                </ListItem>
-                            </List>
-                        </Card>
-                        <Card sx={classes.section}>
-                            <List>
-                                <ListItem>
-                                    <Typography component="h2" variant="h2">
-                                        Payment Method
-                                    </Typography>
-                                </ListItem>
-                                <ListItem>{paymentMethod}</ListItem>
-                                <ListItem>
-                                    Status: {isPaid ? `paid at ${paidAt}` : 'not paid'}
+                                    <Grid container>
+                                        <Grid item xs={6}>
+                                            <Typography>
+                                                Payment Status:
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            {
+                                                isPaid ?
+                                                    <Chip
+                                                        label={`Paid at ${paidAt}`}
+                                                        size='medium'
+                                                        color='secondary'
+                                                    />
+                                                    :
+                                                    <Chip
+                                                        label='Not Paid'
+                                                        size='medium'
+                                                        color='primary'
+                                                    />
+                                            }
+                                        </Grid>
+                                    </Grid>
                                 </ListItem>
                             </List>
                         </Card>
@@ -296,7 +335,7 @@ function Order({params}) {
                                                             <Typography>{item.quantity}</Typography>
                                                         </TableCell>
                                                         <TableCell align="right">
-                                                            <Typography>${item.price}</Typography>
+                                                            <Typography>{item.price} ৳</Typography>
                                                         </TableCell>
                                                     </TableRow>
                                                 ))}
@@ -319,17 +358,7 @@ function Order({params}) {
                                             <Typography>Items:</Typography>
                                         </Grid>
                                         <Grid item xs={6}>
-                                            <Typography align="right">${itemsPrice}</Typography>
-                                        </Grid>
-                                    </Grid>
-                                </ListItem>
-                                <ListItem>
-                                    <Grid container>
-                                        <Grid item xs={6}>
-                                            <Typography>Tax:</Typography>
-                                        </Grid>
-                                        <Grid item xs={6}>
-                                            <Typography align="right">${taxPrice}</Typography>
+                                            <Typography align="right">{itemsPrice} ৳</Typography>
                                         </Grid>
                                     </Grid>
                                 </ListItem>
@@ -339,7 +368,7 @@ function Order({params}) {
                                             <Typography>Shipping:</Typography>
                                         </Grid>
                                         <Grid item xs={6}>
-                                            <Typography align="right">${shippingPrice}</Typography>
+                                            <Typography align="right">{shippingPrice} ৳</Typography>
                                         </Grid>
                                     </Grid>
                                 </ListItem>
@@ -352,7 +381,7 @@ function Order({params}) {
                                         </Grid>
                                         <Grid item xs={6}>
                                             <Typography align="right">
-                                                <strong>${totalPrice}</strong>
+                                                <strong>{totalPrice} ৳</strong>
                                             </Typography>
                                         </Grid>
                                     </Grid>

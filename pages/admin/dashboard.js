@@ -115,7 +115,7 @@ function AdminDashboard() {
                                                 </CardActions>
                                             </Card>
                                         </Grid>
-                                        <Grid item xs = {12} md={3} >
+                                       {/* <Grid item xs = {12} md={3} >
                                             <Card raised>
                                                 <CardContent>
                                                     <Typography variant="h1">
@@ -131,7 +131,7 @@ function AdminDashboard() {
                                                     </NextLink>
                                                 </CardActions>
                                             </Card>
-                                        </Grid>
+                                        </Grid>*/}
                                         <Grid item xs = {12} md={3} >
                                             <Card raised>
                                                 <CardContent>

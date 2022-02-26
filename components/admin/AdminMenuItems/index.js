@@ -5,7 +5,6 @@ import SchoolIcon from '@mui/icons-material/School';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import CategoryIcon from '@mui/icons-material/Category';
-import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import ViewCarouselIcon from '@mui/icons-material/ViewCarousel';
 import InfoIcon from '@mui/icons-material/Info';
@@ -25,7 +24,7 @@ const AdminMenuItems = ({activeItem}) => {
             <NextLink href="/admin/admissions" passHref>
                 <ListItem selected={activeItem === 'admission'} button component="a">
                     <ListItemText primary="Admissions"/>
-                    <SchoolIcon />
+                    <SchoolIcon/>
                 </ListItem>
             </NextLink>
             <NextLink href="/admin/orders" passHref>
@@ -34,12 +33,12 @@ const AdminMenuItems = ({activeItem}) => {
                     <ShoppingCartIcon/>
                 </ListItem>
             </NextLink>
-            <NextLink href="/admin/products" passHref>
+            {/*<NextLink href="/admin/products" passHref>
                 <ListItem selected={activeItem === 'products'} button component="a">
                     <ListItemText primary="Products"/>
                     <ProductionQuantityLimitsIcon/>
                 </ListItem>
-            </NextLink>
+            </NextLink>*/}
             <NextLink href="/admin/users" passHref>
                 <ListItem selected={activeItem === 'users'} button component="a">
                     <ListItemText primary="Users"/>

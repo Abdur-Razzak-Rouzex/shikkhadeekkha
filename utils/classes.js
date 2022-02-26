@@ -24,7 +24,7 @@ const classes = {
         minHeight: '80vh',
     },
     footer: {
-        marginTop: 4,
+        marginTop: 10,
         backgroundColor: '#203040',
         '& a': {
             color: '#ffffff',

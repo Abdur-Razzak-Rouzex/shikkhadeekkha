@@ -15,8 +15,9 @@ async function connect() {
         }
         await mongoose.disconnect();
     }
+    const dbPath = 'mongodb+srv://rouzexsd:1663RZXsd@cluster0.5u1vd.mongodb.net/sddb?retryWrites=true&w=majority';
     /*const db = await mongoose.connect(process.env.MONGODB_URI, {*/
-    const db = await mongoose.connect('mongodb+srv://rouzexsd:1663RZX34@cluster0.5u1vd.mongodb.net/sddb?retryWrites=true&w=majority', {
+    const db = await mongoose.connect(dbPath, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     });
@@ -39,7 +40,7 @@ function convertDocToObj(doc) {
     doc._id = doc?._id.toString();
     doc.createdAt = doc?.createdAt.toString();
     doc.updatedAt = doc?.updatedAt.toString();
-    if(doc?.category) {
+    if (doc?.category) {
         doc.category._id = doc?.category?._id?.toString()
     }
     return doc;

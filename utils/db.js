@@ -16,7 +16,7 @@ async function connect() {
         await mongoose.disconnect();
     }
     /*const db = await mongoose.connect(process.env.MONGODB_URI, {*/
-    const db = await mongoose.connect('mongodb://localhost/sddb', {
+    const db = await mongoose.connect('mongodb+srv://rouzexsd:1663RZX34@cluster0.5u1vd.mongodb.net/sddb?retryWrites=true&w=majority', {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     });

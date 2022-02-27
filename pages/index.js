@@ -1,5 +1,5 @@
 import NextLink from 'next/link';
-import {Button, Grid, Link, Skeleton, Typography} from '@mui/material';
+import {Box, Button, Grid, Link, Skeleton, Typography} from '@mui/material';
 import Layout from '../components/Layout';
 import db from '../utils/db';
 import Course from '../models/Course';
@@ -10,7 +10,6 @@ import ProductItem from '../components/ProductItem';
 import {Carousel} from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import classes from '../utils/classes';
-import TopLineSection from "../components/homepage/TopLineSection";
 import WhyChooseUsSection from "../components/homepage/whyChooseUsSection";
 import Image from 'next/image'
 import {getError} from "../utils/error";
@@ -104,7 +103,27 @@ export default function Home(props) {
                 )
             }
 
-            <TopLineSection topline={topLine}/>
+            <Box sx={{marginY: 10, textAlign: 'center'}}>
+                <Typography
+                    variant="h1"
+                    sx={{
+                        fontFamily: "cursive",
+                        fontWeight: 700,
+                        fontSize: "2rem"
+                    }}
+                >
+                    {topLine.title}
+                </Typography>
+                <Typography
+                    variant="subtitle1"
+                    sx={{
+                        color: "#928a8a",
+                        fontFamily: "cursive"
+                    }}
+                >
+                    {topLine.description}
+                </Typography>
+            </Box>
 
             {/** course section */}
             <Grid container mt={5}>

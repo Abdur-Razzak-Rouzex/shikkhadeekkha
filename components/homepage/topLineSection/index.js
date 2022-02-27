@@ -1,6 +1,6 @@
 import {Box, Typography} from "@mui/material";
 
-const TopLineSection = ({topline}) => {
+export default function TopLineSection({topline}) {
     return (
         <Box sx={{marginY: 10, textAlign: 'center'}}>
             <Typography
@@ -25,5 +25,3 @@ const TopLineSection = ({topline}) => {
         </Box>
     )
 }
-
-export default TopLineSection;

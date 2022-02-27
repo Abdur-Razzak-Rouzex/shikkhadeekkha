@@ -1,7 +1,4 @@
 import mongoose from 'mongoose';
-const dotenv = require("dotenv");
-
-dotenv.config();
 
 const connection = {};
 
@@ -18,7 +15,8 @@ async function connect() {
         }
         await mongoose.disconnect();
     }
-    const db = await mongoose.connect(process.env.MONGODB_URI, {
+    /*const db = await mongoose.connect(process.env.MONGODB_URI, {*/
+    const db = await mongoose.connect('mongodb://localhost/sddb', {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     });

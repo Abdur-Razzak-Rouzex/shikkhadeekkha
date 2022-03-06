@@ -23,7 +23,7 @@ const Footer = () => {
                             </Typography>
                         </Link>
                     </NextLink>
-                    <NextLink href="/admission" passHref>
+                    <NextLink href="/admission-form/student-info" passHref>
                         <Link>
                             <Typography>
                                 Take Admission

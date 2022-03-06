@@ -20,7 +20,7 @@ import {Store} from "../../utils/Store";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import {EDUCATION_MEDIUM, STUDENT_CLASS} from "../../components/common/constants";
-import FilePondUploader from "../../components/common/FilePondUploader";
+import ImageUploader from "../../components/common/ImageUploader";
 
 const initialValues = {
     studentNameBn: '',
@@ -264,7 +264,8 @@ export default function StudentInfo() {
                     </Grid>
 
                     <Grid item xs={12} md={12}>
-                        <FilePondUploader
+                        <ImageUploader
+                            defaultFileUrl={studentInfo?.passportSizePhotoUrl}
                             required={true}
                             title='* upload a passport size photo'
                             id="passportSizePhotoUrl"

@@ -11,11 +11,11 @@ import CancelButton from "../../../components/common/button/CancelButton";
 import axios from "axios";
 import {Store} from "../../../utils/Store";
 import {useRouter} from "next/router";
-import FilePondUploader from "../../../components/common/FilePondUploader";
-import CkEditor from "../../../components/common/CkEditor";
 import CustomCheckBox from "../../../components/common/CustomCheckBox";
 import {LANGUAGE_MEDIUM} from "../../../components/common/constants";
 import CustomRadioButton from "../../../components/common/CustomRadioButton";
+import OnlineEditor from "../../../components/common/OnlineEditor";
+import ImageUploader from "../../../components/common/ImageUploader";
 
 const initialValues = {
     name: '',
@@ -44,7 +44,7 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
 
     const [categories, setCategories] = useState([]);
     const [subCategories, setSubCategories] = useState([]);
-    const [category, setCategory] = useState('');
+    const [courseCategory, setCourseCategory] = useState(null);
     const [subcategory, setSubcategory] = useState('');
 
     const [isFeaturedValue, setIsFeaturedValue] = useState(false);
@@ -98,7 +98,7 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                 .required()
                 .label("Course Slug"),
             category: yup
-                .string()
+                .mixed()
                 .required()
                 .label("Category"),
             subCategory: yup
@@ -174,7 +174,7 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                 isOffered: itemData?.isOffered,
                 docStatus: itemData?.docStatus,
             });
-            setCategory(itemData?.category?._id);
+            setCourseCategory(itemData?.category?._id);
             setSubcategory(itemData?.subCategory);
             setIsFeaturedValue(itemData?.isFeatured);
             setIsOfferedValue(itemData?.isOffered);
@@ -190,7 +190,7 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
     }
     const handleCategoryChange = (event) => {
         setValue('category', event.target.value);
-        setCategory(event.target.value);
+        setCourseCategory(event.target.value);
         const cat = categories.findIndex(cat => cat._id === event.target.value);
         setSubCategories(categories[cat]?.subCategory);
     }
@@ -199,9 +199,9 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
         setSubcategory(event.target.value);
     }
 
-    const getEditorData = (data) => {
-        setValue('description', data);
-    }
+    /*    const getEditorData = (data) => {
+            setValue('description', data);
+        }*/
 
     const handleIsFeatured = (event) => {
         setIsFeaturedValue(event.target.checked)
@@ -298,7 +298,7 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                         <Select
                             labelId="category"
                             id="category"
-                            value={category || ''}
+                            value={courseCategory || ''}
                             label="Select Category"
                             onChange={(event) => handleCategoryChange(event)}
                             error={!!errors?.category}
@@ -338,7 +338,8 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                     </FormControl>
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <FilePondUploader
+                    <ImageUploader
+                        defaultFileUrl={itemData?.image}
                         required={true}
                         id="image"
                         getUrl={getSecureUrl}
@@ -401,9 +402,15 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                     />
                 </Grid>
                 <Grid item xs={12}>
-                    <CkEditor
-                        getEditorData={getEditorData}
-                        defaultData={itemData?.description}
+                    <OnlineEditor
+                        id={'description'}
+                        label={'description'}
+                        errorInstance={errors}
+                        value={itemData?.description || initialValues.description}
+                        height={'300px'}
+                        key={1}
+                        register={register}
+                        setValue={setValue}
                     />
                 </Grid>
             </Grid>

@@ -1,40 +1,39 @@
 import * as path from 'path';
-import { Request, Response } from 'express';
 import multer from 'multer';
 
 const uploadFilePath = path.resolve(__dirname, '../..', 'public/uploads');
 
 const storageFile = multer.diskStorage({
     destination: uploadFilePath,
-    filename(req, file, fn: (error: Error | null, filename: string) => void): void {
+    filename: function (req, file, fn) {
         fn(null, `${new Date().getTime().toString()}-${file.fieldname}${path.extname(file.originalname)}`);
     },
 });
 
 const uploadFile = multer({
     storage: storageFile,
-    limits: { fileSize: 5 * 1024 * 1024 },
+    limits: {fileSize: 5 * 1024 * 1024},
     fileFilter(req, file, callback) {
-        const extension: boolean = ['.png', '.jpg', '.jpeg'].indexOf(path.extname(file.originalname).toLowerCase()) >= 0;
-        const mimeType: boolean = ['image/png', 'image/jpg', 'image/jpeg'].indexOf(file.mimetype) >= 0;
+        const extension = ['.png', '.jpg', '.jpeg'].indexOf(path.extname(file.originalname).toLowerCase()) >= 0;
+        const mimeType = ['image/png', 'image/jpg', 'image/jpeg'].indexOf(file.mimetype) >= 0;
 
         if (extension && mimeType) {
             return callback(null, true);
         }
         callback(new Error('Invalid file type. Only picture file on type PNG and JPG are allowed!'));
     },
-}).single('picture');
+}).single('file');
 
-const handleSingleUploadFile = async (req: Request, res: Response): Promise<any> => {
-    return new Promise((resolve, reject): void => {
+const handleSingleUploadFile = async (req, res) => {
+    return new Promise((resolve, reject) => {
         uploadFile(req, res, (error) => {
             if (error) {
                 reject(error);
             }
 
-            resolve({ file: req.file, body: req.body });
+            resolve({file: req.file, body: req.body});
         });
     });
 };
 
-export { handleSingleUploadFile };
+export default handleSingleUploadFile;

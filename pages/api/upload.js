@@ -1,3 +1,4 @@
+/*
 import nextConnect from 'next-connect';
 import multer from 'multer';
 import {v2 as cloudinary} from 'cloudinary';
@@ -53,3 +54,21 @@ handler.use(upload.single('file')).post(async (req, res) => {
 });
 
 export default handler;
+*/
+
+
+const nc = require("next-connect");
+const handleSingleUploadFile = require("../../utils/uploadSingleFile");
+
+const handler = nc();
+
+handler.post(async (req, res) => {
+    let uploadResult;
+    try {
+        uploadResult = await handleSingleUploadFile(req, res);
+        console.log('uploaded result: ', uploadResult);
+    } catch (e) {
+        return res.status(422).json({errors: [e.message]});
+    }
+    res.send({message: 'Hero Banner Created'});
+});

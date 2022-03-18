@@ -36,7 +36,7 @@ handler.post(async (req, res) => {
         const course = await newCourse.save();
         res.send({message: 'Course Created Successfully', course});
     } else {
-        res.status(409).send({message: 'A Course with slug already exists'});
+        res.status(409).send({message: `A Course with slug "${ req.body.slug}" already exists`});
     }
 });
 

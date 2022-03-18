@@ -130,6 +130,7 @@ function AdminUsers() {
                                                 <TableRow>
                                                     <TableCell>ID</TableCell>
                                                     <TableCell>NAME</TableCell>
+                                                    <TableCell>Phone</TableCell>
                                                     <TableCell>EMAIL</TableCell>
                                                     <TableCell>ISADMIN</TableCell>
                                                     <TableCell>ACTIONS</TableCell>
@@ -137,11 +138,12 @@ function AdminUsers() {
                                             </TableHead>
                                             <TableBody>
                                                 {users.map((user) => (
-                                                    <TableRow key={user._id}>
-                                                        <TableCell>{user._id.substring(20, 24)}</TableCell>
-                                                        <TableCell>{user.name}</TableCell>
-                                                        <TableCell>{user.email}</TableCell>
-                                                        <TableCell>{user.isAdmin ? 'YES' : 'NO'}</TableCell>
+                                                    <TableRow key={user?._id}>
+                                                        <TableCell>{user?._id.substring(20, 24)}</TableCell>
+                                                        <TableCell>{user?.name}</TableCell>
+                                                        <TableCell>{user?.phone}</TableCell>
+                                                        <TableCell>{user?.email}</TableCell>
+                                                        <TableCell>{user?.isAdmin ? 'YES' : 'NO'}</TableCell>
                                                         <TableCell>
                                                             <NextLink
                                                                 href={`/admin/users/${user._id}`}

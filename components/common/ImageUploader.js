@@ -11,13 +11,13 @@ export default function ImageUploader({
                                           getUrl,
                                           id,
                                           required = false,
-                                          title = 'Drag & Drop your files or'
+                                          title = 'Drag & Drop your files'
                                       }) {
     const [files, setFiles] = useState([]);
 
     useEffect(() => {
-        if(defaultFileUrl) {
-            let source = defaultFileUrl.replace('https://res.cloudinary.com/arouzex/image/upload/v1646593466/', '');
+        if (defaultFileUrl) {
+            let source = defaultFileUrl.replace('https://res.cloudinary.com/arouzex/image/upload/', '');
             let defaultUrl = [
                 {
                     source: source,
@@ -46,7 +46,7 @@ export default function ImageUploader({
                     },
                 },
                 load: {
-                    url: 'https://res.cloudinary.com/arouzex/image/upload/v1646593466/'
+                    url: 'https://res.cloudinary.com/arouzex/image/upload/'
                 }
             }}
             name="file"

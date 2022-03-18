@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import {Button, CircularProgress, Grid, TextField, Typography} from '@mui/material';
+import { Grid, TextField, Typography} from '@mui/material';
 import {useForm} from 'react-hook-form';
 import React, {useContext, useEffect, useMemo, useState} from 'react';
 import {useSnackbar} from 'notistack';
@@ -11,6 +11,7 @@ import CancelButton from "../../../components/common/button/CancelButton";
 import axios from "axios";
 import {Store} from "../../../utils/Store";
 import {useRouter} from "next/router";
+import ImageUploader from "../../../components/common/ImageUploader";
 
 const initialValues = {
     imgUrl: '',
@@ -21,7 +22,6 @@ const initialValues = {
 const HeroBannerAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
     const {enqueueSnackbar} = useSnackbar();
     const isEdit = itemId != null;
-    const [loadingUpload, setLoadingUpload] = useState(false);
     const {state} = useContext(Store);
     const {userInfo} = state;
     const router = useRouter();
@@ -63,35 +63,11 @@ const HeroBannerAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
         register,
         reset,
         handleSubmit,
-        getValues,
+        setValue,
         formState: {errors, isSubmitting},
     } = useForm({
         resolver: yupResolver(validationSchema),
     });
-
-    const uploadHandler = async (e) => {
-        setLoadingUpload(true);
-        const file = e.target.files[0];
-        const bodyFormData = new FormData();
-        bodyFormData.append('file', file);
-        bodyFormData.append('from', 'heroBanner');
-        try {
-            const {data} = await axios.post('/api/admin/upload', bodyFormData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    authorization: `Bearer ${userInfo.token}`,
-                },
-            });
-
-            reset({...getValues(), imgUrl: data.secure_url});
-            setLoadingUpload(false);
-            enqueueSnackbar('Hero banner image uploaded successfully', {variant: 'success'});
-
-        } catch (error) {
-            setLoadingUpload(false);
-            enqueueSnackbar(getError(error), {variant: 'error'});
-        }
-    }
 
     useEffect(() => {
         if (itemData) {
@@ -105,12 +81,17 @@ const HeroBannerAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
         }
     }, [itemData, reset]);
 
-    const onSubmit = async ({imgUrl, link, altTitle}) => {
+    const getSecureUrl = (secureUrl) => {
+        setValue('imgUrl', secureUrl);
+    }
+
+    const onSubmit = async (data) => {
+        console.log('the submitted data: ', data);
         try {
             if (itemId) {
                 await axios.put(
                     `/api/admin/hero-banner/${itemId}`,
-                    {imgUrl, link, altTitle},
+                    data,
                     {headers: {authorization: `Bearer ${userInfo.token}`}}
                 );
                 enqueueSnackbar('Hero Banner updated successfully', {variant: 'success'});
@@ -118,7 +99,7 @@ const HeroBannerAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
             } else {
                 await axios.post(
                     `/api/admin/hero-banner`,
-                    {imgUrl, link, altTitle},
+                    data,
                     {headers: {authorization: `Bearer ${userInfo.token}`}}
                 );
                 enqueueSnackbar('Hero Banner created successfully', {variant: 'success'});
@@ -151,27 +132,14 @@ const HeroBannerAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                 </>
             }>
             <Grid container spacing={5}>
-                <Grid item xs={12} md={12}>
-                    <TextField
-                        error={!!errors.imgUrl}
-                        variant="outlined"
+                <Grid item xs={12} md={6}>
+                    <ImageUploader
+                        defaultFileUrl={itemData?.imgUrl}
+                        required={true}
                         id="imgUrl"
-                        label="Upload Hero Banner Image"
-                        {...register("imgUrl")}
-                        helperText={errors.imgUrl?.message ?? null}
-                        InputProps={{
-                            readOnly: true,
-                        }}
-                        fullWidth
+                        getUrl={getSecureUrl}
                     />
-                </Grid>
-                <Grid item xs={6}/>
-                <Grid item xs={6} sx={{display: 'flex', justifyContent: 'end'}}>
-                    <Button variant="contained" component="label">
-                        Upload Hero Banner
-                        <input type="file" onChange={uploadHandler} hidden accept="image/*"/>
-                    </Button>
-                    {loadingUpload && <CircularProgress/>}
+                    <Typography sx={{lineHeight: 0}}>Upload an image of dimension <b>1152 * 284</b> </Typography>
                 </Grid>
                 <Grid item xs={6}>
                     <TextField

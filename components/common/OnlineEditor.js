@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {Editor as TinymceEditor} from '@tinymce/tinymce-react';
 import {
     FormControl,
-    FormHelperText,
     InputLabel,
     TextField,
 } from '@mui/material';

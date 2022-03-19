@@ -59,7 +59,7 @@ function AdminOrders() {
             try {
                 dispatch({type: 'FETCH_REQUEST'});
                 const {data} = await axios.get(`/api/admin/orders`, {
-                    headers: {authorization: `Bearer ${userInfo.token}`},
+                    headers: {authorization: `Bearer ${userInfo?.token}`},
                 });
                 dispatch({type: 'FETCH_SUCCESS', payload: data});
             } catch (err) {

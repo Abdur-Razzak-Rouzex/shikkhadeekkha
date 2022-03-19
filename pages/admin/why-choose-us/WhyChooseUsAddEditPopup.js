@@ -12,6 +12,7 @@ import axios from "axios";
 import {Store} from "../../../utils/Store";
 import {useRouter} from "next/router";
 import ImageUploader from "../../../components/common/ImageUploader";
+import OnlineEditor from "../../../components/common/OnlineEditor";
 
 const initialValues = {
     smallImage: '',
@@ -235,16 +236,15 @@ const WhyChooseUsAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                     (
                         <>
                             <Grid item xs={12}>
-                                <TextField
-                                    error={!!errors.contentBody}
-                                    variant="outlined"
-                                    fullWidth
-                                    id="contentBody"
-                                    label="Write the content body"
-                                    rows={10}
-                                    multiline={true}
-                                    {...register("contentBody")}
-                                    helperText={errors.contentBody?.message ?? null}
+                                <OnlineEditor
+                                    id={'contentBody'}
+                                    label={'Write the content body'}
+                                    errorInstance={errors}
+                                    value={itemData?.contentBody || initialValues.contentBody}
+                                    height={'300px'}
+                                    key={1}
+                                    register={register}
+                                    setValue={setValue}
                                 />
                             </Grid>
                             <Grid item xs={12} md={6}>

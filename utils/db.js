@@ -15,9 +15,9 @@ async function connect() {
         }
         await mongoose.disconnect();
     }
-    /*const dbPath = 'mongodb+srv://rouzexsd:1663RZXsd@cluster0.5u1vd.mongodb.net/sddb?retryWrites=true&w=majority';*/
-    const db = await mongoose.connect(process.env.MONGODB_URI, {
-    /*const db = await mongoose.connect(dbPath, {*/
+    const dbPath = 'mongodb+srv://rouzexsd:1663RZXsd@cluster0.5u1vd.mongodb.net/sddb?retryWrites=true&w=majority';
+    /*const db = await mongoose.connect(process.env.MONGODB_URI, {*/
+    const db = await mongoose.connect(dbPath, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     });

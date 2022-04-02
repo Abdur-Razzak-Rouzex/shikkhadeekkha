@@ -8,7 +8,7 @@ const signToken = (user) => {
             email: user.email,
             isAdmin: user.isAdmin,
         },
-        "45678iokjhgfd456yuhgdertgbvc",
+        process.env.JWT_SECRET,
         {
             expiresIn: '30d',
         }
@@ -19,7 +19,7 @@ const isAuth = async (req, res, next) => {
     if (authorization) {
         // Bearer xxx => xxx
         const token = authorization.slice(7, authorization.length);
-        jwt.verify(token, "45678iokjhgfd456yuhgdertgbvc", (err, decode) => {
+        jwt.verify(token, process.env.JWT_SECRET, (err, decode) => {
             if (err) {
                 res.status(401).send({message: 'Token is not valid'});
             } else {

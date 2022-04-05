@@ -6,9 +6,9 @@ import streamifier from 'streamifier';
 import {onError} from '../../utils/error';
 
 cloudinary.config({
-    cloud_name: "arouzex",
-    api_key: "445858769932296",
-    api_secret: "Z4giZ4SKCOLX2H2hObAVhiwyCx4",
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
 export const config = {

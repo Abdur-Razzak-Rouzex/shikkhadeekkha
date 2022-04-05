@@ -344,6 +344,7 @@ const CourseAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                         id="image"
                         getUrl={getSecureUrl}
                     />
+                    <Typography sx={{lineHeight: 0}}>Upload an image of dimension <b>368 * 210</b> </Typography>
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <TextField

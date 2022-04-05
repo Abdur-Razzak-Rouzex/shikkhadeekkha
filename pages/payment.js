@@ -46,7 +46,7 @@ export default function Payment() {
         closeSnackbar();
         e.preventDefault();
         if (!paymentMethod) {
-            enqueueSnackbar('Payment method is required', {variant: 'error'});
+            enqueueSnackbar('Please select a Payment method first', {variant: 'error'});
         } else {
             dispatch({type: 'SAVE_PAYMENT_METHOD', payload: paymentMethod});
             Cookies.set('paymentMethod', paymentMethod);

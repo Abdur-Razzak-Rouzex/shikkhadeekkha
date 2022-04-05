@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import {Button, CircularProgress, Grid, TextField, Typography} from '@mui/material';
+import {Grid, TextField, Typography} from '@mui/material';
 import {useForm} from 'react-hook-form';
 import React, {useContext, useEffect, useMemo, useState} from 'react';
 import {useSnackbar} from 'notistack';
@@ -11,6 +11,7 @@ import CancelButton from "../../../components/common/button/CancelButton";
 import axios from "axios";
 import {Store} from "../../../utils/Store";
 import {useRouter} from "next/router";
+import ImageUploader from "../../../components/common/ImageUploader";
 
 const initialValues = {
     avatar: '',
@@ -22,7 +23,6 @@ const initialValues = {
 const TestimonialAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
     const {enqueueSnackbar} = useSnackbar();
     const isEdit = itemId != null;
-    const [loadingUpload, setLoadingUpload] = useState(false);
     const {state} = useContext(Store);
     const {userInfo} = state;
     const router = useRouter();
@@ -74,36 +74,11 @@ const TestimonialAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
         register,
         reset,
         handleSubmit,
-        getValues,
+        setValue,
         formState: {errors, isSubmitting},
     } = useForm({
         resolver: yupResolver(validationSchema),
     });
-
-    const uploadHandler = async (e) => {
-        setLoadingUpload(true);
-        const file = e.target.files[0];
-        const bodyFormData = new FormData();
-        bodyFormData.append('file', file);
-        bodyFormData.append('from', 'testimonial');
-        try {
-            const {data} = await axios.post('/api/admin/upload', bodyFormData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    authorization: `Bearer ${userInfo.token}`,
-                },
-            });
-
-
-            reset({...getValues(), avatar: data.secure_url});
-            setLoadingUpload(false);
-            enqueueSnackbar('Avatar uploaded successfully', {variant: 'success'});
-
-        } catch (error) {
-            setLoadingUpload(false);
-            enqueueSnackbar(getError(error), {variant: 'error'});
-        }
-    }
 
     useEffect(() => {
         if (itemData) {
@@ -117,6 +92,10 @@ const TestimonialAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
             reset(initialValues);
         }
     }, [itemData, reset]);
+
+    const getSecureUrl = (secureUrl) => {
+        setValue('avatar', secureUrl);
+    }
 
     const onSubmit = async (data) => {
         try {
@@ -163,27 +142,14 @@ const TestimonialAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                 </>
             }>
             <Grid container spacing={5}>
-                <Grid item xs={12} md={12}>
-                    <TextField
-                        error={!!errors.smallImage}
-                        variant="outlined"
+                <Grid item xs={12} md={6}>
+                    <ImageUploader
+                        defaultFileUrl={itemData?.avatar}
+                        required={true}
                         id="avatar"
-                        label="Upload avatar (small image)"
-                        {...register("avatar")}
-                        helperText={errors.avatar?.message ?? null}
-                        InputProps={{
-                            readOnly: true,
-                        }}
-                        fullWidth
+                        getUrl={getSecureUrl}
                     />
-                </Grid>
-                <Grid item xs={6}/>
-                <Grid item xs={6} sx={{display: 'flex', justifyContent: 'end'}}>
-                    <Button variant="contained" component="label">
-                        Upload avatar
-                        <input type="file" onChange={(e) => uploadHandler(e)} hidden accept="image/*"/>
-                    </Button>
-                    {loadingUpload && <CircularProgress/>}
+                    <Typography sx={{lineHeight: 0}}>Upload an image of dimension <b>74 * 74</b> </Typography>
                 </Grid>
                 <Grid item xs={12}>
                     <TextField

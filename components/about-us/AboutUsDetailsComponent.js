@@ -1,6 +1,7 @@
 import {styled} from '@mui/material/styles';
 import {CardMedia, Container, Grid, Typography,} from '@mui/material';
 import NoDataFoundComponent from "../common/NoDataFoundComponent";
+import React from "react";
 
 const PREFIX = 'RecentActivitiesDetails';
 
@@ -66,11 +67,15 @@ const RecentActivitiesDetails = ({whyChooseUsData}) => {
                     </Grid>
 
                     <Grid item xs={12}>
-                        <Typography variant="subtitle1">{whyChooseUsData.contentBody}</Typography>
+                        <div
+                            dangerouslySetInnerHTML={{
+                                __html: whyChooseUsData?.contentBody,
+                            }}
+                        />
                     </Grid>
                 </Grid>
             ) : (
-                <NoDataFoundComponent />
+                <NoDataFoundComponent/>
             )}
         </StyledContainer>
     );

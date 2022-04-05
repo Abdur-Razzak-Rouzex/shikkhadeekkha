@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import {Button, Checkbox, CircularProgress, Grid, TextField, Typography} from '@mui/material';
+import {Checkbox, Grid, TextField, Typography} from '@mui/material';
 import {useForm} from 'react-hook-form';
 import React, {useContext, useEffect, useMemo, useState} from 'react';
 import {useSnackbar} from 'notistack';
@@ -11,6 +11,8 @@ import CancelButton from "../../../components/common/button/CancelButton";
 import axios from "axios";
 import {Store} from "../../../utils/Store";
 import {useRouter} from "next/router";
+import ImageUploader from "../../../components/common/ImageUploader";
+import OnlineEditor from "../../../components/common/OnlineEditor";
 
 const initialValues = {
     smallImage: '',
@@ -25,7 +27,6 @@ const initialValues = {
 const WhyChooseUsAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
     const {enqueueSnackbar} = useSnackbar();
     const isEdit = itemId != null;
-    const [loadingUpload, setLoadingUpload] = useState(false);
     const {state} = useContext(Store);
     const {userInfo} = state;
     const router = useRouter();
@@ -100,39 +101,11 @@ const WhyChooseUsAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
         register,
         reset,
         handleSubmit,
-        getValues,
+        setValue,
         formState: {errors, isSubmitting},
     } = useForm({
         resolver: yupResolver(validationSchema),
     });
-
-    const uploadHandler = async (e, imageSize = 'image') => {
-        setLoadingUpload(true);
-        const file = e.target.files[0];
-        const bodyFormData = new FormData();
-        bodyFormData.append('file', file);
-        bodyFormData.append('from', 'whyChooseUs');
-        try {
-            const {data} = await axios.post('/api/admin/upload', bodyFormData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    authorization: `Bearer ${userInfo.token}`,
-                },
-            });
-
-            if (imageSize === 'smallImage') {
-                reset({...getValues(), smallImage: data.secure_url});
-            } else {
-                reset({...getValues(), largeImage: data.secure_url});
-            }
-            setLoadingUpload(false);
-            enqueueSnackbar('Image for "Why choose Us" section uploaded successfully', {variant: 'success'});
-
-        } catch (error) {
-            setLoadingUpload(false);
-            enqueueSnackbar(getError(error), {variant: 'error'});
-        }
-    }
 
     useEffect(() => {
         if (itemData) {
@@ -151,8 +124,15 @@ const WhyChooseUsAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
         }
     }, [itemData, reset]);
 
+    const getSmallImageSecureUrl = (secureUrl) => {
+        setValue('smallImage', secureUrl);
+    }
+
+    const getLargeImageSecureUrl = (secureUrl) => {
+        setValue('largeImage', secureUrl);
+    }
+
     const onSubmit = async (data) => {
-        /*console.log('why choose us add edit submitted data: ', data);*/
         try {
             if (itemId) {
                 await axios.put(
@@ -197,27 +177,14 @@ const WhyChooseUsAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                 </>
             }>
             <Grid container spacing={5}>
-                <Grid item xs={12} md={12}>
-                    <TextField
-                        error={!!errors.smallImage}
-                        variant="outlined"
+                <Grid item xs={12} md={6}>
+                    <ImageUploader
+                        defaultFileUrl={itemData?.smallImage}
+                        required={true}
                         id="smallImage"
-                        label="Upload small image for why choose us section"
-                        {...register("smallImage")}
-                        helperText={errors.smallImage?.message ?? null}
-                        InputProps={{
-                            readOnly: true,
-                        }}
-                        fullWidth
+                        getUrl={getSmallImageSecureUrl}
                     />
-                </Grid>
-                <Grid item xs={6}/>
-                <Grid item xs={6} sx={{display: 'flex', justifyContent: 'end'}}>
-                    <Button variant="contained" component="label">
-                        Upload small image
-                        <input type="file" onChange={(e) => uploadHandler(e, 'smallImage')} hidden accept="image/*"/>
-                    </Button>
-                    {loadingUpload && <CircularProgress/>}
+                    <Typography sx={{lineHeight: 0}}>Upload an image of dimension <b>345 * 140</b> </Typography>
                 </Grid>
                 <Grid item xs={12}>
                     <TextField
@@ -269,40 +236,26 @@ const WhyChooseUsAddEditPopup = ({itemId, refreshDataTable, ...props}) => {
                     (
                         <>
                             <Grid item xs={12}>
-                                <TextField
-                                    error={!!errors.contentBody}
-                                    variant="outlined"
-                                    fullWidth
-                                    id="contentBody"
-                                    label="Write the content body"
-                                    rows={10}
-                                    multiline={true}
-                                    {...register("contentBody")}
-                                    helperText={errors.contentBody?.message ?? null}
+                                <OnlineEditor
+                                    id={'contentBody'}
+                                    label={'Write the content body'}
+                                    errorInstance={errors}
+                                    value={itemData?.contentBody || initialValues.contentBody}
+                                    height={'300px'}
+                                    key={1}
+                                    register={register}
+                                    setValue={setValue}
                                 />
                             </Grid>
-                            <Grid item xs={12} md={12}>
-                                <TextField
-                                    error={!!errors.largeImage}
-                                    variant="outlined"
+                            <Grid item xs={12} md={6}>
+                                <ImageUploader
+                                    defaultFileUrl={itemData?.largeImage}
+                                    required={true}
                                     id="largeImage"
-                                    label="Upload large image for about us details page"
-                                    {...register("largeImage")}
-                                    helperText={errors.largeImage?.message ?? null}
-                                    InputProps={{
-                                        readOnly: true,
-                                    }}
-                                    fullWidth
+                                    getUrl={getLargeImageSecureUrl}
                                 />
-                            </Grid>
-                            <Grid item xs={6}/>
-                            <Grid item xs={6} sx={{display: 'flex', justifyContent: 'end'}}>
-                                <Button variant="contained" component="label">
-                                    Upload large image
-                                    <input type="file" onChange={uploadHandler} hidden
-                                           accept="image/*"/>
-                                </Button>
-                                {loadingUpload && <CircularProgress/>}
+                                <Typography sx={{lineHeight: 0}}>Upload an image of dimension <b>1104 * 350</b>
+                                </Typography>
                             </Grid>
                         </>
                     )

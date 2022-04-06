@@ -57,10 +57,18 @@ export default handler;
 */
 
 
-const nc = require("next-connect");
-const handleSingleUploadFile = require("../../utils/uploadSingleFile");
+import {onError} from '../../utils/error';
+import {handleSingleUploadFile} from "../../utils/uploadSingleFile";
 
-const handler = nc();
+const nc = require("next-connect");
+
+const handler = nc({onError});
+
+export const config = {
+    api: {
+        bodyParser: false,
+    },
+};
 
 handler.post(async (req, res) => {
     let uploadResult;
@@ -72,3 +80,5 @@ handler.post(async (req, res) => {
     }
     res.send({message: 'Hero Banner Created'});
 });
+
+export default handler;

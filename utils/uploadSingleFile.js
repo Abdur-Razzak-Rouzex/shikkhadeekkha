@@ -1,7 +1,7 @@
 import * as path from 'path';
 import multer from 'multer';
 
-const uploadFilePath = path.resolve(__dirname, '../..', 'public/uploads');
+const uploadFilePath = path.resolve(__dirname, '../../../../..', 'public/uploads');
 
 const storageFile = multer.diskStorage({
     destination: uploadFilePath,
@@ -16,7 +16,6 @@ const uploadFile = multer({
     fileFilter(req, file, callback) {
         const extension = ['.png', '.jpg', '.jpeg'].indexOf(path.extname(file.originalname).toLowerCase()) >= 0;
         const mimeType = ['image/png', 'image/jpg', 'image/jpeg'].indexOf(file.mimetype) >= 0;
-
         if (extension && mimeType) {
             return callback(null, true);
         }
@@ -24,7 +23,7 @@ const uploadFile = multer({
     },
 }).single('file');
 
-const handleSingleUploadFile = async (req, res) => {
+export const handleSingleUploadFile = async (req, res) => {
     return new Promise((resolve, reject) => {
         uploadFile(req, res, (error) => {
             if (error) {
@@ -35,5 +34,3 @@ const handleSingleUploadFile = async (req, res) => {
         });
     });
 };
-
-export default handleSingleUploadFile;

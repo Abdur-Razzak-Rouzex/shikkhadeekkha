@@ -1,7 +1,7 @@
 import * as path from 'path';
 import multer from 'multer';
 
-const uploadFilePath = path.resolve(__dirname, '../../../../..', 'public/uploads');
+const uploadFilePath = path.resolve(__dirname, '../../../..', 'public/uploads');
 
 const storageFile = multer.diskStorage({
     destination: uploadFilePath,

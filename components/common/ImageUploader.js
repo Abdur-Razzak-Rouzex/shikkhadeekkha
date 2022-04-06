@@ -17,10 +17,10 @@ export default function ImageUploader({
 
     useEffect(() => {
         if (defaultFileUrl) {
-            let source = defaultFileUrl.replace('https://res.cloudinary.com/arouzex/image/upload/', '');
+            /*let source = defaultFileUrl.replace('https://res.cloudinary.com/arouzex/image/upload/', '');*/
             let defaultUrl = [
                 {
-                    source: source,
+                    source: defaultFileUrl,
                     options: {
                         type: 'local'
                     }
@@ -46,7 +46,7 @@ export default function ImageUploader({
                     },
                 },
                 load: {
-                    url: 'https://res.cloudinary.com/arouzex/image/upload/'
+                    url: '/public/uploads'
                 }
             }}
             name="file"

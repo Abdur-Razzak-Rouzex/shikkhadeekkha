@@ -39,7 +39,7 @@ const classes = {
     },
     // header
     appbar: {
-        backgroundColor: '#203040',
+        backgroundColor: '#f81818',
         '& a': {
             color: '#ffffff',
             marginLeft: 1,
@@ -78,7 +78,7 @@ const classes = {
         },
     },
     searchButton: {
-        backgroundColor: '#f8c040',
+        backgroundColor: '#f81818',
         padding: 1,
         borderRadius: '0 5px 5px 0',
         '& span': {

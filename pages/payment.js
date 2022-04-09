@@ -21,7 +21,7 @@ import {COURSE_TYPE} from "../components/common/constants";
 export default function Payment() {
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
     const router = useRouter();
-    const [paymentMethod, setPaymentMethod] = useState('Cash');
+    const [paymentMethod, setPaymentMethod] = useState('cash');
     const {state, dispatch} = useContext(Store);
     const {
         userInfo,
@@ -60,7 +60,7 @@ export default function Payment() {
                 <Typography component="h1" variant="h1" sx={{marginBottom: 0}}>
                     Payment Method
                 </Typography>
-                <Typography
+{/*                <Typography
                     component="span"
                     variant="span"
                     sx={{
@@ -70,7 +70,7 @@ export default function Payment() {
                     }}
                 >
                     * Very soon we will add online payment system
-                </Typography>
+                </Typography>*/}
                 <List>
                     <ListItem>
                         <FormControl component="fieldset">
@@ -92,7 +92,12 @@ export default function Payment() {
                                 />*/}
                                 <FormControlLabel
                                     label="Cash"
-                                    value="Cash"
+                                    value="cash"
+                                    control={<Radio/>}
+                                />
+                                <FormControlLabel
+                                    label="Online Payment"
+                                    value="online payment"
                                     control={<Radio/>}
                                 />
                             </RadioGroup>

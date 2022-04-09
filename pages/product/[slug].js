@@ -6,7 +6,7 @@ import {
     Button,
     Card, Chip,
     CircularProgress,
-    Container,
+    Container, FormHelperText,
     Grid,
     Link,
     List,
@@ -44,6 +44,7 @@ export default function ProductScreen(props) {
     const [rating, setRating] = useState(0);
     const [comment, setComment] = useState('');
     const [loading, setLoading] = useState(false);
+    const [isCommentError, setIsCommentError] = useState(false);
 
     const [value, setValue] = React.useState(0);
 
@@ -70,6 +71,11 @@ export default function ProductScreen(props) {
         e.preventDefault();
         setLoading(true);
         try {
+            if (rating < 1 || !comment) {
+                setIsCommentError(true);
+                setLoading(false);
+                return;
+            }
             await axios.post(
                 `/api/products/${course?._id}/reviews`,
                 {
@@ -85,6 +91,7 @@ export default function ProductScreen(props) {
             setComment('');
             enqueueSnackbar('Review submitted successfully', {variant: 'success'});
             fetchReviews();
+            setIsCommentError(false);
         } catch (err) {
             setLoading(false);
             enqueueSnackbar(getError(err), {variant: 'error'});
@@ -313,6 +320,13 @@ export default function ProductScreen(props) {
                                                         onChange={(e) => setRating(e.target.value)}
                                                     />
                                                 </ListItem>
+                                                {isCommentError &&
+                                                    <ListItem>
+                                                        <FormHelperText sx={{color: 'red'}}>
+                                                            Please provide both comment and rating
+                                                        </FormHelperText>
+                                                    </ListItem>
+                                                }
                                                 <ListItem>
                                                     <Button
                                                         type="submit"

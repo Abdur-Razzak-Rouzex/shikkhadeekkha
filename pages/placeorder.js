@@ -56,9 +56,31 @@ function PlaceOrder() {
     const {closeSnackbar, enqueueSnackbar} = useSnackbar();
     const [loading, setLoading] = useState(false);
 
+
     const placeOrderHandler = async () => {
         closeSnackbar();
         try {
+            const {data} = await axios.post(
+                '/api/ssl',
+                {
+                    orderItems: cartItems,
+                    shippingAddress,
+                    paymentMethod,
+                    itemsPrice,
+                    totalPrice,
+                    userInfo
+                },
+                {
+                    headers: {
+                        authorization: `Bearer ${userInfo?.token}`,
+                    },
+                }
+            );
+            router.push(data?.redirectUrl);
+        } catch (err) {
+            enqueueSnackbar(getError(err), {variant: 'error'});
+        }
+        /*try {
             setLoading(true);
             const {data} = await axios.post(
                 '/api/orders',
@@ -68,6 +90,7 @@ function PlaceOrder() {
                     paymentMethod,
                     itemsPrice,
                     totalPrice,
+                    userInfo
                 },
                 {
                     headers: {
@@ -82,8 +105,10 @@ function PlaceOrder() {
         } catch (err) {
             setLoading(false);
             enqueueSnackbar(getError(err), {variant: 'error'});
-        }
+        }*/
     };
+
+
     return (
         <Layout title="Place Order">
             <CheckoutWizard activeStep={3}/>
@@ -222,7 +247,7 @@ function PlaceOrder() {
                                     color="primary"
                                     fullWidth
                                 >
-                                    Place Order
+                                    Pay Now
                                 </Button>
                             </ListItem>
                             {loading && (

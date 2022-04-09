@@ -60,4 +60,12 @@ export const EMAIL_REGEX = new RegExp(
     '(<|^)[a-z\\d.]+([a-z\\d.\\s_-]{0,30})+@(?:[a-z\\d]+\\.)+([a-z]{2,})(>|$)',
 );
 
-export const COURSE_TYPE = 'course'
+export const COURSE_TYPE = 'course';
+export const PRODUCT_TYPE = 'product';
+
+export const STATUS = {
+    FAILED: 0,
+    SUCCESS: 1,
+    PENDING: 2,
+    CANCEL: 3
+}

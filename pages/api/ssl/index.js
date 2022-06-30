@@ -11,8 +11,8 @@ const handler = nc();
 handler.use(isAuth);
 
 
-const settings = {
-    isSandboxMode: true, //false if live version
+export const ssl_settings = {
+    isSandboxMode: process.env.IS_SANDBOX_MODE, //false if live version
     store_id: process.env.SSLCOMMERZ_STORE_ID,
     store_passwd: process.env.SSLCOMMERZ_STORE_PASSWORD,
 }
@@ -32,7 +32,7 @@ handler.post(async (req, res) => {
     })
 
     const unique_id = crypto.randomBytes(16).toString("hex");
-    let sslcommerz = new SSLCommerz(settings);
+    let sslcommerz = new SSLCommerz(ssl_settings);
 
     let post_body = {};
     post_body['total_amount'] = req?.body?.totalPrice;
@@ -42,7 +42,7 @@ handler.post(async (req, res) => {
     post_body['success_url'] = `${process.env.ROOT_URL}/success`;
     post_body['fail_url'] = `${process.env.ROOT_URL}/fail`;
     post_body['cancel_url'] = `${process.env.ROOT_URL}/cancel`;
-    post_body['ipn_url'] = `${process.env.ROOT_URL}/api/ssl/ipn`;
+    post_body['ipn_url'] = `${process.env.ROOT_URL}/api/ssl/ipn?user_id=${req?.body?.userInfo?._id}`;
     post_body['emi_option'] = 0;
     post_body['cus_name'] = req?.body?.userInfo?.name;
     post_body['cus_email'] = req?.body?.userInfo?.email;
